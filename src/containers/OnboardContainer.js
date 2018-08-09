@@ -10,7 +10,7 @@ class OnboardContainer extends Container {
     var isTokenPresent = GetCookie("joyread") ? true : false;
     
     this.state = {
-      isSignedUp: false, // pull info from backend if admin had already signed up
+      isSignedUp: true, // pull info from backend if admin had already signed up
       isSignedIn: isTokenPresent
     };
   }
@@ -61,7 +61,6 @@ class OnboardContainer extends Container {
     isError = this.isFieldNone(username, 'signUpUsernameError', 'This field is required');
 
     // Check for valid email
-    var emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     isError = this.isFieldValid(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, email, 'signUpEmailError', 'Invalid email address');
 
     // Check if email value is none
@@ -72,6 +71,7 @@ class OnboardContainer extends Container {
 
     // Return false if any of the above errors exists
     if (isError) return false;
+    
 
     var data = {
       username: username,

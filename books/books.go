@@ -1,6 +1,7 @@
 package books
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,4 +30,15 @@ func GetBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"books": books,
 	})
+}
+
+// UploadBooks ...
+func UploadBooks(c *gin.Context) {
+	form, _ := c.MultipartForm()
+	files := form.File["upload[]"]
+
+	for _, file := range files {
+		fmt.Println(file.Filename)
+	}
+	c.String(http.StatusOK, "Uploaded...")
 }

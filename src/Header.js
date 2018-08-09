@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
-import OnboardContainer from './containers/OnboardContainer.js';
+import OnboardContainer from './containers/OnboardContainer';
 import logoImg from './assets/vector/logo.svg';
 import dp from './assets/png/dp.png';
+import UploadBooks from './UploadBooks';
 
 function Logo() {
   return <a className="header__logo"><img src={logoImg} alt="joyread" /></a>
@@ -19,14 +20,15 @@ function HeaderLeft() {
 function HeaderRight(props) {
   return (
     <div className="header__right">
-      <div className="header__books"><i className="icon"><svg width="20" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5V1.447a.62.62 0 0 0-.625-.614H.625A.62.62 0 0 0 0 1.447V12.5h5zM1.875 3.904h1.25v3.684h-1.25V3.904zM0 14.167v3.571c0 .33.28.595.625.595h3.75c.345 0 .625-.266.625-.595v-3.571H0zM11.667 12.5V1.447a.62.62 0 0 0-.625-.614h-3.75a.62.62 0 0 0-.625.614V12.5h5zM8.542 3.904h1.25v3.684h-1.25V3.904zM6.667 14.167v3.571c0 .33.28.595.625.595h3.75c.345 0 .625-.266.625-.595v-3.571h-5zm12.753-.834l-5.253.725.573 3.737a.626.626 0 0 0 .26.414.683.683 0 0 0 .492.117l3.94-.543c.362-.05.614-.37.561-.713l-.574-3.737zm-.253-1.56L17.524.54a.632.632 0 0 0-.719-.533L13.043.55a.632.632 0 0 0-.536.714L14.149 12.5l5.018-.727zm-3.159-8.465l.547 3.745-1.253.182-.548-3.746 1.254-.181z" fill="#676767"/></svg></i>Add new books</div>
+      <input type="file" multiple="multiple" id="uploadBooks" onChange={() => UploadBooks(props.uploadBooksAPI)} />
+      <div className="header__books" onClick={() => TriggerUploadBooks()}><i className="icon"><svg width="20" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5V1.447a.62.62 0 0 0-.625-.614H.625A.62.62 0 0 0 0 1.447V12.5h5zM1.875 3.904h1.25v3.684h-1.25V3.904zM0 14.167v3.571c0 .33.28.595.625.595h3.75c.345 0 .625-.266.625-.595v-3.571H0zM11.667 12.5V1.447a.62.62 0 0 0-.625-.614h-3.75a.62.62 0 0 0-.625.614V12.5h5zM8.542 3.904h1.25v3.684h-1.25V3.904zM6.667 14.167v3.571c0 .33.28.595.625.595h3.75c.345 0 .625-.266.625-.595v-3.571h-5zm12.753-.834l-5.253.725.573 3.737a.626.626 0 0 0 .26.414.683.683 0 0 0 .492.117l3.94-.543c.362-.05.614-.37.561-.713l-.574-3.737zm-.253-1.56L17.524.54a.632.632 0 0 0-.719-.533L13.043.55a.632.632 0 0 0-.536.714L14.149 12.5l5.018-.727zm-3.159-8.465l.547 3.745-1.253.182-.548-3.746 1.254-.181z" fill="#676767"/></svg></i>Add new books</div>
       <div className="header__notification"><i className="icon"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M19.2 15.6s-2.533-3.133-2.533-6.267V6.667C16.667 3 13.667 0 10 0S3.333 3 3.333 6.667v2.666c0 3.134-2.466 6.2-2.533 6.267-.133.2-.2.467-.067.733a.7.7 0 0 0 .6.334h17.334c.266 0 .466-.134.6-.4.133-.2.066-.467-.067-.667zM7.4 18c.267 1.133 1.333 2 2.6 2 1.267 0 2.267-.867 2.6-2H7.4z" fill="#676767"/></svg></i>Notifications</div>
       <div className="header__menu" onClick={() => TriggerMenuDropdown()}><i className="icon icon--dp"><img src={dp} alt="profile" /></i>Menu</div>
     </div>
   );
 }
 
-function MenuDropdown(props) {
+function MenuDropdown() {
   return (
     <Subscribe to={[OnboardContainer]}>
       {onboard => (
@@ -38,6 +40,10 @@ function MenuDropdown(props) {
       )}
     </Subscribe>
   );
+}
+
+function TriggerUploadBooks() {
+  document.getElementById('uploadBooks').click();
 }
 
 function TriggerMenuDropdown() {
@@ -69,7 +75,7 @@ class Header extends Component {
                 <div>
                   <HeaderLeft />
                   <Logo />
-                  <HeaderRight />
+                  <HeaderRight uploadBooksAPI={this.props.uploadBooksAPI} />
                   <MenuDropdown />
                   <NotificationDropdown />
                 </div>

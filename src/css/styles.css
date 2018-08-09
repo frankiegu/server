@@ -425,7 +425,7 @@ table {
 .cursor-pointer, .button, .header__logo, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .currently-reading__left, .currently-reading__right {
   cursor: pointer; }
 
-.none, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error {
+.none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error {
   display: none; }
 
 .block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__error--active, .onboard__submit {

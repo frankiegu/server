@@ -7,25 +7,26 @@ import Home from './Home';
 import Header from './Header';
 
 var apiRoutes = {
-  signin: 'http://localhost:8080/signin',
-  signup: 'http://localhost:8080/signup'
+  signIn: 'http://localhost:8080/signin',
+  signUp: 'http://localhost:8080/signup',
+  uploadBooks: 'http://localhost:8080/upload-books'
 }
 
 class App extends Component {
   render() {
     return (
       <div className="app">
-        <Header />
+        <Header uploadBooksAPI={apiRoutes.uploadBooks} />
         <div className="alert" id="alert"><i></i></div>
         <Switch>
           <Route exact path='/' component={Home} />
           <Route
             path="/signup"
-            render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signup} />}
+            render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signUp} />}
           />
           <Route
             path="/signin"
-            render={(props) => <OnboardSignIn {...props} signInAPI={apiRoutes.signin} />}
+            render={(props) => <OnboardSignIn {...props} signInAPI={apiRoutes.signIn} />}
           />
         </Switch>
       </div>

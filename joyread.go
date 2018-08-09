@@ -84,6 +84,7 @@ func StartServer() {
 	r.GET("/signup", home.Home)
 	r.POST("/signup", onboard.PostSignUp)
 	r.GET("/books", books.GetBooks)
+	r.POST("/upload-books", books.UploadBooks)
 
 	// Listen and serve
 	port, err := strconv.Atoi(serverPort)

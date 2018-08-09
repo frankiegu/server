@@ -15,3 +15,7 @@ body {
 
     color: white;
 }
+
+#uploadBooks {
+    @extend .none;
+}
