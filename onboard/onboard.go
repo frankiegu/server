@@ -12,8 +12,8 @@ import (
 
 	// custom packages
 
-	cError "github.com/joyread/server/error"
-	"github.com/joyread/server/models"
+	cError "source.joyread.app/scm/joyr/server/error"
+	"source.joyread.app/scm/joyr/server/models"
 )
 
 func _HashPassword(password string) (string, error) {

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	// custom packages
-	cError "github.com/joyread/server/error"
+	cError "source.joyread.app/scm/joyr/server/error"
 )
 
 // CreateUser ...
