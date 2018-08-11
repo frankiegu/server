@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import './css/styles.css';
 import OnboardSignUp from './onboard/OnboardSignUp';
 import OnboardSignIn from './onboard/OnboardSignIn';
+import OnboardSMTP from './onboard/OnboardSMTP';
 import Home from './Home';
 import Header from './Header';
 
@@ -20,10 +21,8 @@ class App extends Component {
         <div className="alert" id="alert"><i></i></div>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route
-            path="/signup"
-            render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signUp} />}
-          />
+          <Route path="/signup" component={OnboardSignUp} />
+          <Route path="/smtp" component={OnboardSMTP} />
           <Route
             path="/signin"
             render={(props) => <OnboardSignIn {...props} signInAPI={apiRoutes.signIn} />}

@@ -10,8 +10,12 @@ class OnboardContainer extends Container {
     var isTokenPresent = GetCookie("joyread") ? true : false;
     
     this.state = {
-      isSignedUp: true, // pull info from backend if admin had already signed up
-      isSignedIn: isTokenPresent
+      isSignedUp: false, // pull info from backend if admin had already signed up
+      isSignedIn: isTokenPresent,
+      isSignUpFilled: false, // bool true if signup field values are entered and ready to move to next step
+      username: '',
+      email: '',
+      password: ''
     };
   }
 
@@ -71,42 +75,45 @@ class OnboardContainer extends Container {
 
     // Return false if any of the above errors exists
     if (isError) return false;
+
+    this.setState({ isSignUpFilled: true, username: username, email: email, password: password });
     
 
-    var data = {
-      username: username,
-      email: email,
-      password: password
-    }
+    // var data = {
+    //   username: username,
+    //   email: email,
+    //   password: password
+    // }
 
-    fetch(url, {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      if (data.status === 'registered') {
-        DeleteCookie('joyread');
-        SetCookie('joyread', data.token, 30);
+    // fetch(url, {
+    //   method: 'post',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then((response) => {
+    //   return response.json();
+    // })
+    // .then((data) => {
+    //   if (data.status === 'registered') {
+    //     DeleteCookie('joyread');
+    //     SetCookie('joyread', data.token, 30);
         
-        this.setState({ isSignedUp: true, isSignedIn: true });
-        document.getElementById('alert').innerHTML = '<i></i><p>Your account is successfully registered</p>';
-        document.getElementById('alert').classList.add('alert--success');
-      } else {
-        document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
-        document.getElementById('alert').classList.add('alert--error');
-      }
-    });
+    //     this.setState({ isSignedUp: true, isSignedIn: true });
+    //     document.getElementById('alert').innerHTML = '<i></i><p>Your account is successfully registered</p>';
+    //     document.getElementById('alert').classList.add('alert--success');
+    //   } else {
+    //     document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
+    //     document.getElementById('alert').classList.add('alert--error');
+    //   }
+    // });
   }
   
   signIn(event, url) {
     event.preventDefault();
+    
     var usernameoremail = document.getElementById('signInUsernameOrEmail').value;
     var password = document.getElementById('signInPassword').value;
 

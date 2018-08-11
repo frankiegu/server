@@ -14,7 +14,15 @@ class OnboardRoute extends Component {
               ?
                 <Redirect to="/signin" />
               :
-                <Redirect to="/signup" />
+                <div>
+                  {
+                    onboard.state.isSignUpFilled
+                    ?
+                      <Redirect to="/smtp" />
+                    :
+                      <Redirect to="/signup" />
+                  }
+                </div>
             }
           </div>
         )}
