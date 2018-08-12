@@ -21,8 +21,14 @@ class App extends Component {
         <div className="alert" id="alert"><i></i></div>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path="/signup" component={OnboardSignUp} />
-          <Route path="/smtp" component={OnboardSMTP} />
+          <Route
+            path="/signup"
+            render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signUp} />}
+          />
+          <Route
+            path="/smtp"
+            render={(props) => <OnboardSMTP {...props} smtpAPI={apiRoutes.smtp} />}
+          />
           <Route
             path="/signin"
             render={(props) => <OnboardSignIn {...props} signInAPI={apiRoutes.signIn} />}

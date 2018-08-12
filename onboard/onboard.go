@@ -55,6 +55,8 @@ type SignUpStruct struct {
 func PostSignUp(c *gin.Context) {
 	var form SignUpStruct
 
+	fmt.Println("yes")
+
 	if err := c.BindJSON(&form); err == nil {
 		// Generate password hash using bcrypt
 		passwordHash, err := _HashPassword(form.Password)
@@ -67,6 +69,8 @@ func PostSignUp(c *gin.Context) {
 		db := c.MustGet("db").(*sql.DB)
 
 		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString)
+
+		fmt.Println("coming")
 
 		// Convert string to int64
 		// smtpPort, _ := strconv.Atoi(form.SMTPPort)

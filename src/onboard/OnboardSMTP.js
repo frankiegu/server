@@ -18,13 +18,15 @@ function OnboardSMTP(props) {
                   onboard.state.isSignUpFilled
                   ?
                     <form className="onboard">
-                      <label className="onboard__label">Email sender settings(SMTP)</label>
-                      <input type="text" className="onboard__username" id="signUpUsername" placeholder="Username (johnwell)*" />
-                      <div className="onboard__error" id="signUpUsernameError">This field is required</div>
-                      <input type="email" className="onboard__email" id="signUpEmail" placeholder="Email address (info@example.com)*" />
-                      <div className="onboard__error" id="signUpEmailError">This field is required</div>
-                      <input type="password" className="onboard__password" id="signUpPassword" placeholder="Password*" />
-                      <div className="onboard__error" id="signUpPasswordError">This field is required</div>
+                      <label className="onboard__label">Mail server configuration</label>
+                      <input type="text" className="onboard__smtp-host" id="smtpHost" placeholder="SMTP hostname (smtp.fastmail.com)*" />
+                      <div className="onboard__error" id="smtpHostError">This field is required</div>
+                      <input type="text" className="onboard__smtp-port" id="smtpPort" placeholder="SMTP port (25/587/465)*" />
+                      <div className="onboard__error" id="smtpPortError">This field is required</div>
+                      <input type="text" className="onboard__smtp-username" id="smtpUsername" placeholder="SMTP username (hello@johnwell.com)*" />
+                      <div className="onboard__error" id="smtpUsernameError">This field is required</div>
+                      <input type="password" className="onboard__smtp-password" id="smtpPassword" placeholder="SMTP password*" />
+                      <div className="onboard__error" id="smtpPasswordError">This field is required</div>
                       <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
                     </form>
                   :
