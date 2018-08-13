@@ -1,8 +1,8 @@
 package main
 
 import (
+	joyread "github.com/joyread/server"
 	_ "github.com/lib/pq"
-	joyread "source.joyread.app/scm/joyr/server"
 )
 
 func main() {

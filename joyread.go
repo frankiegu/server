@@ -12,13 +12,13 @@ import (
 	"github.com/gin-gonic/gin"
 
 	// custom packages
-	"source.joyread.app/scm/joyr/server/books"
-	cError "source.joyread.app/scm/joyr/server/error"
-	"source.joyread.app/scm/joyr/server/getenv"
-	"source.joyread.app/scm/joyr/server/home"
-	"source.joyread.app/scm/joyr/server/middleware"
-	"source.joyread.app/scm/joyr/server/models"
-	"source.joyread.app/scm/joyr/server/onboard"
+	"github.com/joyread/server/books"
+	cError "github.com/joyread/server/error"
+	"github.com/joyread/server/getenv"
+	"github.com/joyread/server/home"
+	"github.com/joyread/server/middleware"
+	"github.com/joyread/server/models"
+	"github.com/joyread/server/onboard"
 )
 
 const (
