@@ -95,7 +95,7 @@ class OnboardContainer extends Container {
       if (data.status === 'registered') {
         DeleteCookie('joyread');
         SetCookie('joyread', data.token, 30);
-        alert('yes');
+        
         this.setState({ isSignedUp: true, isSignUpFilled: true });
         document.getElementById('alert').innerHTML = '<i></i><p>Your account is successfully registered</p>';
         document.getElementById('alert').classList.add('alert--success');
