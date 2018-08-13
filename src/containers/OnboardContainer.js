@@ -96,8 +96,8 @@ class OnboardContainer extends Container {
         DeleteCookie('joyread');
         SetCookie('joyread', data.token, 30);
         
-        this.setState({ isSignedUp: true, isSignUpFilled: true });
-        document.getElementById('alert').innerHTML = '<i></i><p>Your account is successfully registered</p>';
+        this.setState({ isSignUpFilled: true });
+        document.getElementById('alert').innerHTML = '<i></i><p>Your signup form is successfully registered</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
         document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
@@ -109,7 +109,28 @@ class OnboardContainer extends Container {
   smtp(event, url) {
     event.preventDefault();
 
-    alert('yes');
+    var smtpHostname = document.getElementById('smtpHost').value;
+    var smtpPort = document.getElementById('smtpPort').value;
+    var smtpUsername = document.getElementById('smtpUsername').value;
+    var smtpPassword = document.getElementById('smtpPassword').value;
+
+    var isError = false;
+    this.removeOnboardErrors();
+
+    // Check if smtp hostname is none
+    isError = this.isFieldNone(smtpHostname, 'smtpHostError', 'This field is required');
+
+    // Check if smtp port is none
+    isError = this.isFieldNone(smtpPort, 'smtpPortError', 'This field is rquired');
+
+    // Check if smtp username is none
+    isError = this.isFieldNone(smtpUsername, 'smtpUsernameError', 'This field is rquired');
+
+    // Check if smtp password is none
+    isError = this.isFieldNone(smtpPassword, 'smtpPasswordError', 'This field is rquired');
+
+    // Return false if any of the above errors exists
+    if (isError) return false;
   }
   
   signIn(event, url) {

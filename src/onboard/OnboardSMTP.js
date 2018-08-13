@@ -27,7 +27,7 @@ function OnboardSMTP(props) {
                       <div className="onboard__error" id="smtpUsernameError">This field is required</div>
                       <input type="password" className="onboard__smtp-password" id="smtpPassword" placeholder="SMTP password*" />
                       <div className="onboard__error" id="smtpPasswordError">This field is required</div>
-                      <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
+                      <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.smtp(event, props.smtpAPI)} />
                     </form>
                   :
                     <Redirect to="/signup" />

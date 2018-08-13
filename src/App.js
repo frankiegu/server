@@ -10,6 +10,7 @@ import Header from './Header';
 var apiRoutes = {
   signIn: 'http://localhost:8080/signin',
   signUp: 'http://localhost:8080/signup',
+  smtp: 'http://localhost:8080/smtp',
   uploadBooks: 'http://localhost:8080/upload-books'
 }
 
