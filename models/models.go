@@ -51,12 +51,12 @@ func SelectPasswordHashAndJWTToken(db *sql.DB, usernameoremail string) (string, 
 
 // CreateSMTP ...
 func CreateSMTP(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS smtp (server VARCHAR(255) NOT NULL, port INTEGER NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS smtp (hostname VARCHAR(255) NOT NULL, port INTEGER NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)")
 	cError.CheckError(err)
 }
 
 // InsertSMTP ...
-func InsertSMTP(db *sql.DB, server string, port int, email string, password string) {
-	_, err := db.Query("INSERT INTO smtp (server, port, email, password) VALUES ($1, $2, $3, $4)", server, port, email, password)
+func InsertSMTP(db *sql.DB, hostname string, port int, username string, password string) {
+	_, err := db.Query("INSERT INTO smtp (hostname, port, username, password) VALUES ($1, $2, $3, $4)", hostname, port, username, password)
 	cError.CheckError(err)
 }

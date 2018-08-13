@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	// vendor packages
 	"github.com/dgrijalva/jwt-go"
@@ -81,6 +82,32 @@ func PostSignUp(c *gin.Context) {
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",
 			"token":  tokenString,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}
+
+// SMTP struct
+type SMTPStruct struct {
+	SMTPHostname string `json:"smtpHostname" binding:"required"`
+	SMTPPort     string `json:"smtpPort" binding:"required"`
+	SMTPUsername string `json:"smtpUsername" binding:"required"`
+	SMTPPassword string `json:"smtpPassword" binding:"required"`
+}
+
+// PostSMTP ...
+func PostSMTP(c *gin.Context) {
+	var form SMTPStruct
+
+	if err := c.BindJSON(&form); err == nil {
+		db := c.MustGet("db").(*sql.DB)
+
+		smtpPort, _ := strconv.Atoi(form.SMTPPort)
+		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
+
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"status": "registered",
 		})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

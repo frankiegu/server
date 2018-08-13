@@ -12,7 +12,8 @@ class OnboardContainer extends Container {
     this.state = {
       isSignedUp: false, // pull info from backend if admin had already signed up
       isSignedIn: isTokenPresent,
-      isSignUpFilled: false // bool true if signup field values are entered and ready to move to next step
+      isSignUpFilled: false, // bool true if signup field values are registered
+      isSMTPFilled: false // bool true if smtp field values are registered
     };
   }
 
@@ -97,7 +98,7 @@ class OnboardContainer extends Container {
         SetCookie('joyread', data.token, 30);
         
         this.setState({ isSignUpFilled: true });
-        document.getElementById('alert').innerHTML = '<i></i><p>Your signup form is successfully registered</p>';
+        document.getElementById('alert').innerHTML = '<i></i><p>Your Sign Up form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
         document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
@@ -131,6 +132,38 @@ class OnboardContainer extends Container {
 
     // Return false if any of the above errors exists
     if (isError) return false;
+
+    var data = {
+      smtpHostname: smtpHostname,
+      smtpPort: smtpPort,
+      smtpUsername: smtpUsername,
+      smtpPassword: smtpPassword
+    }
+
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data.status === 'registered') {
+        DeleteCookie('joyread');
+        SetCookie('joyread', data.token, 30);
+        
+        this.setState({ isSMTPFilled: true });
+        document.getElementById('alert').innerHTML = '<i></i><p>Your SMTP form is registered successfully</p>';
+        document.getElementById('alert').classList.add('alert--success');
+      } else {
+        document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
+        document.getElementById('alert').classList.add('alert--error');
+      }
+    });
   }
   
   signIn(event, url) {
