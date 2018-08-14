@@ -133,13 +133,13 @@ class OnboardContainer extends Container {
     isError = this.isFieldNone(smtpHostname, 'smtpHostError', 'This field is required');
 
     // Check if smtp port is none
-    isError = this.isFieldNone(smtpPort, 'smtpPortError', 'This field is rquired');
+    isError = this.isFieldNone(smtpPort, 'smtpPortError', 'This field is required');
 
     // Check if smtp username is none
-    isError = this.isFieldNone(smtpUsername, 'smtpUsernameError', 'This field is rquired');
+    isError = this.isFieldNone(smtpUsername, 'smtpUsernameError', 'This field is required');
 
     // Check if smtp password is none
-    isError = this.isFieldNone(smtpPassword, 'smtpPasswordError', 'This field is rquired');
+    isError = this.isFieldNone(smtpPassword, 'smtpPasswordError', 'This field is required');
 
     // Return false if any of the above errors exists
     if (isError) return false;
