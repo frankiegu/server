@@ -21,7 +21,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <div id="loader">asdf</div>
+        <div id="loader"><i></i></div>
         <Header uploadBooksAPI={apiRoutes.uploadBooks} />
         <div className="alert" id="alert"><i></i></div>
         <Switch>

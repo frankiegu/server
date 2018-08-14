@@ -107,7 +107,7 @@ func TestEmail(c *gin.Context) {
 
 		// Send test email
 		emailSubject := "Joyread - Test email for your SMTP configuration"
-		emailBody := "Hi,<br /><br />Congratulations! You've successfully set up your email server.<br /><br />Cheers,<br/>Joyread"
+		emailBody := "Congratulations mate!<br /><br /> You've successfully set up your email server.<br /><br />Cheers,<br/>Joyread"
 		go email.SendEmail(form.SMTPUsername, form.SMTPTestEmail, emailSubject, emailBody, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{"status": "Email sent successfully"})

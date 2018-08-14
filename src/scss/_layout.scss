@@ -28,7 +28,16 @@ body {
     top: 0;
     left: 0;
     z-index: 999;
-    font-size: 50px;
-    text-align: center;
-    padding-top: 50px;
+    
+    & i {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-image: url('../assets/gif/loader.gif');
+        background-repeat: no-repeat;
+        background-size: cover;
+        top: 40%;
+        left: 50%;
+        margin-left: -25px;
+    }
 }
