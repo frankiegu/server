@@ -67,7 +67,7 @@ func PostSignUp(c *gin.Context) {
 
 		db := c.MustGet("db").(*sql.DB)
 
-		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString)
+		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
 
 		// Convert string to int64
 		// smtpPort, _ := strconv.Atoi(form.SMTPPort)
@@ -147,4 +147,12 @@ func PostSignIn(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+}
+
+func IsAdminPresent(c *gin.Context) {
+	db := c.MustGet("db").(*sql.DB)
+
+	isAdminPresent := models.SelectOneAdmin(db)
+
+	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent})
 }

@@ -13,13 +13,9 @@ class Home extends Component {
             {
               onboard.state.isSignedIn
               ? 
-                <div>
-                  <CurrentlyReading />
-                </div>
+                <CurrentlyReading />
               :
-                <div>
-                  <OnboardRoute />
-                </div>
+                <OnboardRoute />
             }
           </div>
         )}

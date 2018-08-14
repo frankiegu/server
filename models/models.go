@@ -9,14 +9,29 @@ import (
 
 // CreateUser ...
 func CreateUser(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL)")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, is_nextcloud BOOLEAN NOT NULL DEFAULT FALSE)")
 	cError.CheckError(err)
 }
 
 // InsertUser ...
-func InsertUser(db *sql.DB, username string, email string, passwordHash string, tokenString string) {
-	_, err := db.Query("INSERT INTO account (username, email, password_hash, jwt_token) VALUES ($1, $2, $3, $4)", username, email, passwordHash, tokenString)
+func InsertUser(db *sql.DB, username string, email string, passwordHash string, tokenString string, isAdmin bool) {
+	_, err := db.Query("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5)", username, email, passwordHash, tokenString, isAdmin)
 	cError.CheckError(err)
+}
+
+// SelectOneAdmin ...
+func SelectOneAdmin(db *sql.DB) bool {
+	// Check for Admin in the user table
+	rows, err := db.Query("SELECT id FROM account WHERE is_admin = $1", true)
+	cError.CheckError(err)
+
+	var isAdminPresent = false
+
+	if rows.Next() {
+		isAdminPresent = true
+	}
+
+	return isAdminPresent
 }
 
 // SelectPasswordHashAndJWTToken ...

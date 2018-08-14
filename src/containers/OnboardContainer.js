@@ -8,10 +8,20 @@ class OnboardContainer extends Container {
     super();
 
     var isTokenPresent = GetCookie("joyread") ? true : false;
+
+    fetch("http://localhost:8080/isadminpresent")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      var isAdminPresent = data.isAdminPresent;
+      var isSignedIn = data.isAdminPresent ? isTokenPresent : false;
+      this.setState({ isAdminPresent: isAdminPresent, isSignedIn: isSignedIn });
+    });
     
     this.state = {
-      isSignedUp: false, // pull info from backend if admin had already signed up
-      isSignedIn: isTokenPresent,
+      isAdminPresent: false,
+      isSignedIn: false,
       isSignUpFilled: false, // bool true if signup field values are registered
       isSMTPFilled: false // bool true if smtp field values are registered
     };
