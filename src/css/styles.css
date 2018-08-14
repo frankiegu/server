@@ -66,7 +66,7 @@ table {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard__sub-form .button {
+  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p {
     margin-top: 20px !important; }
   .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form {
     margin-top: 30px !important; }
@@ -96,7 +96,7 @@ table {
   .mb\-\- {
     margin-bottom: 2px !important; }
 
-.ml {
+.ml, .onboard__sub-form i, .onboard__sub-form p {
   margin-left: 10px !important; }
   .ml0 {
     margin-left: 0 !important; }
@@ -362,12 +362,12 @@ table {
   font-size: 16px; }
   .fs\+, .currently-reading__title {
     font-size: 20px; }
-  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__sub-label, .onboard__error {
+  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__sub-label, .onboard__error, .onboard__sub-form p {
     font-size: 14px; }
 
 .fw, .header__link--notification span {
   font-weight: 400; }
-  .fw\+, .alert, .button, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .header__link--notification span em, .currently-reading__title, .onboard__label, .onboard__error {
+  .fw\+, .alert, .button, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .header__link--notification span em, .currently-reading__title, .onboard__label, .onboard__error, .onboard__sub-form p {
     font-weight: 600; }
 
 .w1300, body {
@@ -406,10 +406,10 @@ table {
 .letter-spacing {
   letter-spacing: 1px; }
 
-.pull-left, .header__left, .currently-reading__title, .currently-reading__left, .currently-reading__right {
+.pull-left, .header__left, .currently-reading__title, .currently-reading__left, .currently-reading__right, .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p {
   float: left; }
 
-.pull-right, .header__right, .currently-reading__nav, .onboard__sub-form .button {
+.pull-right, .header__right, .currently-reading__nav {
   float: right; }
 
 .abs-pos, .alert, .header__logo, .header__m-dropdown, .header__n-dropdown, .header__m-dropdown:before, .header__n-dropdown:before, .header__m-dropdown:after, .header__n-dropdown:after {
@@ -425,10 +425,10 @@ table {
 .cursor-pointer, .button, .header__logo, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .currently-reading__left, .currently-reading__right {
   cursor: pointer; }
 
-.none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error {
+.none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error, .onboard__sub-form i, .onboard__sub-form p {
   display: none; }
 
-.block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__sub-label, .onboard__error--active, .onboard__submit {
+.block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__sub-label, .onboard__error--active, .onboard__submit, .onboard__sub-form i.show, .onboard__sub-form p.show {
   display: block; }
 
 .inline-block {
@@ -438,7 +438,7 @@ table {
   margin-left: auto;
   margin-right: auto; }
 
-.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup {
+.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__sub-submit {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
@@ -668,3 +668,13 @@ input[type="text"], input[type="email"], input[type="password"] {
     overflow: hidden; }
     .onboard__sub-form label {
       text-align: left; }
+    .onboard__sub-form i {
+      width: 30px;
+      height: 30px;
+      background-image: url("..//assets/gif/loader-small.gif");
+      background-repeat: no-repeat;
+      background-size: cover; }
+  .onboard__sub-submit {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }

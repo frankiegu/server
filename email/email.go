@@ -24,3 +24,21 @@ func SendEmail(from string, to string, subject string, body string, smtpServer s
 		panic(err)
 	}
 }
+
+// SendSyncEmail ...
+func SendSyncEmail(from string, to string, subject string, body string, smtpServer string, smtpPort int, smtpEmail string, smtpPassword string) bool {
+	m := gomail.NewMessage()
+	m.SetHeader("From", from)
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", body)
+
+	d := gomail.NewDialer(smtpServer, smtpPort, smtpEmail, smtpPassword)
+
+	// Send the email
+	if err := d.DialAndSend(m); err != nil {
+		return false
+	}
+
+	return true
+}

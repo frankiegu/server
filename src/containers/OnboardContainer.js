@@ -180,6 +180,8 @@ class OnboardContainer extends Container {
   sendTestEmail(event, url) {
     event.preventDefault();
 
+    document.getElementById('smtpLoader').classList.add('show');
+
     var smtpHostname = document.getElementById('smtpHost').value;
     var smtpPort = document.getElementById('smtpPort').value;
     var smtpUsername = document.getElementById('smtpUsername').value;
@@ -206,7 +208,16 @@ class OnboardContainer extends Container {
       return response.json();
     })
     .then((data) => {
-      alert('sent successfully');
+      if (data.status) {
+        document.getElementById('smtpLoader').classList.remove('show');
+        document.getElementById('smtpText').innerText = 'Test email sent successfully!';
+        document.getElementById('smtpText').classList.add('show');
+      } else {
+        document.getElementById('smtpLoader').classList.remove('show');
+        document.getElementById('smtpText').innerText = 'Email not sent, please make sure the SMTP fields are correct';
+        document.getElementById('smtpText').classList.add('show');
+      }
+      
     });
   }
   

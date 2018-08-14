@@ -31,7 +31,11 @@ function OnboardSMTP(props) {
                 <div className="onboard__sub-form">
                   <label className="onboard__label">Send test email to</label>
                   <input type="email" className="onboard__smtp-testemail" id="smtpTestEmail" placeholder="Email address" />
-                  <button className="button button--secondary" onClick={(event) => onboard.sendTestEmail(event, props.testEmailAPI)}>Send</button>
+                  <div className="onboard__sub-submit">
+                    <button className="button button--secondary" onClick={(event) => onboard.sendTestEmail(event, props.testEmailAPI)}>Send</button>
+                    <i id="smtpLoader"></i>
+                    <p id="smtpText">Test email sent successfully!</p>
+                  </div>
                 </div>
                 <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.smtp(event, props.smtpAPI)} />
               </form>
