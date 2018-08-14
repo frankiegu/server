@@ -75,3 +75,18 @@ func InsertSMTP(db *sql.DB, hostname string, port int, username string, password
 	_, err := db.Query("INSERT INTO smtp (hostname, port, username, password) VALUES ($1, $2, $3, $4)", hostname, port, username, password)
 	cError.CheckError(err)
 }
+
+// CheckSMTP ...
+func CheckSMTP(db *sql.DB) bool {
+	// Check for Admin in the user table
+	rows, err := db.Query("SELECT hostname FROM smtp")
+	cError.CheckError(err)
+
+	var isSMTPPresent = false
+
+	if rows.Next() {
+		isSMTPPresent = true
+	}
+
+	return isSMTPPresent
+}

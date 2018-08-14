@@ -7,20 +7,21 @@ class OnboardContainer extends Container {
   constructor () {
     super();
 
-    var isTokenPresent = GetCookie("joyread") ? true : false;
-
-    fetch("http://localhost:8080/isadminpresent")
+    fetch("http://localhost:8080/check-onboard")
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      var isAdminPresent = data.isAdminPresent;
-      var isSignedIn = data.isAdminPresent ? isTokenPresent : false;
-      this.setState({ isAdminPresent: isAdminPresent, isSignedIn: isSignedIn });
+      console.log(data);
+      if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
+      if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
+      if (data.isAdminPresent && data.isSMTPPresent) {
+        if (GetCookie("joyread")) this.setState({ isSignedIn: true });
+      }
+      document.getElementById('loader').style.display = 'none';
     });
     
     this.state = {
-      isAdminPresent: false,
       isSignedIn: false,
       isSignUpFilled: false, // bool true if signup field values are registered
       isSMTPFilled: false // bool true if smtp field values are registered

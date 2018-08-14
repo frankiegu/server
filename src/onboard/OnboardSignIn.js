@@ -10,17 +10,13 @@ function OnboardSignIn(props) {
         onboard.state.isSignedIn
         ?
           <Redirect to="/" />
-          :
-            onboard.state.isAdminPresent
-            ?
-              <form className="onboard">
-                <label className="onboard__label">Sign In</label>
-                <input type="text" className="onboard__usernameoremail" id="signInUsernameOrEmail" placeholder="Username / Email address" />
-                <input type="password" className="onboard__password" id="signInPassword" placeholder="Password" />
-                <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signIn(event, props.signInAPI)} />
-              </form>
-            :
-              <Redirect to="/signup" />
+        :
+          <form className="onboard">
+            <label className="onboard__label">Sign In</label>
+            <input type="text" className="onboard__usernameoremail" id="signInUsernameOrEmail" placeholder="Username / Email address" />
+            <input type="password" className="onboard__password" id="signInPassword" placeholder="Password" />
+            <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signIn(event, props.signInAPI)} />
+          </form>
       )}
     </Subscribe>
   );

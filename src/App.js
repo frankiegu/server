@@ -20,10 +20,10 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <div id="loader">asdf</div>
         <Header uploadBooksAPI={apiRoutes.uploadBooks} />
         <div className="alert" id="alert"><i></i></div>
         <Switch>
-          <Route exact path='/' component={Home} />
           <Route
             path="/signup"
             render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signUp} />}
@@ -40,6 +40,7 @@ class App extends Component {
             path="/signin"
             render={(props) => <OnboardSignIn {...props} signInAPI={apiRoutes.signIn} />}
           />
+          <Route exact path='/' component={Home} />
         </Switch>
       </div>
     );

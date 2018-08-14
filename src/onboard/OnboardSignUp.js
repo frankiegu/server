@@ -2,18 +2,19 @@ import React from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
 import OnboardContainer from '../containers/OnboardContainer';
+import OnboardRoute from './OnboardRoute';
 
 function OnboardSignUp(props) {
   return (
     <Subscribe to={[OnboardContainer]}>
       {onboard => (
-        onboard.state.isAdminPresent
+        onboard.state.isSignedIn
         ?
-          <Redirect to="/signin" />
+          <Redirect to="/" />
         :
           onboard.state.isSignUpFilled
           ?
-            <Redirect to="/smtp" />
+            <OnboardRoute />
           :
             <form className="onboard">
               <label className="onboard__label">Create an admin account</label>

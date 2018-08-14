@@ -9,15 +9,11 @@ class Home extends Component {
     return (
       <Subscribe to={[OnboardContainer]}>
         {onboard => (
-          <div className="app__inner">
-            {
-              onboard.state.isSignedIn
-              ? 
-                <CurrentlyReading />
-              :
-                <OnboardRoute />
-            }
-          </div>
+          onboard.state.isSignedIn
+          ? 
+            <CurrentlyReading />
+          :
+            <OnboardRoute />
         )}
       </Subscribe>
     );

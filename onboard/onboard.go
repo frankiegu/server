@@ -149,10 +149,12 @@ func PostSignIn(c *gin.Context) {
 	}
 }
 
-func IsAdminPresent(c *gin.Context) {
+// CheckOnboard ...
+func CheckOnboard(c *gin.Context) {
 	db := c.MustGet("db").(*sql.DB)
 
 	isAdminPresent := models.SelectOneAdmin(db)
+	isSMTPPresent := models.CheckSMTP(db)
 
-	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent})
+	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "isSMTPPresent": isSMTPPresent})
 }
