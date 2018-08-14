@@ -15,7 +15,7 @@ function OnboardSignIn(props) {
             <label className="onboard__label">Sign In</label>
             <input type="text" className="onboard__usernameoremail" id="signInUsernameOrEmail" placeholder="Username / Email address" />
             <input type="password" className="onboard__password" id="signInPassword" placeholder="Password" />
-            <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signIn(event, props.signInAPI)} />
+            <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.signIn(event, props.signInAPI)} />
           </form>
       )}
     </Subscribe>

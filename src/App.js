@@ -12,6 +12,7 @@ var apiRoutes = {
   signIn: 'http://localhost:8080/signin',
   signUp: 'http://localhost:8080/signup',
   smtp: 'http://localhost:8080/smtp',
+  testEmail: 'http://localhost:8080/test-email',
   nextcloud: 'http://localhost:8080/nextcloud',
   uploadBooks: 'http://localhost:8080/upload-books'
 }
@@ -30,7 +31,7 @@ class App extends Component {
           />
           <Route
             path="/smtp"
-            render={(props) => <OnboardSMTP {...props} smtpAPI={apiRoutes.smtp} />}
+            render={(props) => <OnboardSMTP {...props} smtpAPI={apiRoutes.smtp} testEmailAPI={apiRoutes.testEmail} />}
           />
           <Route
             path="/nextcloud"

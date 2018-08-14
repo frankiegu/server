@@ -66,9 +66,9 @@ table {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
+  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard__sub-form .button {
     margin-top: 20px !important; }
-  .mt\+\+, .currently-reading, .onboard__submit {
+  .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form {
     margin-top: 30px !important; }
   .mt\+\+\+ {
     margin-top: 40px !important; }
@@ -284,7 +284,7 @@ table {
   padding-bottom: 10px !important; }
   .pv0 {
     padding-top: 0 !important; }
-  .pv\+ {
+  .pv\+, .onboard__sub-form {
     padding-top: 20px !important; }
   .pv\+\+ {
     padding-top: 30px !important; }
@@ -298,7 +298,7 @@ table {
     padding-top: 2px !important; }
   .pv0 {
     padding-bottom: 0 !important; }
-  .pv\+ {
+  .pv\+, .onboard__sub-form {
     padding-bottom: 20px !important; }
   .pv\+\+ {
     padding-bottom: 30px !important; }
@@ -379,10 +379,10 @@ table {
 .brand-secondary-color {
   color: #F5EFEF; }
 
-.brand-background, ::-moz-selection, .button, .header__link:hover {
+.brand-background, ::-moz-selection, .button--primary, .header__link:hover {
   background-color: #F56363; }
 
-.brand-background, ::selection, .button, .header__link:hover {
+.brand-background, ::selection, .button--primary, .header__link:hover {
   background-color: #F56363; }
 
 .brand-secondary-background {
@@ -409,7 +409,7 @@ table {
 .pull-left, .header__left, .currently-reading__title, .currently-reading__left, .currently-reading__right {
   float: left; }
 
-.pull-right, .header__right, .currently-reading__nav {
+.pull-right, .header__right, .currently-reading__nav, .onboard__sub-form .button {
   float: right; }
 
 .abs-pos, .alert, .header__logo, .header__m-dropdown, .header__n-dropdown, .header__m-dropdown:before, .header__n-dropdown:before, .header__m-dropdown:after, .header__n-dropdown:after {
@@ -565,6 +565,8 @@ input[type="text"], input[type="email"], input[type="password"] {
 .button {
   color: white;
   border: none; }
+  .button--secondary {
+    background: #676767; }
 
 .icon {
   width: 20px;
@@ -653,3 +655,9 @@ input[type="text"], input[type="email"], input[type="password"] {
     text-align: center; }
   .onboard__sub-label {
     text-align: center; }
+  .onboard__sub-form {
+    border-top: 1px solid #E7E4E4;
+    border-bottom: 1px solid #E7E4E4;
+    overflow: hidden; }
+    .onboard__sub-form label {
+      text-align: left; }

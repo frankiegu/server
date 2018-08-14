@@ -41,4 +41,22 @@
         @extend .margin-center;
         @extend .mt\+\+;
     }
+
+    &__sub-form {
+        @extend .mt\+\+;
+        @extend .pv\+;
+        
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        overflow: hidden;
+
+        & label {
+            text-align: left;
+        }
+
+        & .button {
+            @extend .pull-right;
+            @extend .mt\+;
+        }
+    }
 }

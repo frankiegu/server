@@ -1,6 +1,5 @@
 .button {
     @extend .block;
-    @extend .brand-background;
     @extend .fs\-;
     @extend .fw\+;
     @extend .ph\+\+;
@@ -11,4 +10,12 @@
     
     color: white;
     border: none;
+
+    &--primary {
+        @extend .brand-background;
+    }
+
+    &--secondary {
+        background: $text-primary;
+    }
 }

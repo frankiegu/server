@@ -13,6 +13,7 @@ import (
 
 	// custom packages
 
+	"github.com/joyread/server/email"
 	cError "github.com/joyread/server/error"
 	"github.com/joyread/server/models"
 )
@@ -88,6 +89,33 @@ func PostSignUp(c *gin.Context) {
 	}
 }
 
+// TestSMTP struct
+type TestSMTPStruct struct {
+	SMTPHostname  string `json:"smtpHostname" binding:"required"`
+	SMTPPort      string `json:"smtpPort" binding:"required"`
+	SMTPUsername  string `json:"smtpUsername" binding:"required"`
+	SMTPPassword  string `json:"smtpPassword" binding:"required"`
+	SMTPTestEmail string `json:"smtpTestEmail" binding:"required"`
+}
+
+// TestEmail ...
+func TestEmail(c *gin.Context) {
+	var form TestSMTPStruct
+
+	if err := c.BindJSON(&form); err == nil {
+		smtpPort, _ := strconv.Atoi(form.SMTPPort)
+
+		// Send test email
+		emailSubject := "Joyread - Test email for your SMTP configuration"
+		emailBody := "Hi,<br /><br />Congratulations! You've successfully set up your email server.<br /><br />Cheers,<br/>Joyread"
+		go email.SendEmail(form.SMTPUsername, form.SMTPTestEmail, emailSubject, emailBody, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
+
+		c.JSON(http.StatusMovedPermanently, gin.H{"status": "Email sent successfully"})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}
+
 // SMTP struct
 type SMTPStruct struct {
 	SMTPHostname string `json:"smtpHostname" binding:"required"`
@@ -106,9 +134,7 @@ func PostSMTP(c *gin.Context) {
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
 		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
-		c.JSON(http.StatusMovedPermanently, gin.H{
-			"status": "registered",
-		})
+		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}

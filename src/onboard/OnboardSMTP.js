@@ -24,11 +24,16 @@ function OnboardSMTP(props) {
                 <div className="onboard__error" id="smtpHostError">This field is required</div>
                 <input type="text" className="onboard__smtp-port" id="smtpPort" placeholder="SMTP port (25/587/465)*" />
                 <div className="onboard__error" id="smtpPortError">This field is required</div>
-                <input type="text" className="onboard__smtp-username" id="smtpUsername" placeholder="SMTP username (hello@johnwell.com)*" />
+                <input type="email" className="onboard__smtp-username" id="smtpUsername" placeholder="SMTP username (hello@johnwell.com)*" />
                 <div className="onboard__error" id="smtpUsernameError">This field is required</div>
                 <input type="password" className="onboard__smtp-password" id="smtpPassword" placeholder="SMTP password*" />
                 <div className="onboard__error" id="smtpPasswordError">This field is required</div>
-                <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.smtp(event, props.smtpAPI)} />
+                <div className="onboard__sub-form">
+                  <label className="onboard__label">Send test email to</label>
+                  <input type="email" className="onboard__smtp-testemail" id="smtpTestEmail" placeholder="Email address" />
+                  <button className="button button--secondary" onClick={(event) => onboard.sendTestEmail(event, props.testEmailAPI)}>Send</button>
+                </div>
+                <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.smtp(event, props.smtpAPI)} />
               </form>
           :
             <OnboardRoute />

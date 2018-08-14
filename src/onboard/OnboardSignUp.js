@@ -24,7 +24,7 @@ function OnboardSignUp(props) {
               <div className="onboard__error" id="signUpEmailError">This field is required</div>
               <input type="password" className="onboard__password" id="signUpPassword" placeholder="Password*" />
               <div className="onboard__error" id="signUpPasswordError">This field is required</div>
-              <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
+              <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
             </form>
       )}
     </Subscribe>

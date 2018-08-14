@@ -27,7 +27,7 @@ function OnboardNextcloud(props) {
                 <div className="onboard__error" id="nextcloudClientIdError">This field is required</div>
                 <input type="text" className="onboard__nextcloud-client-secret" id="nextcloudClientSecret" placeholder="Client secret*" />
                 <div className="onboard__error" id="nextcloudClientSecretError">This field is required</div>
-                <input type="submit" className="button button-primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
+                <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
               </form>
           :
             <OnboardRoute />

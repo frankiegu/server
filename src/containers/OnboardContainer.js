@@ -14,7 +14,7 @@ class OnboardContainer extends Container {
     .then((data) => {
       console.log(data);
       if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
-      if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
+      if (data.isSMTPPresent) this.setState({ isSMTPFilled: false });
       if (data.isAdminPresent && data.isSMTPPresent) {
         if (GetCookie("joyread")) this.setState({ isSignedIn: true });
       }
@@ -174,6 +174,39 @@ class OnboardContainer extends Container {
         document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
         document.getElementById('alert').classList.add('alert--error');
       }
+    });
+  }
+
+  sendTestEmail(event, url) {
+    event.preventDefault();
+
+    var smtpHostname = document.getElementById('smtpHost').value;
+    var smtpPort = document.getElementById('smtpPort').value;
+    var smtpUsername = document.getElementById('smtpUsername').value;
+    var smtpPassword = document.getElementById('smtpPassword').value;
+    var smtpTestEmail = document.getElementById('smtpTestEmail').value;
+
+    var data = {
+      smtpHostname: smtpHostname,
+      smtpPort: smtpPort,
+      smtpUsername: smtpUsername,
+      smtpPassword: smtpPassword,
+      smtpTestEmail: smtpTestEmail
+    }
+
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      alert('sent successfully');
     });
   }
   
