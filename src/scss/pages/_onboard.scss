@@ -12,6 +12,15 @@
         text-align: center;
     }
 
+    &__sub-label {
+        @extend .block;
+        @extend .w1\/1;
+        @extend .fs\-;
+        @extend .mt;
+
+        text-align: center;
+    }
+
     input[type="text"], input[type="email"], input[type="password"] {
         @extend .w1\/1;
         @extend .mt\+;

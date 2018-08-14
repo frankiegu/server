@@ -62,7 +62,7 @@ table {
   .m\-\- {
     margin: 2px !important; }
 
-.mt {
+.mt, .onboard__sub-label {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
@@ -343,7 +343,7 @@ table {
   .ph\-\- {
     padding-right: 2px !important; }
 
-.w1\/1, .header__logo img, .currently-reading__header, .onboard__label, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
+.w1\/1, .header__logo img, .currently-reading__header, .onboard__label, .onboard__sub-label, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
   width: 100% !important; }
 
 .w1\/2 {
@@ -362,7 +362,7 @@ table {
   font-size: 16px; }
   .fs\+, .currently-reading__title {
     font-size: 20px; }
-  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__error {
+  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__sub-label, .onboard__error {
     font-size: 14px; }
 
 .fw, .header__link--notification span {
@@ -428,7 +428,7 @@ table {
 .none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error {
   display: none; }
 
-.block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__error--active, .onboard__submit {
+.block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__sub-label, .onboard__error--active, .onboard__submit {
   display: block; }
 
 .inline-block {
@@ -650,4 +650,6 @@ input[type="text"], input[type="email"], input[type="password"] {
 .onboard {
   width: 300px; }
   .onboard__label {
+    text-align: center; }
+  .onboard__sub-label {
     text-align: center; }
