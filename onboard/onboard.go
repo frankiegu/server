@@ -60,7 +60,7 @@ func PostDatabase(c *gin.Context) {
 	var form DBStruct
 
 	if err := c.BindJSON(&form); err == nil {
-		db := models.CreateDB(form.DBType, form.DBHostname, form.DBPort, form.DBName, form.DBUsername, form.DBPassword)
+		// db := models.CreateDB(form.DBType, form.DBHostname, form.DBPort, form.DBName, form.DBUsername, form.DBPassword)
 	}
 }
 
