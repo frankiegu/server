@@ -1,7 +1,6 @@
 package onboard
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -84,10 +83,8 @@ func PostSignUp(c *gin.Context) {
 		tokenString, err := _GenerateJWTToken(passwordHash)
 		cError.CheckError(err)
 
-		db := c.MustGet("db").(*sql.DB)
-
-		models.CreateUser(db)
-		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
+		models.CreateUser()
+		models.InsertUser(form.Username, form.Email, passwordHash, tokenString, true)
 
 		// Convert string to int64
 		// smtpPort, _ := strconv.Atoi(form.SMTPPort)
@@ -148,10 +145,9 @@ func PostSMTP(c *gin.Context) {
 	var form SMTPStruct
 
 	if err := c.BindJSON(&form); err == nil {
-		db := c.MustGet("db").(*sql.DB)
-		models.CreateSMTP(db)
+		models.CreateSMTP()
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
-		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
+		models.InsertSMTP(form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
 	} else {
@@ -170,9 +166,8 @@ func PostSignIn(c *gin.Context) {
 	var form SignInStruct
 
 	if err := c.BindJSON(&form); err == nil {
-		db := c.MustGet("db").(*sql.DB)
 
-		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, form.UsernameOrEmail)
+		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(form.UsernameOrEmail)
 
 		if isPasswordValid := _CheckPasswordHash(form.Password, passwordHash); isPasswordValid == true {
 			isTokenValid, err := _ValidateJWTToken(tokenString, passwordHash)
@@ -196,10 +191,9 @@ func PostSignIn(c *gin.Context) {
 
 // CheckOnboard ...
 func CheckOnboard(c *gin.Context) {
-	db := c.MustGet("db").(*sql.DB)
 
-	isAdminPresent := models.SelectOneAdmin(db)
-	isSMTPPresent := models.CheckSMTP(db)
+	isAdminPresent := models.SelectOneAdmin()
+	isSMTPPresent := models.CheckSMTP()
 
 	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "isSMTPPresent": isSMTPPresent})
 }

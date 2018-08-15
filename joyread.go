@@ -2,7 +2,7 @@ package joyread
 
 import (
 	// built-in packages
-	"database/sql"
+
 	"fmt"
 	"os"
 	"path"
@@ -13,38 +13,11 @@ import (
 
 	// custom packages
 	"github.com/joyread/server/books"
-	cError "github.com/joyread/server/error"
-	"github.com/joyread/server/getenv"
 	"github.com/joyread/server/home"
 	"github.com/joyread/server/middleware"
 	"github.com/joyread/server/onboard"
+	"github.com/joyread/server/settings"
 )
-
-const (
-	portDefault             = "8080"
-	portEnv                 = "JOYREAD_PORT"
-	dbPathEnv               = "JOYREAD_DB_PATH"
-	dbPathDefault           = "."
-	assetPathEnv            = "JOYREAD_ASSET_PATH"
-	assetPathDefault        = "."
-	postgresPasswordEnv     = "POSTGRES_PASSWORD"
-	postgresPasswordDefault = "postgres"
-)
-
-var (
-	serverPort       = portDefault
-	dbPath           = dbPathDefault
-	assetPath        = assetPathDefault
-	postgresPassword = postgresPasswordDefault
-)
-
-func init() {
-	fmt.Println("Running init ...")
-	serverPort = getenv.GetEnv(portEnv, portDefault)
-	dbPath = getenv.GetEnv(dbPathEnv, dbPathDefault)
-	assetPath = getenv.GetEnv(assetPathEnv, assetPathDefault)
-	postgresPassword = getenv.GetEnv(postgresPasswordEnv, postgresPasswordDefault)
-}
 
 // StartServer handles the URL routes and starts the server
 func StartServer() {
@@ -52,25 +25,16 @@ func StartServer() {
 	r := gin.Default()
 
 	// Serve static files
-	r.Static("/service-worker.js", path.Join(assetPath, "build/service-worker.js"))
-	r.Static("/static", path.Join(assetPath, "build/static"))
-	r.Static("/cover", path.Join(assetPath, "uploads/img"))
+	r.Static("/service-worker.js", path.Join(settings.GetAssetPath(), "build/service-worker.js"))
+	r.Static("/static", path.Join(settings.GetAssetPath(), "build/static"))
+	r.Static("/cover", path.Join(settings.GetAssetPath(), "uploads/img"))
 
 	// HTML rendering
-	r.LoadHTMLGlob(path.Join(assetPath, "build/index.html"))
+	r.LoadHTMLGlob(path.Join(settings.GetAssetPath(), "build/index.html"))
 
-	// Open postgres database
-	connStr := fmt.Sprintf("postgres://postgres:%v@localhost/joyread?sslmode=disable", postgresPassword)
-	db, err := sql.Open("postgres", connStr)
-	cError.CheckError(err)
-
-	// Close sqlite3 database when all the functions are done
-	defer db.Close()
-
-	// Use CORSMiddleware
 	r.Use(
 		middleware.CORSMiddleware(),
-		middleware.APIMiddleware(db),
+		//middleware.APIMiddleware(db),
 	)
 
 	// Gin handlers
@@ -89,7 +53,7 @@ func StartServer() {
 	r.POST("/upload-books", books.UploadBooks)
 
 	// Listen and serve
-	port, err := strconv.Atoi(serverPort)
+	port, err := strconv.Atoi(settings.GetServerPort())
 	if err != nil {
 		fmt.Println("Invalid port specified")
 		os.Exit(1)
