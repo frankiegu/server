@@ -17,7 +17,6 @@ import (
 	"github.com/joyread/server/getenv"
 	"github.com/joyread/server/home"
 	"github.com/joyread/server/middleware"
-	"github.com/joyread/server/models"
 	"github.com/joyread/server/onboard"
 )
 
@@ -73,9 +72,6 @@ func StartServer() {
 		middleware.CORSMiddleware(),
 		middleware.APIMiddleware(db),
 	)
-
-	models.CreateUser(db)
-	models.CreateSMTP(db)
 
 	// Gin handlers
 	r.GET("/", home.Home)

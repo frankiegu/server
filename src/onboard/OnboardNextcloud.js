@@ -19,7 +19,8 @@ function OnboardNextcloud(props) {
               <OnboardRoute />
             :
               <form className="onboard">
-                <label className="onboard__label">Nextcloud configuration</label>
+                <label className="onboard__label">Nextcloud OAuth2 configuration</label>
+                <p className="onboard__sub-label">Redirect URL: &lt;YOUR URL&gt;/nextcloud-code</p>
                 <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
                 <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (mynextcloud.com)*" />
                 <div className="onboard__error" id="nextcloudURLError">This field is required</div>

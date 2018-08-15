@@ -68,6 +68,7 @@ func PostSignUp(c *gin.Context) {
 
 		db := c.MustGet("db").(*sql.DB)
 
+		models.CreateUser(db)
 		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
 
 		// Convert string to int64
@@ -130,7 +131,7 @@ func PostSMTP(c *gin.Context) {
 
 	if err := c.BindJSON(&form); err == nil {
 		db := c.MustGet("db").(*sql.DB)
-
+		models.CreateSMTP(db)
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
 		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 

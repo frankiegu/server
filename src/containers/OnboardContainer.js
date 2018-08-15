@@ -14,7 +14,7 @@ class OnboardContainer extends Container {
     .then((data) => {
       console.log(data);
       if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
-      if (data.isSMTPPresent) this.setState({ isSMTPFilled: false });
+      if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
       if (data.isAdminPresent && data.isSMTPPresent) {
         if (GetCookie("joyread")) this.setState({ isSignedIn: true });
       }
