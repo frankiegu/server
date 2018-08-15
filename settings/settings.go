@@ -18,6 +18,13 @@ var (
 	assetPath  = assetPathDefault
 )
 
+// BaseStruct struct
+type BaseStruct struct {
+	ServerPort string
+	AssetPath  string
+}
+
+// DBStruct struct
 type DBStruct struct {
 	DBType     string
 	DBHostname string
@@ -34,10 +41,17 @@ func init() {
 	assetPath = getenv.GetEnv(assetPathEnv, assetPathDefault)
 }
 
-func GetAssetPath() string {
-	return assetPath
+// GetBaseConf ...
+func GetBaseConf() *BaseStruct {
+	baseConf := &BaseStruct{
+		ServerPort: serverPort,
+		AssetPath:  assetPath,
+	}
+
+	return baseConf
 }
 
+// GetDBConf ...
 func GetDBConf() *DBStruct {
 	dbConf := &DBStruct{
 		DBType:     "postgresql",
@@ -50,8 +64,4 @@ func GetDBConf() *DBStruct {
 	}
 
 	return dbConf
-}
-
-func GetServerPort() string {
-	return serverPort
 }

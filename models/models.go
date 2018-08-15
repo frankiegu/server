@@ -12,9 +12,10 @@ import (
 // ConnectDB
 func ConnectDB() *sql.DB {
 	dbConf := settings.GetDBConf()
+	fmt.Println(dbConf)
 
 	// Open postgres database
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", dbConf.DBUsername, dbConf.DBPassword, dbConf.DBHostname, dbConf.DBPort, dbConf.DBName, dbConf.DBPassword, dbConf.DBSSLMode)
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", dbConf.DBUsername, dbConf.DBPassword, dbConf.DBHostname, dbConf.DBPort, dbConf.DBName, dbConf.DBSSLMode)
 	db, err := sql.Open("postgres", connStr)
 	cError.CheckError(err)
 
@@ -24,6 +25,7 @@ func ConnectDB() *sql.DB {
 // CreateUser ...
 func CreateUser() {
 	db := ConnectDB()
+
 	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, is_nextcloud BOOLEAN NOT NULL DEFAULT FALSE)")
 	cError.CheckError(err)
 
@@ -33,6 +35,7 @@ func CreateUser() {
 // InsertUser ...
 func InsertUser(username string, email string, passwordHash string, tokenString string, isAdmin bool) {
 	db := ConnectDB()
+
 	_, err := db.Query("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5)", username, email, passwordHash, tokenString, isAdmin)
 	cError.CheckError(err)
 

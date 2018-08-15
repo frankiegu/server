@@ -23,7 +23,7 @@ class OnboardContainer extends Container {
     
     this.state = {
       isSignedIn: false,
-      isDatabaseFilled: false,
+      isDatabaseFilled: true,
       isSignUpFilled: false, // bool true if signup field values are registered
       isSMTPFilled: false // bool true if smtp field values are registered
     };

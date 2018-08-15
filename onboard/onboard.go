@@ -86,16 +86,6 @@ func PostSignUp(c *gin.Context) {
 		models.CreateUser()
 		models.InsertUser(form.Username, form.Email, passwordHash, tokenString, true)
 
-		// Convert string to int64
-		// smtpPort, _ := strconv.Atoi(form.SMTPPort)
-
-		// models.InsertSMTP(db, form.SMTPServer, smtpPort, form.SMTPEmail, form.SMTPPassword)
-
-		// Send confirmation email
-		// emailSubject := "Email confirmation - Joyread"
-		// emailBody := "Hi,<br /><br />Please confirm this link."
-		// go email.SendEmail(form.SMTPEmail, form.Email, emailSubject, emailBody, form.SMTPServer, smtpPort, form.SMTPEmail, form.SMTPPassword)
-
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",
 			"token":  tokenString,

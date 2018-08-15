@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"database/sql"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,14 +20,6 @@ func CORSMiddleware() gin.HandlerFunc {
 			}
 		}
 
-		c.Next()
-	}
-}
-
-// APIMiddleware ...
-func APIMiddleware(db *sql.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("db", db)
 		c.Next()
 	}
 }
