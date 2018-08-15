@@ -8,19 +8,23 @@ class OnboardRoute extends Component {
     return (
       <Subscribe to={[OnboardContainer]}>
         {onboard => (
-          onboard.state.isSignUpFilled
+          onboard.state.isDatabaseFilled
           ?
-            onboard.state.isSMTPFilled
+            onboard.state.isSignUpFilled
             ?
-              onboard.state.isNextcloudFilled
+              onboard.state.isSMTPFilled
               ?
-                <Redirect to="/signin" />
+                onboard.state.isNextcloudFilled
+                ?
+                  <Redirect to="/signin" />
+                :
+                  <Redirect to="/nextcloud" />
               :
-                <Redirect to="/nextcloud" />
+                <Redirect to="/smtp" />
             :
-              <Redirect to="/smtp" />
+              <Redirect to="/signup" />
           :
-            <Redirect to="/signup" />
+            <Redirect to="/database" />
         )}
       </Subscribe>
     );

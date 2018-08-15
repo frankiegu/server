@@ -1,0 +1,12 @@
+select {
+    @extend .p;
+    @extend .border;
+    @extend .outline-none;
+    @extend .border-box;
+
+    height: 40px;
+
+    &:focus {
+        @extend .border-focus;
+    }
+}

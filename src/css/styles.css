@@ -66,7 +66,7 @@ table {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p {
+  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard select, .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p {
     margin-top: 20px !important; }
   .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form {
     margin-top: 30px !important; }
@@ -194,7 +194,7 @@ table {
   .mh\-\- {
     margin-right: 2px !important; }
 
-.p, input[type="text"], input[type="email"], input[type="password"], .currently-reading__title, .currently-reading__left, .currently-reading__right {
+.p, input[type="text"], input[type="email"], input[type="password"], select, .currently-reading__title, .currently-reading__left, .currently-reading__right {
   padding: 10px !important; }
   .p0 {
     padding: 0 !important; }
@@ -343,7 +343,7 @@ table {
   .ph\-\- {
     padding-right: 2px !important; }
 
-.w1\/1, .header__logo img, .currently-reading__header, .onboard__label, .onboard__sub-label, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
+.w1\/1, .header__logo img, .currently-reading__header, .onboard__label, .onboard__sub-label, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard select {
   width: 100% !important; }
 
 .w1\/2 {
@@ -418,7 +418,7 @@ table {
 .rel-pos, .header, .currently-reading {
   position: relative; }
 
-.border-box, body, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__m-dropdown, .header__n-dropdown, .currently-reading__left, .currently-reading__right {
+.border-box, body, .alert, input[type="text"], input[type="email"], input[type="password"], select, .button, .header__m-dropdown, .header__n-dropdown, .currently-reading__left, .currently-reading__right {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
@@ -502,17 +502,17 @@ table {
 .overflow-hidden {
   overflow: hidden; }
 
-.outline-none, input[type="text"], input[type="email"], input[type="password"], .button {
+.outline-none, input[type="text"], input[type="email"], input[type="password"], select, .button {
   outline: none; }
 
 .no-link {
   text-decoration: none;
   outline: none; }
 
-.border, .alert, input[type="text"], input[type="email"], input[type="password"], .header__m-dropdown, .header__n-dropdown {
+.border, .alert, input[type="text"], input[type="email"], input[type="password"], select, .header__m-dropdown, .header__n-dropdown {
   border: 1px solid #E7E4E4; }
 
-.border-focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+.border-focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
   border: 1px solid #F56363; }
 
 body {
@@ -525,6 +525,7 @@ body {
   color: white; }
 
 #loader {
+  display: none;
   width: 100%;
   height: 100%;
   background: white;
@@ -568,6 +569,9 @@ body {
 
 input[type="text"], input[type="email"], input[type="password"] {
   height: 36px; }
+
+select {
+  height: 40px; }
 
 .button {
   color: white;

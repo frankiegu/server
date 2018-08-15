@@ -77,6 +77,8 @@ func StartServer() {
 	r.GET("/", home.Home)
 	r.GET("/signin", home.Home)
 	r.POST("/signin", onboard.PostSignIn)
+	r.GET("/database", home.Home)
+	r.POST("/database", onboard.PostDatabase)
 	r.GET("/signup", home.Home)
 	r.POST("/signup", onboard.PostSignUp)
 	r.GET("/smtp", home.Home)

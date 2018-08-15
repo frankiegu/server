@@ -21,7 +21,7 @@
         text-align: center;
     }
 
-    input[type="text"], input[type="email"], input[type="password"] {
+    input[type="text"], input[type="email"], input[type="password"], select {
         @extend .w1\/1;
         @extend .mt\+;
     }

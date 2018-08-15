@@ -46,6 +46,24 @@ func _ValidateJWTToken(tokenString string, passwordHash string) (bool, error) {
 	return token.Valid, err
 }
 
+// DBStruct struct
+type DBStruct struct {
+	DBType     string `json:"dbType" binding:"required"`
+	DBHostname string `json:"dbHostname" binding:"required"`
+	DBPort     string `json:"dbPort" binding:"required"`
+	DBName     string `json:"dbName" binding:"required"`
+	DBUsername string `json:"dbUsername" binding:"required"`
+	DBPassword string `json:"dbPassword" binding:"required"`
+}
+
+func PostDatabase(c *gin.Context) {
+	var form DBStruct
+
+	if err := c.BindJSON(&form); err == nil {
+		db := models.CreateDB(form.DBType, form.DBHostname, form.DBPort, form.DBName, form.DBUsername, form.DBPassword)
+	}
+}
+
 // SignUpStruct struct
 type SignUpStruct struct {
 	Username string `json:"username" binding:"required"`
