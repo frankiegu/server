@@ -3,6 +3,7 @@ package joyread
 import (
 	// built-in packages
 
+	"database/sql"
 	"fmt"
 	"os"
 	"path"
@@ -13,6 +14,7 @@ import (
 
 	// custom packages
 	"github.com/joyread/server/books"
+	cError "github.com/joyread/server/error"
 	"github.com/joyread/server/home"
 	"github.com/joyread/server/middleware"
 	"github.com/joyread/server/models"
@@ -25,17 +27,21 @@ func StartServer() {
 	// Gin initiate
 	r := gin.Default()
 
-	baseConf := settings.GetBaseConf()
+	conf := settings.GetConf()
 
 	// Serve static files
-	r.Static("/service-worker.js", path.Join(baseConf.AssetPath, "build/service-worker.js"))
-	r.Static("/static", path.Join(baseConf.AssetPath, "build/static"))
-	r.Static("/cover", path.Join(baseConf.AssetPath, "uploads/img"))
+	r.Static("/service-worker.js", path.Join(conf.BaseValues.AssetPath, "build/service-worker.js"))
+	r.Static("/static", path.Join(conf.BaseValues.AssetPath, "build/static"))
+	r.Static("/cover", path.Join(conf.BaseValues.AssetPath, "uploads/img"))
 
 	// HTML rendering
-	r.LoadHTMLGlob(path.Join(baseConf.AssetPath, "build/index.html"))
+	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "build/index.html"))
 
-	db := models.ConnectDB()
+	// Open postgres database
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", conf.BaseValues.DBValues.DBUsername, conf.BaseValues.DBValues.DBPassword, conf.BaseValues.DBValues.DBHostname, conf.BaseValues.DBValues.DBPort, conf.BaseValues.DBValues.DBName, conf.BaseValues.DBValues.DBSSLMode)
+	db, err := sql.Open("postgres", connStr)
+	cError.CheckError(err)
+	defer db.Close()
 
 	r.Use(
 		middleware.CORSMiddleware(),
@@ -59,7 +65,7 @@ func StartServer() {
 	r.POST("/upload-books", books.UploadBooks)
 
 	// Listen and serve
-	port, err := strconv.Atoi(baseConf.ServerPort)
+	port, err := strconv.Atoi(conf.BaseValues.ServerPort)
 	if err != nil {
 		fmt.Println("Invalid port specified")
 		os.Exit(1)

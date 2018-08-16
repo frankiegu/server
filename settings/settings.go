@@ -7,7 +7,6 @@ import (
 	"gopkg.in/yaml.v2"
 
 	cError "github.com/joyread/server/error"
-	"github.com/joyread/server/getenv"
 )
 
 const (
@@ -22,17 +21,20 @@ var (
 	assetPath  = assetPathDefault
 )
 
+var conf BaseStruct
+
 // BaseStruct struct
 type BaseStruct struct {
-	ServerPort string
-	AssetPath  string
+	BaseValues BaseValuesStruct `yaml:"server" binding:"required"`
 }
 
-type DBStruct struct {
-	DBValues DBValuesStruct `yaml:"database"`
+type BaseValuesStruct struct {
+	ServerPort string         `yaml:"port" binding:"required"`
+	AssetPath  string         `yaml:"asset_path" binding:"required"`
+	DBValues   DBValuesStruct `yaml:"database" binding:"required"`
 }
 
-// DBStruct struct
+// DBValuesStruct struct
 type DBValuesStruct struct {
 	DBType     string `yaml:"type" binding:"required"`
 	DBHostname string `yaml:"hostname" binding:"required"`
@@ -45,29 +47,15 @@ type DBValuesStruct struct {
 
 func init() {
 	fmt.Println("Running init ...")
-	serverPort = getenv.GetEnv(portEnv, portDefault)
-	assetPath = getenv.GetEnv(assetPathEnv, assetPathDefault)
-}
-
-// GetBaseConf ...
-func GetBaseConf() *BaseStruct {
-	baseConf := &BaseStruct{
-		ServerPort: serverPort,
-		AssetPath:  assetPath,
-	}
-
-	return baseConf
-}
-
-// GetDBConf ...
-func GetDBConf() *DBStruct {
 	yamlFile, err := ioutil.ReadFile("config/app.yaml")
 	cError.CheckError(err)
 
-	var dbConf DBStruct
-
-	err = yaml.Unmarshal(yamlFile, &dbConf)
+	err = yaml.Unmarshal(yamlFile, &conf)
 	cError.CheckError(err)
 
-	return &dbConf
+	fmt.Println(&conf)
+}
+
+func GetConf() *BaseStruct {
+	return &conf
 }

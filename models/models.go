@@ -2,25 +2,10 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 
 	// custom packages
 	cError "github.com/joyread/server/error"
-	"github.com/joyread/server/settings"
 )
-
-// ConnectDB
-func ConnectDB() *sql.DB {
-	dbConf := settings.GetDBConf()
-	fmt.Println(dbConf.DBValues)
-
-	// Open postgres database
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", dbConf.DBValues.DBUsername, dbConf.DBValues.DBPassword, dbConf.DBValues.DBHostname, dbConf.DBValues.DBPort, dbConf.DBValues.DBName, dbConf.DBValues.DBSSLMode)
-	db, err := sql.Open("postgres", connStr)
-	cError.CheckError(err)
-
-	return db
-}
 
 // CreateUser ...
 func CreateUser(db *sql.DB) {
