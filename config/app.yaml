@@ -10,4 +10,4 @@ server:
         name: joyread # joyreaddb
         username: postgres # joyreaduser
         password: postgres
-        sslmode: disable # only applicable for postgresql    
+        sslmode: disable # only applicable for postgresql
