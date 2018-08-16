@@ -15,6 +15,7 @@ import (
 	"github.com/joyread/server/books"
 	"github.com/joyread/server/home"
 	"github.com/joyread/server/middleware"
+	"github.com/joyread/server/models"
 	"github.com/joyread/server/onboard"
 	"github.com/joyread/server/settings"
 )
@@ -34,16 +35,20 @@ func StartServer() {
 	// HTML rendering
 	r.LoadHTMLGlob(path.Join(baseConf.AssetPath, "build/index.html"))
 
+	db := models.ConnectDB()
+
 	r.Use(
 		middleware.CORSMiddleware(),
+		middleware.APIMiddleware(db),
 	)
+
+	models.CreateUser(db)
+	models.CreateSMTP(db)
 
 	// Gin handlers
 	r.GET("/", home.Home)
 	r.GET("/signin", home.Home)
 	r.POST("/signin", onboard.PostSignIn)
-	r.GET("/database", home.Home)
-	r.POST("/database", onboard.PostDatabase)
 	r.GET("/signup", home.Home)
 	r.POST("/signup", onboard.PostSignUp)
 	r.GET("/smtp", home.Home)

@@ -1,6 +1,7 @@
 package onboard
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -45,24 +46,6 @@ func _ValidateJWTToken(tokenString string, passwordHash string) (bool, error) {
 	return token.Valid, err
 }
 
-// DBStruct struct
-type DBStruct struct {
-	DBType     string `json:"dbType" binding:"required"`
-	DBHostname string `json:"dbHostname" binding:"required"`
-	DBPort     string `json:"dbPort" binding:"required"`
-	DBName     string `json:"dbName" binding:"required"`
-	DBUsername string `json:"dbUsername" binding:"required"`
-	DBPassword string `json:"dbPassword" binding:"required"`
-}
-
-func PostDatabase(c *gin.Context) {
-	var form DBStruct
-
-	if err := c.BindJSON(&form); err == nil {
-		// db := models.CreateDB(form.DBType, form.DBHostname, form.DBPort, form.DBName, form.DBUsername, form.DBPassword)
-	}
-}
-
 // SignUpStruct struct
 type SignUpStruct struct {
 	Username string `json:"username" binding:"required"`
@@ -83,8 +66,12 @@ func PostSignUp(c *gin.Context) {
 		tokenString, err := _GenerateJWTToken(passwordHash)
 		cError.CheckError(err)
 
-		models.CreateUser()
-		models.InsertUser(form.Username, form.Email, passwordHash, tokenString, true)
+		db, ok := c.MustGet("db").(*sql.DB)
+		if !ok {
+			fmt.Println("Middleware db error")
+		}
+
+		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",
@@ -135,9 +122,12 @@ func PostSMTP(c *gin.Context) {
 	var form SMTPStruct
 
 	if err := c.BindJSON(&form); err == nil {
-		models.CreateSMTP()
+		db, ok := c.MustGet("db").(*sql.DB)
+		if !ok {
+			fmt.Println("Middleware db error")
+		}
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
-		models.InsertSMTP(form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
+		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
 	} else {
@@ -156,8 +146,11 @@ func PostSignIn(c *gin.Context) {
 	var form SignInStruct
 
 	if err := c.BindJSON(&form); err == nil {
-
-		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(form.UsernameOrEmail)
+		db, ok := c.MustGet("db").(*sql.DB)
+		if !ok {
+			fmt.Println("Middleware db error")
+		}
+		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, form.UsernameOrEmail)
 
 		if isPasswordValid := _CheckPasswordHash(form.Password, passwordHash); isPasswordValid == true {
 			isTokenValid, err := _ValidateJWTToken(tokenString, passwordHash)
@@ -181,9 +174,12 @@ func PostSignIn(c *gin.Context) {
 
 // CheckOnboard ...
 func CheckOnboard(c *gin.Context) {
-
-	isAdminPresent := models.SelectOneAdmin()
-	isSMTPPresent := models.CheckSMTP()
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+	isAdminPresent := models.SelectOneAdmin(db)
+	isSMTPPresent := models.CheckSMTP(db)
 
 	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "isSMTPPresent": isSMTPPresent})
 }

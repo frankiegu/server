@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import './css/styles.css';
-import OnboardDatabase from './onboard/OnboardDatabase';
 import OnboardSignUp from './onboard/OnboardSignUp';
 import OnboardSignIn from './onboard/OnboardSignIn';
 import OnboardSMTP from './onboard/OnboardSMTP';
@@ -12,7 +11,6 @@ import Header from './Header';
 var apiRoutes = {
   signIn: 'http://localhost:8080/signin',
   signUp: 'http://localhost:8080/signup',
-  database: 'http://localhost:8080/database',
   smtp: 'http://localhost:8080/smtp',
   testEmail: 'http://localhost:8080/test-email',
   nextcloud: 'http://localhost:8080/nextcloud',
@@ -27,10 +25,6 @@ class App extends Component {
         <Header uploadBooksAPI={apiRoutes.uploadBooks} />
         <div className="alert" id="alert"><i></i></div>
         <Switch>
-          <Route
-            path="/database"
-            render={(props) => <OnboardDatabase {...props} databaseAPI={apiRoutes.database} />}
-          />
           <Route
             path="/signup"
             render={(props) => <OnboardSignUp {...props} signUpAPI={apiRoutes.signUp} />}

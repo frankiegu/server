@@ -23,7 +23,6 @@ class OnboardContainer extends Container {
     
     this.state = {
       isSignedIn: false,
-      isDatabaseFilled: true,
       isSignUpFilled: false, // bool true if signup field values are registered
       isSMTPFilled: false // bool true if smtp field values are registered
     };
@@ -56,68 +55,6 @@ class OnboardContainer extends Container {
     }
 
     return false;
-  }
-
-  database(event, url) {
-    event.preventDefault();
-
-    var dbType = document.getElementById('databaseType').value;
-    var dbHostname = document.getElementById('databaseHostname').value;
-    var dbPort = document.getElementById('databasePort').value;
-    var dbName = document.getElementById('databaseName').value;
-    var dbUsername = document.getElementById('databaseUsername').value;
-    var dbPassword = document.getElementById('databasePassword').value;
-
-    var isError = false;
-    this.removeOnboardErrors();
-
-    // Check if dbHostname value is none
-    isError = this.isFieldNone(dbHostname, 'databaseHostnameError', 'This field is required');
-
-    // Check if dbPort value is none
-    isError = this.isFieldNone(dbPort, 'databasePortError', 'This field is required');
-
-    // Check if dbName value is none
-    isError = this.isFieldNone(dbName, 'databaseNameError', 'This field is required');
-
-    // Check if dbUsername value is none
-    isError = this.isFieldNone(dbUsername, 'databaseUsernameError', 'This field is required');
-
-    if (isError) return false;
-
-    var data = {
-      dbType: dbType,
-      dbHostname: dbHostname,
-      dbPort: dbPort,
-      dbName: dbName,
-      dbUsername: dbUsername,
-      dbPassword: dbPassword
-    }
-
-    fetch(url, {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      if (data.status === 'registered') {
-        DeleteCookie('joyread');
-        SetCookie('joyread', data.token, 30);
-        
-        this.setState({ isSignUpFilled: true });
-        document.getElementById('alert').innerHTML = '<i></i><p>Your Sign Up form is registered successfully</p>';
-        document.getElementById('alert').classList.add('alert--success');
-      } else {
-        document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
-        document.getElementById('alert').classList.add('alert--error');
-      }
-    });
   }
 
   signUp(event, url) {
@@ -168,7 +105,7 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       if (data.status === 'registered') {
-        this.setState({ isDatabaseFilled: true });
+        this.setState({ isSignUpFilled: true });
         document.getElementById('alert').innerHTML = '<i></i><p>Your database form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
