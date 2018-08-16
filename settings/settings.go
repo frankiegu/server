@@ -2,7 +2,11 @@ package settings
 
 import (
 	"fmt"
+	"io/ioutil"
 
+	"gopkg.in/yaml.v2"
+
+	cError "github.com/joyread/server/error"
 	"github.com/joyread/server/getenv"
 )
 
@@ -24,15 +28,19 @@ type BaseStruct struct {
 	AssetPath  string
 }
 
-// DBStruct struct
 type DBStruct struct {
-	DBType     string
-	DBHostname string
-	DBPort     string
-	DBName     string
-	DBUsername string
-	DBPassword string
-	DBSSLMode  string
+	DBValues DBValuesStruct `yaml:"database"`
+}
+
+// DBStruct struct
+type DBValuesStruct struct {
+	DBType     string `yaml:"type" binding:"required"`
+	DBHostname string `yaml:"hostname" binding:"required"`
+	DBPort     string `yaml:"port" binding:"required"`
+	DBName     string `yaml:"name" binding:"required"`
+	DBUsername string `yaml:"username" binding:"required"`
+	DBPassword string `yaml:"password" binding:"required"`
+	DBSSLMode  string `yaml:"sslmode" binding:"required"`
 }
 
 func init() {
@@ -53,15 +61,13 @@ func GetBaseConf() *BaseStruct {
 
 // GetDBConf ...
 func GetDBConf() *DBStruct {
-	dbConf := &DBStruct{
-		DBType:     "postgresql",
-		DBHostname: "localhost",
-		DBPort:     "5432",
-		DBName:     "joyread",
-		DBUsername: "postgres",
-		DBPassword: "postgres",
-		DBSSLMode:  "disable",
-	}
+	yamlFile, err := ioutil.ReadFile("config/app.yaml")
+	cError.CheckError(err)
 
-	return dbConf
+	var dbConf DBStruct
+
+	err = yaml.Unmarshal(yamlFile, &dbConf)
+	cError.CheckError(err)
+
+	return &dbConf
 }

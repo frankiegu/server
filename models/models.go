@@ -12,10 +12,10 @@ import (
 // ConnectDB
 func ConnectDB() *sql.DB {
 	dbConf := settings.GetDBConf()
-	fmt.Println(dbConf)
+	fmt.Println(dbConf.DBValues)
 
 	// Open postgres database
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", dbConf.DBUsername, dbConf.DBPassword, dbConf.DBHostname, dbConf.DBPort, dbConf.DBName, dbConf.DBSSLMode)
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", dbConf.DBValues.DBUsername, dbConf.DBValues.DBPassword, dbConf.DBValues.DBHostname, dbConf.DBValues.DBPort, dbConf.DBValues.DBName, dbConf.DBValues.DBSSLMode)
 	db, err := sql.Open("postgres", connStr)
 	cError.CheckError(err)
 
@@ -105,8 +105,6 @@ func CheckSMTP(db *sql.DB) bool {
 		isSMTPPresent = true
 	}
 	rows.Close()
-
-	db.Close()
 
 	return isSMTPPresent
 }

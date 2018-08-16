@@ -7,19 +7,19 @@ class OnboardContainer extends Container {
   constructor () {
     super();
 
-    // fetch("http://localhost:8080/check-onboard")
-    // .then((response) => {
-    //   return response.json();
-    // })
-    // .then((data) => {
-    //   console.log(data);
-    //   if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
-    //   if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
-    //   if (data.isAdminPresent && data.isSMTPPresent) {
-    //     if (GetCookie("joyread")) this.setState({ isSignedIn: true });
-    //   }
-    //   document.getElementById('loader').style.display = 'none';
-    // });
+    fetch("http://localhost:8080/check-onboard")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
+      if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
+      if (data.isAdminPresent && data.isSMTPPresent) {
+        if (GetCookie("joyread")) this.setState({ isSignedIn: true });
+      }
+      document.getElementById('loader').style.display = 'none';
+    });
     
     this.state = {
       isSignedIn: false,
