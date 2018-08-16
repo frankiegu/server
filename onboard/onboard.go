@@ -109,7 +109,7 @@ func TestEmail(c *gin.Context) {
 	}
 }
 
-// SMTP struct
+// SMTPStruct struct
 type SMTPStruct struct {
 	SMTPHostname string `json:"smtpHostname" binding:"required"`
 	SMTPPort     string `json:"smtpPort" binding:"required"`
@@ -128,6 +128,32 @@ func PostSMTP(c *gin.Context) {
 		}
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
 		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
+
+		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+}
+
+// NextcloudStruct struct
+type NextcloudStruct struct {
+	NextcloudURL          string `json:"nextcloudURL" binding:"required"`
+	NextcloudClientId     string `json:"nextcloudClientId" binding:"required"`
+	NextcloudClientSecret string `json:"nextcloudClientSecret" binding:"required"`
+	NextcloudDirectory    string `json:"nextcloudDirectory" binding:"required"`
+}
+
+// PostNextcloud ...
+func PostNextcloud(c *gin.Context) {
+	var form NextcloudStruct
+
+	if err := c.BindJSON(&form); err == nil {
+		// db, ok := c.MustGet("db").(*sql.DB)
+		// if !ok {
+		// 	fmt.Println("Middleware db error")
+		// }
+
+		fmt.Println(&form)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
 	} else {

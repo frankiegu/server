@@ -208,10 +208,47 @@ class OnboardContainer extends Container {
         document.getElementById('smtpText').classList.add('show');
       } else {
         document.getElementById('smtpLoader').classList.remove('show');
+        document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
+        document.getElementById('alert').classList.add('alert--error');
+      }
+      
+    });
+  }
+
+  nextcloud(event, url) {
+    event.preventDefault();
+
+    var nextcloudURL = document.getElementById('nextcloudURL').value;
+    var nextcloudClientId = document.getElementById('nextcloudClientId').value;
+    var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
+    var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
+
+    var data = {
+      nextcloudURL: nextcloudURL,
+      nextcloudClientId: nextcloudClientId,
+      nextcloudClientSecret: nextcloudClientSecret,
+      nextcloudDirectory: nextcloudDirectory
+    }
+
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data.status) {
+        document.getElementById('alert').innerHTML = '<i></i><p>Your Nextcloud form is registered successfully</p>';
+        document.getElementById('alert').classList.add('alert--success');
+      } else {
         document.getElementById('smtpText').innerText = 'Email not sent, please make sure the SMTP fields are correct';
         document.getElementById('smtpText').classList.add('show');
       }
-      
     });
   }
   

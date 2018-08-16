@@ -60,6 +60,8 @@ func StartServer() {
 	r.GET("/smtp", home.Home)
 	r.POST("/smtp", onboard.PostSMTP)
 	r.POST("/test-email", onboard.TestEmail)
+	r.GET("/nextcloud", home.Home)
+	r.POST("/nextcloud", onboard.PostNextcloud)
 	r.GET("/check-onboard", onboard.CheckOnboard)
 	r.GET("/books", books.GetBooks)
 	r.POST("/upload-books", books.UploadBooks)
