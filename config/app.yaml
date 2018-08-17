@@ -1,13 +1,13 @@
 # Joyread YAML config
 
 server:
-    port: 8080
-    asset_path: .
+    port: 8080 # port that app runs
+    asset_path: . # templates, scss etc
     database:
         type: postgresql # postgresql/mysql/sqlite3
         hostname: localhost # localhost/23.253.231.169
         port: 5432 # 5432/3306
-        name: joyread # joyreaddb
+        name: joyreaddb # joyreaddb
         username: postgres # joyreaduser
         password: postgres
         sslmode: disable # only applicable for postgresql
