@@ -243,6 +243,7 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       if (data.status) {
+        window.location.href = data.auth_url
         document.getElementById('alert').innerHTML = '<i></i><p>Your Nextcloud form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {

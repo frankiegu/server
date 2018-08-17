@@ -50,6 +50,7 @@ func StartServer() {
 
 	models.CreateUser(db)
 	models.CreateSMTP(db)
+	models.CreateNextcloud(db)
 
 	// Gin handlers
 	r.GET("/", home.Home)
@@ -62,6 +63,7 @@ func StartServer() {
 	r.POST("/test-email", onboard.TestEmail)
 	r.GET("/nextcloud", home.Home)
 	r.POST("/nextcloud", onboard.PostNextcloud)
+	r.GET("/nextcloud-code", onboard.NextcloudAuthCode)
 	r.GET("/check-onboard", onboard.CheckOnboard)
 	r.GET("/books", books.GetBooks)
 	r.POST("/upload-books", books.UploadBooks)

@@ -2,9 +2,12 @@ package onboard
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 
 	// vendor packages
 	"github.com/dgrijalva/jwt-go"
@@ -138,7 +141,7 @@ func PostSMTP(c *gin.Context) {
 // NextcloudStruct struct
 type NextcloudStruct struct {
 	NextcloudURL          string `json:"nextcloudURL" binding:"required"`
-	NextcloudClientId     string `json:"nextcloudClientId" binding:"required"`
+	NextcloudClientID     string `json:"nextcloudClientId" binding:"required"`
 	NextcloudClientSecret string `json:"nextcloudClientSecret" binding:"required"`
 	NextcloudDirectory    string `json:"nextcloudDirectory" binding:"required"`
 }
@@ -148,17 +151,54 @@ func PostNextcloud(c *gin.Context) {
 	var form NextcloudStruct
 
 	if err := c.BindJSON(&form); err == nil {
-		// db, ok := c.MustGet("db").(*sql.DB)
-		// if !ok {
-		// 	fmt.Println("Middleware db error")
-		// }
+		db, ok := c.MustGet("db").(*sql.DB)
+		if !ok {
+			fmt.Println("Middleware db error")
+		}
 
-		fmt.Println(&form)
+		models.InsertNextcloud(db, form.NextcloudURL, form.NextcloudClientID, form.NextcloudClientSecret, form.NextcloudDirectory)
 
-		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
+		authURL := fmt.Sprintf("%s/apps/oauth2/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=write", form.NextcloudURL, form.NextcloudClientID, "http://localhost:8080/nextcloud-code")
+		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered", "auth_url": authURL})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+}
+
+// NextcloudTokenStruct struct
+type NextcloudTokenStruct struct {
+	AccessToken  string `json:"access_token" binding:"required"`
+	RefreshToken string `json:"refresh_token" binding:"required"`
+}
+
+// NextcloudAuthCode ...
+func NextcloudAuthCode(c *gin.Context) {
+	code := c.Query("code")
+	var nextcloudToken NextcloudTokenStruct
+
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	url, clientID, clientSecret := models.SelectNextcloud(db)
+	body := strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=%s&code=%s&redirect_uri=%s", clientID, clientSecret, "authorization_code", code, "http://localhost:8080/nextcloud-code"))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/apps/oauth2/api/v1/token", url), body)
+	cError.CheckError(err)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+	}
+	resp, err := client.Do(req)
+	cError.CheckError(err)
+	json.NewDecoder(resp.Body).Decode(&nextcloudToken)
+	fmt.Println(&nextcloudToken)
+	resp.Body.Close()
+
+	models.UpdateNextcloudToken(db, nextcloudToken.AccessToken, nextcloudToken.RefreshToken)
+
+	c.Redirect(http.StatusMovedPermanently, "/")
 }
 
 // SignInStruct struct
