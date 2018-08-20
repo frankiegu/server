@@ -23,7 +23,7 @@ function OnboardStorage(props) {
         :
           onboard.state.isSignUpFilled && onboard.state.isSMTPFilled
           ?
-            onboard.state.isNextcloudFilled
+            onboard.state.isStorageFilled
             ?
               <OnboardRoute />
             :
