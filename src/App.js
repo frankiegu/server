@@ -4,7 +4,7 @@ import './css/styles.css';
 import OnboardSignUp from './onboard/OnboardSignUp';
 import OnboardSignIn from './onboard/OnboardSignIn';
 import OnboardSMTP from './onboard/OnboardSMTP';
-import OnboardNextcloud from './onboard/OnboardNextcloud';
+import OnboardStorage from './onboard/OnboardStorage';
 import Home from './Home';
 import Header from './Header';
 
@@ -34,8 +34,8 @@ class App extends Component {
             render={(props) => <OnboardSMTP {...props} smtpAPI={apiRoutes.smtp} testEmailAPI={apiRoutes.testEmail} />}
           />
           <Route
-            path="/nextcloud"
-            render={(props) => <OnboardNextcloud {...props} nextcloudAPI={apiRoutes.nextcloud} />}
+            path="/storage"
+            render={(props) => <OnboardStorage {...props} nextcloudAPI={apiRoutes.nextcloud} />}
           />
           <Route
             path="/signin"

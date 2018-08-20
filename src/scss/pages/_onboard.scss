@@ -147,4 +147,10 @@
             margin-left: 28px;
         }
     }
+
+    & #nextcloudForm {
+        &.none {
+            @extend .none;
+        }
+    }
 }

@@ -14,9 +14,12 @@ func CreateUser(db *sql.DB) {
 }
 
 // InsertUser ...
-func InsertUser(db *sql.DB, username string, email string, passwordHash string, tokenString string, isAdmin bool) {
-	_, err := db.Query("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5)", username, email, passwordHash, tokenString, isAdmin)
+func InsertUser(db *sql.DB, username string, email string, passwordHash string, tokenString string, isAdmin bool) int {
+	var lastInsertId int
+	err := db.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", username, email, passwordHash, tokenString, isAdmin).Scan(&lastInsertId)
 	cError.CheckError(err)
+
+	return lastInsertId
 }
 
 // SelectOneAdmin ...
@@ -67,7 +70,7 @@ func SelectPasswordHashAndJWTToken(db *sql.DB, usernameoremail string) (string, 
 
 // CreateSMTP ...
 func CreateSMTP(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS smtp (id BIGSERIAL PRIMARY KEY, hostname VARCHAR(255) NOT NULL, port INTEGER NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS smtp (hostname VARCHAR(255) NOT NULL, port INTEGER NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)")
 	cError.CheckError(err)
 }
 
@@ -81,7 +84,7 @@ func InsertSMTP(db *sql.DB, hostname string, port int, username string, password
 func CheckSMTP(db *sql.DB) bool {
 
 	// Check for Admin in the user table
-	rows, err := db.Query("SELECT hostname FROM smtp WHERE id = $1", 1)
+	rows, err := db.Query("SELECT hostname FROM smtp")
 	cError.CheckError(err)
 
 	var isSMTPPresent = false
@@ -96,19 +99,19 @@ func CheckSMTP(db *sql.DB) bool {
 
 // CreateNextcloud ...
 func CreateNextcloud(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS nextcloud (id BIGSERIAL PRIMARY KEY, url VARCHAR(255) NOT NULL, client_id VARCHAR(1200) NOT NULL, client_secret VARCHAR(1200) NOT NULL, directory VARCHAR(255) NOT NULL, access_token VARCHAR(255), refresh_token VARCHAR(255))")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS nextcloud (id BIGSERIAL, user_id INTEGER REFERENCES account(id), url VARCHAR(255) NOT NULL, client_id VARCHAR(1200) NOT NULL, client_secret VARCHAR(1200) NOT NULL, directory VARCHAR(255) NOT NULL, access_token VARCHAR(255), refresh_token VARCHAR(255), PRIMARY KEY (id, user_id))")
 	cError.CheckError(err)
 }
 
 // InsertNextcloud ...
-func InsertNextcloud(db *sql.DB, url string, clientID string, clientSecret string, directory string) {
-	_, err := db.Query("INSERT INTO nextcloud (url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4)", url, clientID, clientSecret, directory)
+func InsertNextcloud(db *sql.DB, userID int, url string, clientID string, clientSecret string, directory string) {
+	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4, $5)", userID, url, clientID, clientSecret, directory)
 	cError.CheckError(err)
 }
 
 // SelectNextcloud ...
 func SelectNextcloud(db *sql.DB) (string, string, string) {
-	rows, err := db.Query("SELECT url, client_id, client_secret FROM nextcloud WHERE id = $1", 7)
+	rows, err := db.Query("SELECT url, client_id, client_secret FROM nextcloud WHERE user_id = $1", 1)
 	cError.CheckError(err)
 
 	var url, clientID, clientSecret string
@@ -124,6 +127,6 @@ func SelectNextcloud(db *sql.DB) (string, string, string) {
 
 // UpdateNextcloudToken ...
 func UpdateNextcloudToken(db *sql.DB, accessToken string, refreshToken string) {
-	_, err := db.Query("UPDATE nextcloud SET access_token=$1, refresh_token=$2 WHERE id=$3", accessToken, refreshToken, 7)
+	_, err := db.Query("UPDATE nextcloud SET access_token=$1, refresh_token=$2 WHERE user_id=$3", accessToken, refreshToken, 1)
 	cError.CheckError(err)
 }

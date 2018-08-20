@@ -12,11 +12,11 @@ class OnboardRoute extends Component {
           ?
             onboard.state.isSMTPFilled
             ?
-              onboard.state.isNextcloudFilled
+              onboard.state.isStorageFilled
               ?
                 <Redirect to="/signin" />
               :
-                <Redirect to="/nextcloud" />
+                <Redirect to="/storage" />
             :
               <Redirect to="/smtp" />
           :

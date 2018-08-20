@@ -4,7 +4,16 @@ import { Redirect } from "react-router-dom";
 import OnboardContainer from '../containers/OnboardContainer';
 import OnboardRoute from './OnboardRoute';
 
-function OnboardNextcloud(props) {
+function HandleRadioClick(event) {
+  var storageType = event.target.value;
+  if (storageType === "local") {
+    document.getElementById('nextcloudForm').className = "none";
+  } else {
+    document.getElementById('nextcloudForm').className = "";
+  }
+}
+
+function OnboardStorage(props) {
   return (
     <Subscribe to={[OnboardContainer]}>
       {onboard => (
@@ -23,19 +32,19 @@ function OnboardNextcloud(props) {
                 <div className="onboard__note">NOTE: Please make sure you choose the correct option, the storage option cannot be changed again.</div>
                 <div className="onboard__radio-form">
                   <div>
-                    <input type="radio" name="storage" id="nextcloudRadio" value="nextcloud" defaultChecked />
+                    <input type="radio" name="storage" id="nextcloudRadio" value="nextcloud" defaultChecked onClick={(event) => HandleRadioClick(event)} />
                     <label htmlFor="nextcloudRadio">Nextcloud</label>
                   </div>
-                  <p class="onboard__info">Nextcloud as a storage option will provide you a way to sync ebooks...</p>
+                  <p className="onboard__info">Nextcloud as a storage option will provide you a way to sync ebooks...</p>
                   <div>
-                    <input type="radio" name="storage" id="localRadio" value="local" />
+                    <input type="radio" name="storage" id="localRadio" value="local" onClick={(event) => HandleRadioClick(event)} />
                     <label htmlFor="localRadio">Local storage</label>
                   </div>
-                  <p class="onboard__info">Local storage as a storage option will provide you a way to sync ebooks...</p>
+                  <p className="onboard__info">Local storage as a storage option will provide you a way to sync ebooks...</p>
                 </div>
                 <div id="nextcloudForm">
-                  <div class="onboard__label onboard__label--small">Nextcloud configuration</div>
-                  <p className="onboard__sub-label">Redirect URL: &lt;YOUR URL&gt;/nextcloud-code</p>
+                  <div className="onboard__label onboard__label--small">Nextcloud configuration</div>
+                  <p className="onboard__sub-label">Redirect URL: &lt;YOUR JOYREAD URL&gt;/nextcloud-auth</p>
                   <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
                   <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (http://mynextcloud.com)*" />
                   <div className="onboard__error" id="nextcloudURLError">This field is required</div>
@@ -55,4 +64,4 @@ function OnboardNextcloud(props) {
   );
 }
 
-export default OnboardNextcloud;
+export default OnboardStorage;

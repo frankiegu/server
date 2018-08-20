@@ -13,7 +13,9 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       console.log(data);
-      if (data.isAdminPresent) this.setState({ isSignUpFilled: true });
+      if (data.isAdminPresent) {
+        this.setState({ isSignUpFilled: true, userID: data.userID });
+      }
       if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
       if (data.isAdminPresent && data.isSMTPPresent) {
         if (GetCookie("joyread")) this.setState({ isSignedIn: true });
@@ -22,9 +24,11 @@ class OnboardContainer extends Container {
     });
     
     this.state = {
+      userID: 0,
       isSignedIn: false,
       isSignUpFilled: false, // bool true if signup field values are registered
-      isSMTPFilled: false // bool true if smtp field values are registered
+      isSMTPFilled: false, // bool true if smtp field values are registered
+      isStorageFilled: false // bool true if storage field values are registered
     };
   }
 
@@ -105,7 +109,7 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       if (data.status === 'registered') {
-        this.setState({ isSignUpFilled: true });
+        this.setState({ userID: data.userID, isSignUpFilled: true });
         document.getElementById('alert').innerHTML = '<i></i><p>Your database form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
@@ -218,39 +222,44 @@ class OnboardContainer extends Container {
   nextcloud(event, url) {
     event.preventDefault();
 
-    var nextcloudURL = document.getElementById('nextcloudURL').value;
-    var nextcloudClientId = document.getElementById('nextcloudClientId').value;
-    var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
-    var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
+    var isNextcloud = document.getElementById('nextcloudRadio').checked ? true : false;
 
-    var data = {
-      nextcloudURL: nextcloudURL,
-      nextcloudClientId: nextcloudClientId,
-      nextcloudClientSecret: nextcloudClientSecret,
-      nextcloudDirectory: nextcloudDirectory
+    if (isNextcloud) {
+      var nextcloudURL = document.getElementById('nextcloudURL').value;
+      var nextcloudClientId = document.getElementById('nextcloudClientId').value;
+      var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
+      var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
+
+      var data = {
+        userID: this.state.userID,
+        nextcloudURL: nextcloudURL,
+        nextcloudClientId: nextcloudClientId,
+        nextcloudClientSecret: nextcloudClientSecret,
+        nextcloudDirectory: nextcloudDirectory
+      }
+
+      fetch(url, {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status) {
+          window.location.href = data.auth_url
+        } else {
+          document.getElementById('alert').innerHTML = '<i></i><p>Not registered</p>';
+          document.getElementById('alert').classList.add('alert--error');
+        }
+      });
+    } else {
+      this.setState({ isStorageFilled: true });
     }
-
-    fetch(url, {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      if (data.status) {
-        window.location.href = data.auth_url
-        document.getElementById('alert').innerHTML = '<i></i><p>Your Nextcloud form is registered successfully</p>';
-        document.getElementById('alert').classList.add('alert--success');
-      } else {
-        document.getElementById('smtpText').innerText = 'Email not sent, please make sure the SMTP fields are correct';
-        document.getElementById('smtpText').classList.add('show');
-      }
-    });
   }
   
   signIn(event, url) {

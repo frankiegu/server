@@ -74,11 +74,12 @@ func PostSignUp(c *gin.Context) {
 			fmt.Println("Middleware db error")
 		}
 
-		models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
+		lastInsertId := models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",
 			"token":  tokenString,
+			"userID": lastInsertId,
 		})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -140,10 +141,11 @@ func PostSMTP(c *gin.Context) {
 
 // NextcloudStruct struct
 type NextcloudStruct struct {
-	NextcloudURL          string `json:"nextcloudURL" binding:"required"`
-	NextcloudClientID     string `json:"nextcloudClientId" binding:"required"`
-	NextcloudClientSecret string `json:"nextcloudClientSecret" binding:"required"`
-	NextcloudDirectory    string `json:"nextcloudDirectory" binding:"required"`
+	UserID                int    `json:"userID"`
+	NextcloudURL          string `json:"nextcloudURL"`
+	NextcloudClientID     string `json:"nextcloudClientId"`
+	NextcloudClientSecret string `json:"nextcloudClientSecret"`
+	NextcloudDirectory    string `json:"nextcloudDirectory"`
 }
 
 // PostNextcloud ...
@@ -151,12 +153,13 @@ func PostNextcloud(c *gin.Context) {
 	var form NextcloudStruct
 
 	if err := c.BindJSON(&form); err == nil {
+		fmt.Println(form)
 		db, ok := c.MustGet("db").(*sql.DB)
 		if !ok {
 			fmt.Println("Middleware db error")
 		}
 
-		models.InsertNextcloud(db, form.NextcloudURL, form.NextcloudClientID, form.NextcloudClientSecret, form.NextcloudDirectory)
+		models.InsertNextcloud(db, form.UserID, form.NextcloudURL, form.NextcloudClientID, form.NextcloudClientSecret, form.NextcloudDirectory)
 
 		authURL := fmt.Sprintf("%s/apps/oauth2/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=write", form.NextcloudURL, form.NextcloudClientID, "http://localhost:8080/nextcloud-code")
 		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered", "auth_url": authURL})
@@ -247,5 +250,5 @@ func CheckOnboard(c *gin.Context) {
 	isAdminPresent := models.SelectOneAdmin(db)
 	isSMTPPresent := models.CheckSMTP(db)
 
-	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "isSMTPPresent": isSMTPPresent})
+	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "userID": 1, "isSMTPPresent": isSMTPPresent})
 }
