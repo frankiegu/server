@@ -13,10 +13,19 @@ func CreateUser(db *sql.DB) {
 	cError.CheckError(err)
 }
 
+type SignUpModel struct {
+	DB           *sql.DB
+	Username     string
+	Email        string
+	PasswordHash string
+	Token        string
+	IsAdmin      bool
+}
+
 // InsertUser ...
-func InsertUser(db *sql.DB, username string, email string, passwordHash string, tokenString string, isAdmin bool) int {
+func InsertUser(signUpModel SignUpModel) int {
 	var lastInsertId int
-	err := db.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", username, email, passwordHash, tokenString, isAdmin).Scan(&lastInsertId)
+	err := signUpModel.DB.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin).Scan(&lastInsertId)
 	cError.CheckError(err)
 
 	return lastInsertId

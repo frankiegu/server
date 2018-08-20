@@ -49,8 +49,8 @@ func validateJWTToken(tokenString string, passwordHash string) (bool, error) {
 	return token.Valid, err
 }
 
-// SignUpStruct struct
-type SignUpStruct struct {
+// SignUpResponse struct
+type SignUpResponse struct {
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -58,7 +58,7 @@ type SignUpStruct struct {
 
 // PostSignUp ...
 func PostSignUp(c *gin.Context) {
-	var form SignUpStruct
+	var form SignUpResponse
 
 	if err := c.BindJSON(&form); err == nil {
 		// Generate password hash using bcrypt
@@ -66,7 +66,7 @@ func PostSignUp(c *gin.Context) {
 		cError.CheckError(err)
 
 		// Generate JWT token using the hash password above
-		tokenString, err := generateJWTToken(passwordHash)
+		token, err := generateJWTToken(passwordHash)
 		cError.CheckError(err)
 
 		db, ok := c.MustGet("db").(*sql.DB)
@@ -74,12 +74,21 @@ func PostSignUp(c *gin.Context) {
 			fmt.Println("Middleware db error")
 		}
 
-		lastInsertId := models.InsertUser(db, form.Username, form.Email, passwordHash, tokenString, true)
+		signUpModel := models.SignUpModel{
+			DB:           db,
+			Username:     form.Username,
+			Email:        form.Email,
+			PasswordHash: passwordHash,
+			Token:        token,
+			IsAdmin:      true,
+		}
+
+		lastInsertID := models.InsertUser(signUpModel)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",
-			"token":  tokenString,
-			"userID": lastInsertId,
+			"token":  token,
+			"userID": lastInsertID,
 		})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
