@@ -9,7 +9,7 @@ import (
 
 // CreateUser ...
 func CreateUser(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, is_nextcloud BOOLEAN NOT NULL DEFAULT FALSE)")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, is_nextcloud BOOLEAN NOT NULL DEFAULT FALSE, is_onboarded BOOLEAN NOT NULL DEFAULT FALSE)")
 	cError.CheckError(err)
 }
 
@@ -23,19 +23,23 @@ func InsertUser(db *sql.DB, username string, email string, passwordHash string, 
 }
 
 // SelectOneAdmin ...
-func SelectOneAdmin(db *sql.DB) bool {
+func SelectOneAdmin(db *sql.DB) (bool, int) {
 	// Check for Admin in the user table
 	rows, err := db.Query("SELECT id FROM account WHERE is_admin = $1", true)
 	cError.CheckError(err)
 
 	var isAdminPresent = false
+	var userID int
 
 	if rows.Next() {
+		err := rows.Scan(&userID)
+		cError.CheckError(err)
+
 		isAdminPresent = true
 	}
 	rows.Close()
 
-	return isAdminPresent
+	return isAdminPresent, userID
 }
 
 // SelectPasswordHashAndJWTToken ...
@@ -107,11 +111,14 @@ func CreateNextcloud(db *sql.DB) {
 func InsertNextcloud(db *sql.DB, userID int, url string, clientID string, clientSecret string, directory string) {
 	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4, $5)", userID, url, clientID, clientSecret, directory)
 	cError.CheckError(err)
+
+	_, err = db.Query("UPDATE account SET is_nextcloud=$1, is_onboarded=$2 WHERE id=$3", true, true, userID)
+	cError.CheckError(err)
 }
 
 // SelectNextcloud ...
 func SelectNextcloud(db *sql.DB) (string, string, string) {
-	rows, err := db.Query("SELECT url, client_id, client_secret FROM nextcloud WHERE user_id = $1", 1)
+	rows, err := db.Query("SELECT url, client_id, client_secret FROM nextcloud WHERE user_id=$1", 1)
 	cError.CheckError(err)
 
 	var url, clientID, clientSecret string
@@ -129,4 +136,36 @@ func SelectNextcloud(db *sql.DB) (string, string, string) {
 func UpdateNextcloudToken(db *sql.DB, accessToken string, refreshToken string) {
 	_, err := db.Query("UPDATE nextcloud SET access_token=$1, refresh_token=$2 WHERE user_id=$3", accessToken, refreshToken, 1)
 	cError.CheckError(err)
+}
+
+// CheckIsNextcloud ...
+func CheckIsNextcloud(db *sql.DB, userID int) bool {
+	rows, err := db.Query("SELECT is_nextcloud FROM account WHERE user_id=$1", userID)
+	cError.CheckError(err)
+
+	var isNextcloud = false
+
+	if rows.Next() {
+		err := rows.Scan(&isNextcloud)
+		cError.CheckError(err)
+	}
+	rows.Close()
+
+	return isNextcloud
+}
+
+// CheckNextcloudToken ...
+func CheckNextcloudToken(db *sql.DB, userID int) string {
+	rows, err := db.Query("SELECT access_token FROM nextcloud WHERE user_id=$1", userID)
+	cError.CheckError(err)
+
+	var accessToken string
+
+	if rows.Next() {
+		err := rows.Scan(&accessToken)
+		cError.CheckError(err)
+	}
+	rows.Close()
+
+	return accessToken
 }

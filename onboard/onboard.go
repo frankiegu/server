@@ -88,11 +88,11 @@ func PostSignUp(c *gin.Context) {
 
 // TestSMTP struct
 type TestSMTPStruct struct {
-	SMTPHostname  string `json:"smtpHostname" binding:"required"`
-	SMTPPort      string `json:"smtpPort" binding:"required"`
-	SMTPUsername  string `json:"smtpUsername" binding:"required"`
-	SMTPPassword  string `json:"smtpPassword" binding:"required"`
-	SMTPTestEmail string `json:"smtpTestEmail" binding:"required"`
+	SMTPHostname  string `json:"smtp_hostname" binding:"required"`
+	SMTPPort      string `json:"smtp_port" binding:"required"`
+	SMTPUsername  string `json:"smtp_username" binding:"required"`
+	SMTPPassword  string `json:"smtp_password" binding:"required"`
+	SMTPTestEmail string `json:"smtp_test_email" binding:"required"`
 }
 
 // TestEmail ...
@@ -115,10 +115,10 @@ func TestEmail(c *gin.Context) {
 
 // SMTPStruct struct
 type SMTPStruct struct {
-	SMTPHostname string `json:"smtpHostname" binding:"required"`
-	SMTPPort     string `json:"smtpPort" binding:"required"`
-	SMTPUsername string `json:"smtpUsername" binding:"required"`
-	SMTPPassword string `json:"smtpPassword" binding:"required"`
+	SMTPHostname string `json:"smtp_hostname" binding:"required"`
+	SMTPPort     string `json:"smtp_port" binding:"required"`
+	SMTPUsername string `json:"smtp_username" binding:"required"`
+	SMTPPassword string `json:"smtp_password" binding:"required"`
 }
 
 // PostSMTP ...
@@ -141,11 +141,11 @@ func PostSMTP(c *gin.Context) {
 
 // NextcloudStruct struct
 type NextcloudStruct struct {
-	UserID                int    `json:"userID"`
-	NextcloudURL          string `json:"nextcloudURL"`
-	NextcloudClientID     string `json:"nextcloudClientId"`
-	NextcloudClientSecret string `json:"nextcloudClientSecret"`
-	NextcloudDirectory    string `json:"nextcloudDirectory"`
+	UserID                int    `json:"user_id" binding:"required"`
+	NextcloudURL          string `json:"nextcloud_url" binding:"required"`
+	NextcloudClientID     string `json:"nextcloud_client_id" binding:"required"`
+	NextcloudClientSecret string `json:"nextcloud_client_secret binding:"required"`
+	NextcloudDirectory    string `json:"nextcloud_directory binding:"required"`
 }
 
 // PostNextcloud ...
@@ -247,8 +247,18 @@ func CheckOnboard(c *gin.Context) {
 	if !ok {
 		fmt.Println("Middleware db error")
 	}
-	isAdminPresent := models.SelectOneAdmin(db)
+	isAdminPresent, userID := models.SelectOneAdmin(db)
 	isSMTPPresent := models.CheckSMTP(db)
+	isNextcloud := models.CheckIsNextcloud(db, userID)
+	isNextcloudPresent := false
 
-	c.JSON(http.StatusOK, gin.H{"isAdminPresent": isAdminPresent, "userID": 1, "isSMTPPresent": isSMTPPresent})
+	if isNextcloud {
+		accessToken := models.CheckNextcloudToken(db, userID)
+
+		if len(accessToken) > 0 {
+			isNextcloudPresent = true
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"is_admin_present": isAdminPresent, "user_id": userID, "is_smtp_present": isSMTPPresent, "is_nextcloud_present": isNextcloudPresent})
 }

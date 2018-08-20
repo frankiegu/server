@@ -13,11 +13,12 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       console.log(data);
-      if (data.isAdminPresent) {
+      if (data.is_admin_present) {
         this.setState({ isSignUpFilled: true, userID: data.userID });
       }
-      if (data.isSMTPPresent) this.setState({ isSMTPFilled: true });
-      if (data.isAdminPresent && data.isSMTPPresent) {
+      if (data.is_smtp_present) this.setState({ isSMTPFilled: true });
+      if (data.is_nextcloud_present) this.setState({ isStorageFilled: true });
+      if (data.is_admin_present && data.is_smtp_present) {
         if (GetCookie("joyread")) this.setState({ isSignedIn: true });
       }
       document.getElementById('loader').style.display = 'none';
@@ -146,10 +147,10 @@ class OnboardContainer extends Container {
     if (isError) return false;
 
     var data = {
-      smtpHostname: smtpHostname,
-      smtpPort: smtpPort,
-      smtpUsername: smtpUsername,
-      smtpPassword: smtpPassword
+      smtp_hostname: smtpHostname,
+      smtp_port: smtpPort,
+      smtp_username: smtpUsername,
+      smtp_password: smtpPassword
     }
 
     fetch(url, {
@@ -187,11 +188,11 @@ class OnboardContainer extends Container {
     var smtpTestEmail = document.getElementById('smtpTestEmail').value;
 
     var data = {
-      smtpHostname: smtpHostname,
-      smtpPort: smtpPort,
-      smtpUsername: smtpUsername,
-      smtpPassword: smtpPassword,
-      smtpTestEmail: smtpTestEmail
+      smtp_hostname: smtpHostname,
+      smtp_port: smtpPort,
+      smtp_username: smtpUsername,
+      smtp_password: smtpPassword,
+      smtp_test_email: smtpTestEmail
     }
 
     fetch(url, {
@@ -231,11 +232,11 @@ class OnboardContainer extends Container {
       var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
 
       var data = {
-        userID: this.state.userID,
-        nextcloudURL: nextcloudURL,
-        nextcloudClientId: nextcloudClientId,
-        nextcloudClientSecret: nextcloudClientSecret,
-        nextcloudDirectory: nextcloudDirectory
+        user_id: this.state.userID,
+        nextcloud_url: nextcloudURL,
+        nextcloud_client_id: nextcloudClientId,
+        nextcloud_client_secret: nextcloudClientSecret,
+        nextcloud_directory: nextcloudDirectory
       }
 
       fetch(url, {
