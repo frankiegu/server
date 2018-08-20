@@ -75,7 +75,6 @@ func PostSignUp(c *gin.Context) {
 		}
 
 		signUpModel := models.SignUpModel{
-			DB:           db,
 			Username:     form.Username,
 			Email:        form.Email,
 			PasswordHash: passwordHash,
@@ -83,7 +82,7 @@ func PostSignUp(c *gin.Context) {
 			IsAdmin:      true,
 		}
 
-		lastInsertID := models.InsertUser(signUpModel)
+		lastInsertID := models.InsertUser(db, signUpModel)
 
 		c.JSON(http.StatusMovedPermanently, gin.H{
 			"status": "registered",

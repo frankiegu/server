@@ -13,8 +13,8 @@ func CreateUser(db *sql.DB) {
 	cError.CheckError(err)
 }
 
+// SignUpModel struct
 type SignUpModel struct {
-	DB           *sql.DB
 	Username     string
 	Email        string
 	PasswordHash string
@@ -23,9 +23,9 @@ type SignUpModel struct {
 }
 
 // InsertUser ...
-func InsertUser(signUpModel SignUpModel) int {
+func InsertUser(db *sql.DB, signUpModel SignUpModel) int {
 	var lastInsertId int
-	err := signUpModel.DB.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin).Scan(&lastInsertId)
+	err := db.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin).Scan(&lastInsertId)
 	cError.CheckError(err)
 
 	return lastInsertId
