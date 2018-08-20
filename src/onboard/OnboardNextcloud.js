@@ -19,7 +19,21 @@ function OnboardNextcloud(props) {
               <OnboardRoute />
             :
               <form className="onboard">
-                <label className="onboard__label">Nextcloud OAuth2 configuration</label>
+                <label className="onboard__label">Ebooks storage option</label>
+                <div className="onboard__note">NOTE: Please make sure you choose the correct option, the storage option cannot be changed again.</div>
+                <div className="onboard__radio-form">
+                  <div>
+                    <input type="radio" name="storage" id="nextcloudRadio" value="nextcloud" defaultChecked />
+                    <label htmlFor="nextcloudRadio">Nextcloud</label>
+                  </div>
+                  <p class="onboard__info">Nextcloud as a storage option will provide you a way to sync ebooks...</p>
+                  <div>
+                    <input type="radio" name="storage" id="localRadio" value="local" />
+                    <label htmlFor="localRadio">Local storage</label>
+                  </div>
+                  <p class="onboard__info">Local storage as a storage option will provide you a way to sync ebooks...</p>
+                </div>
+                <div class="onboard__label onboard__label--small">Nextcloud</div>
                 <p className="onboard__sub-label">Redirect URL: &lt;YOUR URL&gt;/nextcloud-code</p>
                 <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
                 <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (http://mynextcloud.com)*" />

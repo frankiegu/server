@@ -7,9 +7,14 @@
     &__label {
         @extend .block;
         @extend .w1\/1;
+        @extend .fs\+;
         @extend .fw\+;
         
         text-align: center;
+
+        &--small {
+            font-size: 16px !important;
+        }
     }
 
     &__sub-label {
@@ -93,5 +98,54 @@
     &__sub-submit {
         @extend .flex;
         align-items: center;
+    }
+
+    &__secondary-form {
+        @extend .mt\+\+;
+        @extend .pv\+;
+        
+        border-top: 1px solid $border-color;
+
+        & p {
+            @extend .fs\-;
+
+            text-align: center;
+        }
+
+        & .button {
+            @extend .mt\+;
+            margin: 0 auto;
+        }
+    }
+
+    &__note {
+        @extend .fw\+;
+        @extend .mt\+;
+
+        text-align: center;
+    }
+
+    &__radio-form {
+        @extend .mv\+;
+        @extend .pb\+;
+        border-bottom: 1px solid $border-color;
+
+        & div {
+            @extend .flex;
+            @extend .flex__center;
+
+            &:nth-child(3) {
+                @extend .mt\+;
+            }
+        }
+
+        & input {
+            @extend .mr\-;
+        }
+
+        & p {
+            @extend .mt\-;
+            margin-left: 28px;
+        }
     }
 }

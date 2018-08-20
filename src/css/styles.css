@@ -66,15 +66,15 @@ table {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard select, .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p {
+  .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard select, .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p, .onboard__secondary-form .button, .onboard__note, .onboard__radio-form div:nth-child(3) {
     margin-top: 20px !important; }
-  .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form {
+  .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form, .onboard__secondary-form {
     margin-top: 30px !important; }
   .mt\+\+\+ {
     margin-top: 40px !important; }
   .mt\+\+\+\+, .onboard {
     margin-top: 50px !important; }
-  .mt\- {
+  .mt\-, .onboard__radio-form p {
     margin-top: 5px !important; }
   .mt\-\- {
     margin-top: 2px !important; }
@@ -125,7 +125,7 @@ table {
     margin-right: 40px !important; }
   .mr\+\+\+\+ {
     margin-right: 50px !important; }
-  .mr\-, .header__menu .icon, .header__notification .icon, .header__books .icon, .header__link .icon, .header__signup .icon {
+  .mr\-, .header__menu .icon, .header__notification .icon, .header__books .icon, .header__link .icon, .header__signup .icon, .onboard__radio-form input {
     margin-right: 5px !important; }
   .mr\-\- {
     margin-right: 2px !important; }
@@ -135,7 +135,7 @@ table {
   margin-bottom: 10px !important; }
   .mv0 {
     margin-top: 0 !important; }
-  .mv\+ {
+  .mv\+, .onboard__radio-form {
     margin-top: 20px !important; }
   .mv\+\+ {
     margin-top: 30px !important; }
@@ -149,7 +149,7 @@ table {
     margin-top: 2px !important; }
   .mv0 {
     margin-bottom: 0 !important; }
-  .mv\+ {
+  .mv\+, .onboard__radio-form {
     margin-bottom: 20px !important; }
   .mv\+\+ {
     margin-bottom: 30px !important; }
@@ -232,7 +232,7 @@ table {
   padding-bottom: 10px !important; }
   .pb0 {
     padding-bottom: 0 !important; }
-  .pb\+ {
+  .pb\+, .onboard__radio-form {
     padding-bottom: 20px !important; }
   .pb\+\+ {
     padding-bottom: 30px !important; }
@@ -284,7 +284,7 @@ table {
   padding-bottom: 10px !important; }
   .pv0 {
     padding-top: 0 !important; }
-  .pv\+, .onboard__sub-form {
+  .pv\+, .onboard__sub-form, .onboard__secondary-form {
     padding-top: 20px !important; }
   .pv\+\+ {
     padding-top: 30px !important; }
@@ -298,7 +298,7 @@ table {
     padding-top: 2px !important; }
   .pv0 {
     padding-bottom: 0 !important; }
-  .pv\+, .onboard__sub-form {
+  .pv\+, .onboard__sub-form, .onboard__secondary-form {
     padding-bottom: 20px !important; }
   .pv\+\+ {
     padding-bottom: 30px !important; }
@@ -360,14 +360,14 @@ table {
 
 .fs, body {
   font-size: 16px; }
-  .fs\+, .currently-reading__title {
+  .fs\+, .currently-reading__title, .onboard__label {
     font-size: 20px; }
-  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__sub-label, .onboard__error, .onboard__sub-form p {
+  .fs\-, .alert, input[type="text"], input[type="email"], input[type="password"], .button, .header__link--notification span, .onboard__sub-label, .onboard__error, .onboard__sub-form p, .onboard__secondary-form p {
     font-size: 14px; }
 
 .fw, .header__link--notification span {
   font-weight: 400; }
-  .fw\+, .alert, .button, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .header__link--notification span em, .currently-reading__title, .onboard__label, .onboard__error, .onboard__sub-form p {
+  .fw\+, .alert, .button, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .header__link--notification span em, .currently-reading__title, .onboard__label, .onboard__error, .onboard__sub-form p, .onboard__note {
     font-weight: 600; }
 
 .w1300, body {
@@ -438,7 +438,7 @@ table {
   margin-left: auto;
   margin-right: auto; }
 
-.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__sub-submit {
+.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__sub-submit, .onboard__radio-form div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
@@ -459,7 +459,7 @@ table {
     -webkit-box-align: baseline;
     -ms-flex-align: baseline;
     align-items: baseline; }
-  .flex__center, .alert--error, .alert--success, .header__menu, .header__notification, .header__books, .header__link, .header__signup {
+  .flex__center, .alert--error, .alert--success, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__radio-form div {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center; }
@@ -570,6 +570,10 @@ body {
 input[type="text"], input[type="email"], input[type="password"] {
   height: 36px; }
 
+input[type="radio"] {
+  width: 18px;
+  height: 18px; }
+
 select {
   height: 40px; }
 
@@ -664,6 +668,8 @@ select {
   width: 300px; }
   .onboard__label {
     text-align: center; }
+    .onboard__label--small {
+      font-size: 16px !important; }
   .onboard__sub-label {
     text-align: center; }
   .onboard__sub-form {
@@ -682,3 +688,15 @@ select {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center; }
+  .onboard__secondary-form {
+    border-top: 1px solid #E7E4E4; }
+    .onboard__secondary-form p {
+      text-align: center; }
+    .onboard__secondary-form .button {
+      margin: 0 auto; }
+  .onboard__note {
+    text-align: center; }
+  .onboard__radio-form {
+    border-bottom: 1px solid #E7E4E4; }
+    .onboard__radio-form p {
+      margin-left: 28px; }

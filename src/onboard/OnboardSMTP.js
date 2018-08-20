@@ -29,7 +29,7 @@ function OnboardSMTP(props) {
                 <input type="password" className="onboard__smtp-password" id="smtpPassword" placeholder="SMTP password*" />
                 <div className="onboard__error" id="smtpPasswordError">This field is required</div>
                 <div className="onboard__sub-form">
-                  <label className="onboard__label">Send test email to</label>
+                  <label className="onboard__label onboard__label--small">Send test email to</label>
                   <input type="email" className="onboard__smtp-testemail" id="smtpTestEmail" placeholder="Email address" />
                   <div className="onboard__sub-submit">
                     <button className="button button--secondary" onClick={(event) => onboard.sendTestEmail(event, props.testEmailAPI)}>Send</button>

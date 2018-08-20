@@ -11,3 +11,8 @@ input[type="text"], input[type="email"], input[type="password"] {
         @extend .border-focus;
     }
 }
+
+input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
