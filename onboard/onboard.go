@@ -21,23 +21,23 @@ import (
 	"github.com/joyread/server/models"
 )
 
-func _HashPassword(password string) (string, error) {
+func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
 }
 
-func _CheckPasswordHash(password, hash string) bool {
+func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
 
-func _GenerateJWTToken(passwordHash string) (string, error) {
+func generateJWTToken(passwordHash string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{})
 	tokenString, err := token.SignedString([]byte(passwordHash))
 	return tokenString, err
 }
 
-func _ValidateJWTToken(tokenString string, passwordHash string) (bool, error) {
+func validateJWTToken(tokenString string, passwordHash string) (bool, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -62,11 +62,11 @@ func PostSignUp(c *gin.Context) {
 
 	if err := c.BindJSON(&form); err == nil {
 		// Generate password hash using bcrypt
-		passwordHash, err := _HashPassword(form.Password)
+		passwordHash, err := hashPassword(form.Password)
 		cError.CheckError(err)
 
 		// Generate JWT token using the hash password above
-		tokenString, err := _GenerateJWTToken(passwordHash)
+		tokenString, err := generateJWTToken(passwordHash)
 		cError.CheckError(err)
 
 		db, ok := c.MustGet("db").(*sql.DB)
@@ -221,8 +221,8 @@ func PostSignIn(c *gin.Context) {
 		}
 		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, form.UsernameOrEmail)
 
-		if isPasswordValid := _CheckPasswordHash(form.Password, passwordHash); isPasswordValid == true {
-			isTokenValid, err := _ValidateJWTToken(tokenString, passwordHash)
+		if isPasswordValid := checkPasswordHash(form.Password, passwordHash); isPasswordValid == true {
+			isTokenValid, err := validateJWTToken(tokenString, passwordHash)
 			cError.CheckError(err)
 
 			if isTokenValid == true {
@@ -248,15 +248,20 @@ func CheckOnboard(c *gin.Context) {
 		fmt.Println("Middleware db error")
 	}
 	isAdminPresent, userID := models.SelectOneAdmin(db)
-	isSMTPPresent := models.CheckSMTP(db)
-	isNextcloud := models.CheckIsNextcloud(db, userID)
-	isNextcloudPresent := false
 
-	if isNextcloud {
-		accessToken := models.CheckNextcloudToken(db, userID)
+	var isSMTPPresent, isNextcloud, isNextcloudPresent bool
 
-		if len(accessToken) > 0 {
-			isNextcloudPresent = true
+	if isAdminPresent {
+		isSMTPPresent = models.CheckSMTP(db)
+		isNextcloud = models.CheckIsNextcloud(db, userID)
+		isNextcloudPresent = false
+
+		if isNextcloud {
+			accessToken := models.CheckNextcloudToken(db, userID)
+
+			if len(accessToken) > 0 {
+				isNextcloudPresent = true
+			}
 		}
 	}
 
