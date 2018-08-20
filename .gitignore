@@ -2,6 +2,5 @@ node_modules/
 yarn.lock
 package-lock.json
 joyread.db
-app.yaml
 build/
 vendor/

@@ -128,7 +128,6 @@
     &__radio-form {
         @extend .mv\+;
         @extend .pb\+;
-        border-bottom: 1px solid $border-color;
 
         & div {
             @extend .flex;
