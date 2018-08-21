@@ -9,7 +9,7 @@ import (
 
 // CreateUser ...
 func CreateUser(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, is_nextcloud BOOLEAN NOT NULL DEFAULT FALSE, is_onboarded BOOLEAN NOT NULL DEFAULT FALSE)")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, storage VARCHAR(255) NOT NULL DEFAULT 'local')")
 	cError.CheckError(err)
 }
 
@@ -31,24 +31,21 @@ func InsertUser(db *sql.DB, signUpModel SignUpModel) int {
 	return lastInsertID
 }
 
-// SelectOneAdmin ...
-func SelectOneAdmin(db *sql.DB) (bool, int) {
+// SelectAdmin ...
+func SelectAdmin(db *sql.DB) int {
 	// Check for Admin in the user table
 	rows, err := db.Query("SELECT id FROM account WHERE is_admin = $1", true)
 	cError.CheckError(err)
 
-	var isAdminPresent = false
 	var userID int
 
 	if rows.Next() {
 		err := rows.Scan(&userID)
 		cError.CheckError(err)
-
-		isAdminPresent = true
 	}
 	rows.Close()
 
-	return isAdminPresent, userID
+	return userID
 }
 
 // SelectPasswordHashAndJWTTokenModel struct

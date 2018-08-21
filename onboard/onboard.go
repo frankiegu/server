@@ -364,23 +364,20 @@ func CheckOnboard(c *gin.Context) {
 	if !ok {
 		fmt.Println("Middleware db error")
 	}
-	isAdminPresent, userID := models.SelectOneAdmin(db)
 
-	var isSMTPPresent, isNextcloud, isNextcloudPresent bool
+	var currentProgress string
 
-	if isAdminPresent {
-		isSMTPPresent = models.CheckSMTP(db)
-		isNextcloud = models.CheckIsNextcloud(db, userID)
-		isNextcloudPresent = false
+	if userID := models.SelectAdmin(db); userID > 0 {
+		currentProgress = "signup"
 
-		if isNextcloud {
-			accessToken := models.CheckNextcloudToken(db, userID)
+		if models.CheckSMTP(db) {
+			currentProgress = "smtp"
 
-			if len(accessToken) > 0 {
-				isNextcloudPresent = true
+			if models.CheckIsNextcloud(db, userID) {
+				currentProgress = "nextcloud"
 			}
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"is_admin_present": isAdminPresent, "user_id": userID, "is_smtp_present": isSMTPPresent, "is_nextcloud_present": isNextcloudPresent})
+	c.JSON(http.StatusOK, gin.H{"current_progress": currentProgress})
 }

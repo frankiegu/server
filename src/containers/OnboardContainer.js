@@ -12,15 +12,14 @@ class OnboardContainer extends Container {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
-      if (data.is_admin_present) {
-        this.setState({ isSignUpFilled: true, userID: data.userID });
+      if (data.current_progress === "signup") {
+        this.setState({ isSignUpFilled: true });
+      } else if (data.current_progress === "smtp") {
+        this.setState({ isSignUpFilled: true, isSMTPFilled: true});
+      } else if (data.current_progress === "nextcloud") {
+        this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
       }
-      if (data.is_smtp_present) this.setState({ isSMTPFilled: true });
-      if (data.is_nextcloud_present) this.setState({ isStorageFilled: true });
-      if (data.is_admin_present && data.is_smtp_present) {
-        if (GetCookie("joyread")) this.setState({ isSignedIn: true });
-      }
+
       document.getElementById('loader').style.display = 'none';
     });
     
