@@ -6,18 +6,30 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-// SendEmail ...
-func SendEmail(from string, to string, subject string, body string, smtpServer string, smtpPort int, smtpEmail string, smtpPassword string) {
+// SendEmailRequest struct
+type SendEmailRequest struct {
+	From         string
+	To           string
+	Subject      string
+	Body         string
+	SMTPHostname string
+	SMTPPort     int
+	SMTPUsername string
+	SMTPPassword string
+}
+
+// SendAsyncEmail ...
+func SendAsyncEmail(sendEmailRequest SendEmailRequest) {
 	// Set home many CPU cores this function wants to use
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", from)
-	m.SetHeader("To", to)
-	m.SetHeader("Subject", subject)
-	m.SetBody("text/html", body)
+	m.SetHeader("From", sendEmailRequest.From)
+	m.SetHeader("To", sendEmailRequest.To)
+	m.SetHeader("Subject", sendEmailRequest.Subject)
+	m.SetBody("text/html", sendEmailRequest.Body)
 
-	d := gomail.NewDialer(smtpServer, smtpPort, smtpEmail, smtpPassword)
+	d := gomail.NewDialer(sendEmailRequest.SMTPHostname, sendEmailRequest.SMTPPort, sendEmailRequest.SMTPUsername, sendEmailRequest.SMTPPassword)
 
 	// Send the email
 	if err := d.DialAndSend(m); err != nil {
@@ -26,14 +38,14 @@ func SendEmail(from string, to string, subject string, body string, smtpServer s
 }
 
 // SendSyncEmail ...
-func SendSyncEmail(from string, to string, subject string, body string, smtpServer string, smtpPort int, smtpEmail string, smtpPassword string) bool {
+func SendSyncEmail(sendEmailRequest SendEmailRequest) bool {
 	m := gomail.NewMessage()
-	m.SetHeader("From", from)
-	m.SetHeader("To", to)
-	m.SetHeader("Subject", subject)
-	m.SetBody("text/html", body)
+	m.SetHeader("From", sendEmailRequest.From)
+	m.SetHeader("To", sendEmailRequest.To)
+	m.SetHeader("Subject", sendEmailRequest.Subject)
+	m.SetBody("text/html", sendEmailRequest.Body)
 
-	d := gomail.NewDialer(smtpServer, smtpPort, smtpEmail, smtpPassword)
+	d := gomail.NewDialer(sendEmailRequest.SMTPHostname, sendEmailRequest.SMTPPort, sendEmailRequest.SMTPUsername, sendEmailRequest.SMTPPassword)
 
 	// Send the email
 	if err := d.DialAndSend(m); err != nil {

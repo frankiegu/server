@@ -87,9 +87,17 @@ func CreateSMTP(db *sql.DB) {
 	cError.CheckError(err)
 }
 
+// SMTPModel struct
+type SMTPModel struct {
+	Hostname string
+	Port     int
+	Username string
+	Password string
+}
+
 // InsertSMTP ...
-func InsertSMTP(db *sql.DB, hostname string, port int, username string, password string) {
-	_, err := db.Query("INSERT INTO smtp (hostname, port, username, password) VALUES ($1, $2, $3, $4)", hostname, port, username, password)
+func InsertSMTP(db *sql.DB, smtpModel SMTPModel) {
+	_, err := db.Query("INSERT INTO smtp (hostname, port, username, password) VALUES ($1, $2, $3, $4)", smtpModel.Hostname, smtpModel.Port, smtpModel.Username, smtpModel.Password)
 	cError.CheckError(err)
 }
 
@@ -116,12 +124,21 @@ func CreateNextcloud(db *sql.DB) {
 	cError.CheckError(err)
 }
 
+// NextcloudModel struct
+type NextcloudModel struct {
+	UserID       int
+	URL          string
+	ClientID     string
+	ClientSecret string
+	Directory    string
+}
+
 // InsertNextcloud ...
-func InsertNextcloud(db *sql.DB, userID int, url string, clientID string, clientSecret string, directory string) {
-	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4, $5)", userID, url, clientID, clientSecret, directory)
+func InsertNextcloud(db *sql.DB, nextcloudModel NextcloudModel) {
+	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4, $5)", nextcloudModel.UserID, nextcloudModel.URL, nextcloudModel.ClientID, nextcloudModel.ClientSecret, nextcloudModel.Directory)
 	cError.CheckError(err)
 
-	_, err = db.Query("UPDATE account SET is_nextcloud=$1, is_onboarded=$2 WHERE id=$3", true, true, userID)
+	_, err = db.Query("UPDATE account SET is_nextcloud=$1, is_onboarded=$2 WHERE id=$3", true, true, nextcloudModel.UserID)
 	cError.CheckError(err)
 }
 

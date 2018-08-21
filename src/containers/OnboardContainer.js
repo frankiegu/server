@@ -110,7 +110,7 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       if (data.status === 'registered') {
-        this.setState({ userID: data.userID, isSignUpFilled: true });
+        this.setState({ userID: data.user_id, isSignUpFilled: true });
         document.getElementById('alert').innerHTML = '<i></i><p>Your database form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
@@ -207,7 +207,7 @@ class OnboardContainer extends Container {
       return response.json();
     })
     .then((data) => {
-      if (data.status) {
+      if (data.is_email_sent) {
         document.getElementById('smtpLoader').classList.remove('show');
         document.getElementById('smtpText').innerText = 'Test email sent successfully!';
         document.getElementById('smtpText').classList.add('show');

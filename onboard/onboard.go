@@ -49,16 +49,28 @@ func validateJWTToken(tokenString string, passwordHash string) (bool, error) {
 	return token.Valid, err
 }
 
-// SignUpResponse struct
-type SignUpResponse struct {
+// ErrorResponse struct
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+// SignUpRequest struct
+type SignUpRequest struct {
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
+// SignUpResponse struct
+type SignUpResponse struct {
+	Status string `json:"status"`
+	Token  string `json:"token"`
+	UserID int    `json:"user_id"`
+}
+
 // PostSignUp ...
 func PostSignUp(c *gin.Context) {
-	var form SignUpResponse
+	var form SignUpRequest
 
 	if err := c.BindJSON(&form); err == nil {
 		// Generate password hash using bcrypt
@@ -84,18 +96,70 @@ func PostSignUp(c *gin.Context) {
 
 		lastInsertID := models.InsertUser(db, signUpModel)
 
-		c.JSON(http.StatusMovedPermanently, gin.H{
-			"status": "registered",
-			"token":  token,
-			"userID": lastInsertID,
-		})
+		signUpResponse := &SignUpResponse{
+			Status: "registered",
+			Token:  token,
+			UserID: lastInsertID,
+		}
+
+		c.JSON(http.StatusMovedPermanently, signUpResponse)
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		errorResponse := &ErrorResponse{
+			Error: err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, errorResponse)
 	}
 }
 
-// TestSMTP struct
-type TestSMTPStruct struct {
+// SMTPRequest struct
+type SMTPRequest struct {
+	SMTPHostname string `json:"smtp_hostname" binding:"required"`
+	SMTPPort     string `json:"smtp_port" binding:"required"`
+	SMTPUsername string `json:"smtp_username" binding:"required"`
+	SMTPPassword string `json:"smtp_password" binding:"required"`
+}
+
+// SMTPResponse struct
+type SMTPResponse struct {
+	Status string `json:"status"`
+}
+
+// PostSMTP ...
+func PostSMTP(c *gin.Context) {
+	var form SMTPRequest
+
+	if err := c.BindJSON(&form); err == nil {
+		db, ok := c.MustGet("db").(*sql.DB)
+		if !ok {
+			fmt.Println("Middleware db error")
+		}
+
+		smtpPort, _ := strconv.Atoi(form.SMTPPort)
+
+		smtpModel := models.SMTPModel{
+			Hostname: form.SMTPHostname,
+			Port:     smtpPort,
+			Username: form.SMTPUsername,
+			Password: form.SMTPPassword,
+		}
+
+		models.InsertSMTP(db, smtpModel)
+
+		smtpResponse := &SMTPResponse{
+			Status: "registered",
+		}
+
+		c.JSON(http.StatusMovedPermanently, smtpResponse)
+	} else {
+		errorResponse := &ErrorResponse{
+			Error: err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, errorResponse)
+	}
+}
+
+// TestEmailRequest struct
+type TestEmailRequest struct {
 	SMTPHostname  string `json:"smtp_hostname" binding:"required"`
 	SMTPPort      string `json:"smtp_port" binding:"required"`
 	SMTPUsername  string `json:"smtp_username" binding:"required"`
@@ -103,62 +167,64 @@ type TestSMTPStruct struct {
 	SMTPTestEmail string `json:"smtp_test_email" binding:"required"`
 }
 
+// TestEmailResponse struct
+type TestEmailResponse struct {
+	IsEmailSent bool `json:"is_email_sent"`
+}
+
 // TestEmail ...
 func TestEmail(c *gin.Context) {
-	var form TestSMTPStruct
+	var form TestEmailRequest
 
 	if err := c.BindJSON(&form); err == nil {
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
-
-		// Send test email
 		emailSubject := "Joyread - Test email for your SMTP configuration"
 		emailBody := "Congratulations mate!<br /><br /> You've successfully set up your email server.<br /><br />Cheers,<br/>Joyread"
-		isEmailSent := email.SendSyncEmail(form.SMTPUsername, form.SMTPTestEmail, emailSubject, emailBody, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
-		c.JSON(http.StatusMovedPermanently, gin.H{"status": isEmailSent})
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-}
-
-// SMTPStruct struct
-type SMTPStruct struct {
-	SMTPHostname string `json:"smtp_hostname" binding:"required"`
-	SMTPPort     string `json:"smtp_port" binding:"required"`
-	SMTPUsername string `json:"smtp_username" binding:"required"`
-	SMTPPassword string `json:"smtp_password" binding:"required"`
-}
-
-// PostSMTP ...
-func PostSMTP(c *gin.Context) {
-	var form SMTPStruct
-
-	if err := c.BindJSON(&form); err == nil {
-		db, ok := c.MustGet("db").(*sql.DB)
-		if !ok {
-			fmt.Println("Middleware db error")
+		sendEmailRequest := email.SendEmailRequest{
+			From:         form.SMTPUsername,
+			To:           form.SMTPTestEmail,
+			Subject:      emailSubject,
+			Body:         emailBody,
+			SMTPHostname: form.SMTPHostname,
+			SMTPPort:     smtpPort,
+			SMTPUsername: form.SMTPUsername,
+			SMTPPassword: form.SMTPPassword,
 		}
-		smtpPort, _ := strconv.Atoi(form.SMTPPort)
-		models.InsertSMTP(db, form.SMTPHostname, smtpPort, form.SMTPUsername, form.SMTPPassword)
 
-		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered"})
+		isEmailSent := email.SendSyncEmail(sendEmailRequest)
+
+		testEmailResponse := &TestEmailResponse{
+			IsEmailSent: isEmailSent,
+		}
+
+		c.JSON(http.StatusMovedPermanently, testEmailResponse)
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		errorResponse := &ErrorResponse{
+			Error: err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, errorResponse)
 	}
 }
 
-// NextcloudStruct struct
-type NextcloudStruct struct {
+// NextcloudRequest struct
+type NextcloudRequest struct {
 	UserID                int    `json:"user_id" binding:"required"`
 	NextcloudURL          string `json:"nextcloud_url" binding:"required"`
 	NextcloudClientID     string `json:"nextcloud_client_id" binding:"required"`
-	NextcloudClientSecret string `json:"nextcloud_client_secret binding:"required"`
-	NextcloudDirectory    string `json:"nextcloud_directory binding:"required"`
+	NextcloudClientSecret string `json:"nextcloud_client_secret" binding:"required"`
+	NextcloudDirectory    string `json:"nextcloud_directory" binding:"required"`
+}
+
+// NextcloudResponse struct
+type NextcloudResponse struct {
+	Status  string `json:"status"`
+	AuthURL string `json:"auth_url"`
 }
 
 // PostNextcloud ...
 func PostNextcloud(c *gin.Context) {
-	var form NextcloudStruct
+	var form NextcloudRequest
 
 	if err := c.BindJSON(&form); err == nil {
 		fmt.Println(form)
@@ -167,12 +233,28 @@ func PostNextcloud(c *gin.Context) {
 			fmt.Println("Middleware db error")
 		}
 
-		models.InsertNextcloud(db, form.UserID, form.NextcloudURL, form.NextcloudClientID, form.NextcloudClientSecret, form.NextcloudDirectory)
+		nextcloudModel := models.NextcloudModel{
+			UserID:       form.UserID,
+			URL:          form.NextcloudURL,
+			ClientID:     form.NextcloudClientID,
+			ClientSecret: form.NextcloudClientSecret,
+			Directory:    form.NextcloudDirectory,
+		}
+
+		models.InsertNextcloud(db, nextcloudModel)
 
 		authURL := fmt.Sprintf("%s/apps/oauth2/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=write", form.NextcloudURL, form.NextcloudClientID, "http://localhost:8080/nextcloud-code")
-		c.JSON(http.StatusMovedPermanently, gin.H{"status": "registered", "auth_url": authURL})
+		nextcloudResponse := &NextcloudResponse{
+			Status:  "registered",
+			AuthURL: authURL,
+		}
+
+		c.JSON(http.StatusMovedPermanently, nextcloudResponse)
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		errorResponse := &ErrorResponse{
+			Error: err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, errorResponse)
 	}
 }
 
@@ -245,7 +327,10 @@ func PostSignIn(c *gin.Context) {
 			c.JSON(http.StatusMovedPermanently, gin.H{"status": "unauthorized"})
 		}
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		errorResponse := &ErrorResponse{
+			Error: err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, errorResponse)
 	}
 }
 
