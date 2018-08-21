@@ -24,11 +24,11 @@ type SignUpModel struct {
 
 // InsertUser ...
 func InsertUser(db *sql.DB, signUpModel SignUpModel) int {
-	var lastInsertId int
-	err := db.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin).Scan(&lastInsertId)
+	var lastInsertID int
+	err := db.QueryRow("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5) returning id", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin).Scan(&lastInsertID)
 	cError.CheckError(err)
 
-	return lastInsertId
+	return lastInsertID
 }
 
 // SelectOneAdmin ...
@@ -156,6 +156,7 @@ type SelectNextcloudModel struct {
 	UserID int
 }
 
+// SelectNextcloudResponse struct
 type SelectNextcloudResponse struct {
 	URL          string
 	ClientID     string
