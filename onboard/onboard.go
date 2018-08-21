@@ -312,6 +312,12 @@ type SignInRequest struct {
 	Password        string `json:"password" binding:"required"`
 }
 
+// SignInResponse struct
+type SignInResponse struct {
+	Status string `json:"status"`
+	Token  string `json:"token"`
+}
+
 // PostSignIn ...
 func PostSignIn(c *gin.Context) {
 	var form SignInRequest
@@ -322,20 +328,22 @@ func PostSignIn(c *gin.Context) {
 			fmt.Println("Middleware db error")
 		}
 
-		selectPasswordHashAndJWTTokenRequest := models.SelectPasswordHashAndJWTTokenRequest{
+		selectPasswordHashAndJWTTokenModel := models.SelectPasswordHashAndJWTTokenModel{
 			UsernameOrEmail: form.UsernameOrEmail,
 		}
-		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, selectPasswordHashAndJWTTokenRequest)
+		selectPasswordHashAndJWTTokenResponse := models.SelectPasswordHashAndJWTToken(db, selectPasswordHashAndJWTTokenModel)
 
-		if isPasswordValid := checkPasswordHash(form.Password, passwordHash); isPasswordValid == true {
-			isTokenValid, err := validateJWTToken(tokenString, passwordHash)
+		if isPasswordValid := checkPasswordHash(form.Password, selectPasswordHashAndJWTTokenResponse.PasswordHash); isPasswordValid == true {
+			isTokenValid, err := validateJWTToken(selectPasswordHashAndJWTTokenResponse.Token, selectPasswordHashAndJWTTokenResponse.PasswordHash)
 			cError.CheckError(err)
 
+			signInResponse := &SignInResponse{
+				Status: "authorized",
+				Token:  selectPasswordHashAndJWTTokenResponse.Token,
+			}
+
 			if isTokenValid == true {
-				c.JSON(http.StatusMovedPermanently, gin.H{
-					"status": "authorized",
-					"token":  tokenString,
-				})
+				c.JSON(http.StatusMovedPermanently, signInResponse)
 			} else {
 				c.JSON(http.StatusMovedPermanently, gin.H{"status": "unauthorized"})
 			}

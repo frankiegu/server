@@ -51,39 +51,42 @@ func SelectOneAdmin(db *sql.DB) (bool, int) {
 	return isAdminPresent, userID
 }
 
-// SelectPasswordHashAndJWTTokenRequest struct
-type SelectPasswordHashAndJWTTokenRequest struct {
+// SelectPasswordHashAndJWTTokenModel struct
+type SelectPasswordHashAndJWTTokenModel struct {
 	UsernameOrEmail string
 }
 
+// SelectPasswordHashAndJWTTokenResponse struct
+type SelectPasswordHashAndJWTTokenResponse struct {
+	PasswordHash string
+	Token        string
+}
+
 // SelectPasswordHashAndJWTToken ...
-func SelectPasswordHashAndJWTToken(db *sql.DB, selectPasswordHashAndJWTTokenRequest SelectPasswordHashAndJWTTokenRequest) (string, string) {
+func SelectPasswordHashAndJWTToken(db *sql.DB, selectPasswordHashAndJWTTokenModel SelectPasswordHashAndJWTTokenModel) *SelectPasswordHashAndJWTTokenResponse {
 	// Search for username in the 'account' table with the given string
-	rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE username = $1", selectPasswordHashAndJWTTokenRequest.UsernameOrEmail)
+	rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE username = $1", selectPasswordHashAndJWTTokenModel.UsernameOrEmail)
 	cError.CheckError(err)
 
-	var (
-		passwordHash string
-		tokenString  string
-	)
+	var selectPasswordHashAndJWTTokenResponse SelectPasswordHashAndJWTTokenResponse
 
 	if rows.Next() {
-		err := rows.Scan(&passwordHash, &tokenString)
+		err := rows.Scan(&selectPasswordHashAndJWTTokenResponse.PasswordHash, &selectPasswordHashAndJWTTokenResponse.Token)
 		cError.CheckError(err)
 	} else {
 		// if username doesn't exist, search for email in the 'account' table with the given string
-		rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE email = $1", selectPasswordHashAndJWTTokenRequest.UsernameOrEmail)
+		rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE email = $1", selectPasswordHashAndJWTTokenModel.UsernameOrEmail)
 		cError.CheckError(err)
 
 		if rows.Next() {
-			err := rows.Scan(&passwordHash, &tokenString)
+			err := rows.Scan(&selectPasswordHashAndJWTTokenResponse.PasswordHash, &selectPasswordHashAndJWTTokenResponse.Token)
 			cError.CheckError(err)
 		}
 		rows.Close()
 	}
 	rows.Close()
 
-	return passwordHash, tokenString
+	return &selectPasswordHashAndJWTTokenResponse
 }
 
 // CreateSMTP ...
