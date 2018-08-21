@@ -63,7 +63,7 @@ func StartServer() {
 	r.POST("/test-email", onboard.TestEmail)
 	r.GET("/storage", home.Home)
 	r.POST("/nextcloud", onboard.PostNextcloud)
-	r.GET("/nextcloud-auth", onboard.NextcloudAuthCode)
+	r.GET("/nextcloud-auth/:user_id", onboard.NextcloudAuthCode)
 	r.GET("/check-onboard", onboard.CheckOnboard)
 	r.GET("/books", books.GetBooks)
 	r.POST("/upload-books", books.UploadBooks)

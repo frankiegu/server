@@ -54,6 +54,8 @@ function OnboardStorage(props) {
                   <div className="onboard__error" id="nextcloudClientSecretError">This field is required</div>
                   <input type="text" className="onboard__nextcloud-directory" id="nextcloudDirectory" placeholder="Nextcloud directory (/books or /)*" />
                   <div className="onboard__error" id="nextcloudDirectoryError">This field is required</div>
+                  <input type="text" className="onboard__nextcloud-redirect-uri" id="nextcloudRedirectURI" placeholder="OAuth2 Redirect URI (http://myjoyread.com)*" />
+                  <div className="onboard__error" id="nextcloudRedirectURIError">This field is required</div>
                 </div>
                 <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.nextcloud(event, props.nextcloudAPI)} />
               </form>

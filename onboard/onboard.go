@@ -2,12 +2,9 @@ package onboard
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
 
 	// vendor packages
 	"github.com/dgrijalva/jwt-go"
@@ -15,10 +12,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	// custom packages
-
 	"github.com/joyread/server/email"
 	cError "github.com/joyread/server/error"
 	"github.com/joyread/server/models"
+	"github.com/joyread/server/nextcloud"
 )
 
 func hashPassword(password string) (string, error) {
@@ -117,11 +114,13 @@ type SMTPRequest struct {
 	SMTPPort     string `json:"smtp_port" binding:"required"`
 	SMTPUsername string `json:"smtp_username" binding:"required"`
 	SMTPPassword string `json:"smtp_password" binding:"required"`
+	UserID       int    `json:"user_id" binding:"required"`
 }
 
 // SMTPResponse struct
 type SMTPResponse struct {
 	Status string `json:"status"`
+	UserID int    `json:"user_id"`
 }
 
 // PostSMTP ...
@@ -214,6 +213,7 @@ type NextcloudRequest struct {
 	NextcloudClientID     string `json:"nextcloud_client_id" binding:"required"`
 	NextcloudClientSecret string `json:"nextcloud_client_secret" binding:"required"`
 	NextcloudDirectory    string `json:"nextcloud_directory" binding:"required"`
+	NextcloudRedirectURI  string `json:"nextcloud_redirect_uri" binding:"required"`
 }
 
 // NextcloudResponse struct
@@ -227,11 +227,13 @@ func PostNextcloud(c *gin.Context) {
 	var form NextcloudRequest
 
 	if err := c.BindJSON(&form); err == nil {
-		fmt.Println(form)
 		db, ok := c.MustGet("db").(*sql.DB)
 		if !ok {
 			fmt.Println("Middleware db error")
 		}
+
+		// Redirect URI - https://myjoyread.com/nextcloud-auth/:user_id
+		redirectURI := fmt.Sprintf("%s/nextcloud-auth/%d", form.NextcloudRedirectURI, form.UserID)
 
 		nextcloudModel := models.NextcloudModel{
 			UserID:       form.UserID,
@@ -239,16 +241,21 @@ func PostNextcloud(c *gin.Context) {
 			ClientID:     form.NextcloudClientID,
 			ClientSecret: form.NextcloudClientSecret,
 			Directory:    form.NextcloudDirectory,
+			RedirectURI:  redirectURI,
 		}
-
 		models.InsertNextcloud(db, nextcloudModel)
 
-		authURL := fmt.Sprintf("%s/apps/oauth2/authorize?response_type=code&client_id=%s&redirect_uri=%s&scope=write", form.NextcloudURL, form.NextcloudClientID, "http://localhost:8080/nextcloud-code")
+		authURLRequest := nextcloud.AuthURLRequest{
+			URL:         form.NextcloudURL,
+			ClientID:    form.NextcloudClientID,
+			RedirectURI: redirectURI,
+		}
+		authURL := nextcloud.GetAuthURL(authURLRequest)
+
 		nextcloudResponse := &NextcloudResponse{
 			Status:  "registered",
 			AuthURL: authURL,
 		}
-
 		c.JSON(http.StatusMovedPermanently, nextcloudResponse)
 	} else {
 		errorResponse := &ErrorResponse{
@@ -258,58 +265,67 @@ func PostNextcloud(c *gin.Context) {
 	}
 }
 
-// NextcloudTokenStruct struct
-type NextcloudTokenStruct struct {
-	AccessToken  string `json:"access_token" binding:"required"`
-	RefreshToken string `json:"refresh_token" binding:"required"`
-}
-
 // NextcloudAuthCode ...
 func NextcloudAuthCode(c *gin.Context) {
+	// Get UserID from the URL
+	userIDString := c.Param("user_id")
+	var userID int
+	if len(userIDString) > 0 {
+		userID, _ = strconv.Atoi(userIDString)
+	}
+
+	// Get authorization code from the URL
 	code := c.Query("code")
-	var nextcloudToken NextcloudTokenStruct
 
 	db, ok := c.MustGet("db").(*sql.DB)
 	if !ok {
 		fmt.Println("Middleware db error")
 	}
 
-	url, clientID, clientSecret := models.SelectNextcloud(db)
-	body := strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=%s&code=%s&redirect_uri=%s", clientID, clientSecret, "authorization_code", code, "http://localhost:8080/nextcloud-code"))
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/apps/oauth2/api/v1/token", url), body)
-	cError.CheckError(err)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	client := &http.Client{
-		Timeout: 15 * time.Second,
+	selectNextcloudModel := models.SelectNextcloudModel{
+		UserID: userID,
 	}
-	resp, err := client.Do(req)
-	cError.CheckError(err)
-	json.NewDecoder(resp.Body).Decode(&nextcloudToken)
-	fmt.Println(&nextcloudToken)
-	resp.Body.Close()
+	url, clientID, clientSecret, redirectURI := models.SelectNextcloud(db, selectNextcloudModel)
 
-	models.UpdateNextcloudToken(db, nextcloudToken.AccessToken, nextcloudToken.RefreshToken)
+	accessTokenRequest := nextcloud.AccessTokenRequest{
+		URL:          url,
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		AuthCode:     code,
+		RedirectURI:  redirectURI,
+	}
+	accessToken, refreshToken := nextcloud.GetAccessToken(accessTokenRequest)
+
+	nextcloudTokenModel := models.NextcloudTokenModel{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		UserID:       userID,
+	}
+	models.UpdateNextcloudToken(db, nextcloudTokenModel)
 
 	c.Redirect(http.StatusMovedPermanently, "/")
 }
 
-// SignInStruct struct
-type SignInStruct struct {
+// SignInRequest struct
+type SignInRequest struct {
 	UsernameOrEmail string `json:"usernameoremail" binding:"required"`
 	Password        string `json:"password" binding:"required"`
 }
 
 // PostSignIn ...
 func PostSignIn(c *gin.Context) {
-	var form SignInStruct
+	var form SignInRequest
 
 	if err := c.BindJSON(&form); err == nil {
 		db, ok := c.MustGet("db").(*sql.DB)
 		if !ok {
 			fmt.Println("Middleware db error")
 		}
-		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, form.UsernameOrEmail)
+
+		selectPasswordHashAndJWTTokenRequest := models.SelectPasswordHashAndJWTTokenRequest{
+			UsernameOrEmail: form.UsernameOrEmail,
+		}
+		passwordHash, tokenString := models.SelectPasswordHashAndJWTToken(db, selectPasswordHashAndJWTTokenRequest)
 
 		if isPasswordValid := checkPasswordHash(form.Password, passwordHash); isPasswordValid == true {
 			isTokenValid, err := validateJWTToken(tokenString, passwordHash)

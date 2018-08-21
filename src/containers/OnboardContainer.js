@@ -150,7 +150,8 @@ class OnboardContainer extends Container {
       smtp_hostname: smtpHostname,
       smtp_port: smtpPort,
       smtp_username: smtpUsername,
-      smtp_password: smtpPassword
+      smtp_password: smtpPassword,
+      user_id: this.state.userID
     }
 
     fetch(url, {
@@ -166,7 +167,7 @@ class OnboardContainer extends Container {
     })
     .then((data) => {
       if (data.status === 'registered') {        
-        this.setState({ isSMTPFilled: true });
+        this.setState({ isSMTPFilled: true, userID: data.user_id });
         document.getElementById('alert').innerHTML = '<i></i><p>Your SMTP form is registered successfully</p>';
         document.getElementById('alert').classList.add('alert--success');
       } else {
@@ -230,13 +231,15 @@ class OnboardContainer extends Container {
       var nextcloudClientId = document.getElementById('nextcloudClientId').value;
       var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
       var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
+      var nextcloudRedirectURI = document.getElementById('nextcloudRedirectURI').value;
 
       var data = {
         user_id: this.state.userID,
         nextcloud_url: nextcloudURL,
         nextcloud_client_id: nextcloudClientId,
         nextcloud_client_secret: nextcloudClientSecret,
-        nextcloud_directory: nextcloudDirectory
+        nextcloud_directory: nextcloudDirectory,
+        nextcloud_redirect_uri: nextcloudRedirectURI
       }
 
       fetch(url, {

@@ -51,10 +51,15 @@ func SelectOneAdmin(db *sql.DB) (bool, int) {
 	return isAdminPresent, userID
 }
 
+// SelectPasswordHashAndJWTTokenRequest struct
+type SelectPasswordHashAndJWTTokenRequest struct {
+	UsernameOrEmail string
+}
+
 // SelectPasswordHashAndJWTToken ...
-func SelectPasswordHashAndJWTToken(db *sql.DB, usernameoremail string) (string, string) {
+func SelectPasswordHashAndJWTToken(db *sql.DB, selectPasswordHashAndJWTTokenRequest SelectPasswordHashAndJWTTokenRequest) (string, string) {
 	// Search for username in the 'account' table with the given string
-	rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE username = $1", usernameoremail)
+	rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE username = $1", selectPasswordHashAndJWTTokenRequest.UsernameOrEmail)
 	cError.CheckError(err)
 
 	var (
@@ -67,7 +72,7 @@ func SelectPasswordHashAndJWTToken(db *sql.DB, usernameoremail string) (string, 
 		cError.CheckError(err)
 	} else {
 		// if username doesn't exist, search for email in the 'account' table with the given string
-		rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE email = $1", usernameoremail)
+		rows, err := db.Query("SELECT password_hash, jwt_token FROM account WHERE email = $1", selectPasswordHashAndJWTTokenRequest.UsernameOrEmail)
 		cError.CheckError(err)
 
 		if rows.Next() {
@@ -131,36 +136,48 @@ type NextcloudModel struct {
 	ClientID     string
 	ClientSecret string
 	Directory    string
+	RedirectURI  string
 }
 
 // InsertNextcloud ...
 func InsertNextcloud(db *sql.DB, nextcloudModel NextcloudModel) {
-	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory) VALUES ($1, $2, $3, $4, $5)", nextcloudModel.UserID, nextcloudModel.URL, nextcloudModel.ClientID, nextcloudModel.ClientSecret, nextcloudModel.Directory)
+	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory, redirect_uri) VALUES ($1, $2, $3, $4, $5, $6)", nextcloudModel.UserID, nextcloudModel.URL, nextcloudModel.ClientID, nextcloudModel.ClientSecret, nextcloudModel.Directory, nextcloudModel.RedirectURI)
 	cError.CheckError(err)
 
 	_, err = db.Query("UPDATE account SET is_nextcloud=$1, is_onboarded=$2 WHERE id=$3", true, true, nextcloudModel.UserID)
 	cError.CheckError(err)
 }
 
+// SelectNextcloudModel struct
+type SelectNextcloudModel struct {
+	UserID int
+}
+
 // SelectNextcloud ...
-func SelectNextcloud(db *sql.DB) (string, string, string) {
-	rows, err := db.Query("SELECT url, client_id, client_secret FROM nextcloud WHERE user_id=$1", 1)
+func SelectNextcloud(db *sql.DB, selectNextcloudModel SelectNextcloudModel) (string, string, string, string) {
+	rows, err := db.Query("SELECT url, client_id, client_secret, redirect_uri FROM nextcloud WHERE user_id=$1", selectNextcloudModel.UserID)
 	cError.CheckError(err)
 
-	var url, clientID, clientSecret string
+	var url, clientID, clientSecret, redirectURI string
 
 	if rows.Next() {
-		err := rows.Scan(&url, &clientID, &clientSecret)
+		err := rows.Scan(&url, &clientID, &clientSecret, &redirectURI)
 		cError.CheckError(err)
 	}
 	rows.Close()
 
-	return url, clientID, clientSecret
+	return url, clientID, clientSecret, redirectURI
+}
+
+type NextcloudTokenModel struct {
+	AccessToken  string
+	RefreshToken string
+	UserID       int
 }
 
 // UpdateNextcloudToken ...
-func UpdateNextcloudToken(db *sql.DB, accessToken string, refreshToken string) {
-	_, err := db.Query("UPDATE nextcloud SET access_token=$1, refresh_token=$2 WHERE user_id=$3", accessToken, refreshToken, 1)
+func UpdateNextcloudToken(db *sql.DB, nextcloudTokenModel NextcloudTokenModel) {
+	_, err := db.Query("UPDATE nextcloud SET access_token=$1, refresh_token=$2 WHERE user_id=$3", nextcloudTokenModel.AccessToken, nextcloudTokenModel.RefreshToken, nextcloudTokenModel.UserID)
 	cError.CheckError(err)
 }
 
