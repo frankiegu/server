@@ -180,6 +180,7 @@ func SelectNextcloud(db *sql.DB, selectNextcloudModel SelectNextcloudModel) *Sel
 	return &selectNextcloudResponse
 }
 
+// NextcloudTokenModel struct
 type NextcloudTokenModel struct {
 	AccessToken  string
 	RefreshToken string
