@@ -43,10 +43,10 @@ function OnboardStorage(props) {
                   <p className="onboard__info">Local storage as a storage option will provide you a way to sync ebooks...</p>
                 </div>
                 <div id="nextcloudForm">
-                  <div className="onboard__label onboard__label--small">Nextcloud configuration</div>
-                  <p className="onboard__sub-label">Redirect URL: &lt;YOUR JOYREAD URL&gt;/nextcloud-auth</p>
+                  <div className="onboard__label onboard__label--small">Nextcloud OAuth2 configuration</div>
+                  <p className="onboard__sub-label">Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{props.userID}</p>
                   <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
-                  <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (http://mynextcloud.com)*" />
+                  <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (https://mynextcloud.com)*" />
                   <div className="onboard__error" id="nextcloudURLError">This field is required</div>
                   <input type="text" className="onboard__nextcloud-client-id" id="nextcloudClientId" placeholder="Client id*" />
                   <div className="onboard__error" id="nextcloudClientIdError">This field is required</div>
@@ -54,7 +54,7 @@ function OnboardStorage(props) {
                   <div className="onboard__error" id="nextcloudClientSecretError">This field is required</div>
                   <input type="text" className="onboard__nextcloud-directory" id="nextcloudDirectory" placeholder="Nextcloud directory (/books or /)*" />
                   <div className="onboard__error" id="nextcloudDirectoryError">This field is required</div>
-                  <input type="text" className="onboard__nextcloud-redirect-uri" id="nextcloudRedirectURI" placeholder="OAuth2 Redirect URI (http://myjoyread.com)*" />
+                  <input type="text" className="onboard__nextcloud-redirect-uri" id="nextcloudRedirectURI" placeholder="Joyread URL (https://myjoyread.com)*" />
                   <div className="onboard__error" id="nextcloudRedirectURIError">This field is required</div>
                 </div>
                 <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.nextcloud(event, props.nextcloudAPI)} />
