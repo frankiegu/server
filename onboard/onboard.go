@@ -178,7 +178,7 @@ func TestEmail(c *gin.Context) {
 	if err := c.BindJSON(&form); err == nil {
 		smtpPort, _ := strconv.Atoi(form.SMTPPort)
 		emailSubject := "Joyread - Test email for your SMTP configuration"
-		emailBody := "Congratulations mate!<br /><br /> You've successfully set up your email server.<br /><br />Cheers,<br/>Joyread"
+		emailBody := "Congratulations mate!<br /><br />Your test email has been succesfully received, you could submit the Mail configuration form now.<br /><br />Cheers,<br/>Joyread"
 
 		sendEmailRequest := email.SendEmailRequest{
 			From:         form.SMTPUsername,
