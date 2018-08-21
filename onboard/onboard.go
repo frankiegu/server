@@ -213,7 +213,7 @@ type NextcloudRequest struct {
 	NextcloudClientID     string `json:"nextcloud_client_id" binding:"required"`
 	NextcloudClientSecret string `json:"nextcloud_client_secret" binding:"required"`
 	NextcloudDirectory    string `json:"nextcloud_directory" binding:"required"`
-	NextcloudRedirectURI  string `json:"nextcloud_redirect_uri" binding:"required"`
+	JoyreadURL            string `json:"joyread_url" binding:"required"`
 }
 
 // NextcloudResponse struct
@@ -233,7 +233,7 @@ func PostNextcloud(c *gin.Context) {
 		}
 
 		// Redirect URI - https://myjoyread.com/nextcloud-auth/:user_id
-		redirectURI := fmt.Sprintf("%s/nextcloud-auth/%d", form.NextcloudRedirectURI, form.UserID)
+		redirectURI := fmt.Sprintf("%s/nextcloud-auth/%d", form.JoyreadURL, form.UserID)
 
 		nextcloudModel := models.NextcloudModel{
 			UserID:       form.UserID,

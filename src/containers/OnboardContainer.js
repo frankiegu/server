@@ -253,7 +253,28 @@ class OnboardContainer extends Container {
       var nextcloudClientId = document.getElementById('nextcloudClientId').value;
       var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
       var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
-      var nextcloudRedirectURI = document.getElementById('nextcloudRedirectURI').value;
+      var joyreadURL = document.getElementById('joyreadURL').value;
+
+      var isError = false;
+      this.removeOnboardErrors();
+
+      // Check if Nextcloud URL is none
+      isError = this.isFieldNone(nextcloudURL, 'nextcloudURLError', 'This field is required');
+
+      // Check if Nextcloud client id is none
+      isError = this.isFieldNone(nextcloudClientId, 'nextcloudClientIdError', 'This field is required');
+
+      // Check if Nextcloud client secret is none
+      isError = this.isFieldNone(nextcloudClientSecret, 'nextcloudClientSecretError', 'This field is required');
+
+      // Check if Nextcloud directory is none
+      isError = this.isFieldNone(nextcloudDirectory, 'nextcloudDirectoryError', 'This field is required');
+
+      // Check if Joyread URL is none
+      isError = this.isFieldNone(joyreadURL, 'joyreadURLError', 'This field is required');
+
+      // Return false if any of the above errors exists
+      if (isError) return false;
 
       var data = {
         user_id: this.state.userID,
@@ -261,7 +282,7 @@ class OnboardContainer extends Container {
         nextcloud_client_id: nextcloudClientId,
         nextcloud_client_secret: nextcloudClientSecret,
         nextcloud_directory: nextcloudDirectory,
-        nextcloud_redirect_uri: nextcloudRedirectURI
+        joyread_url: joyreadURL
       }
 
       fetch(url, {
