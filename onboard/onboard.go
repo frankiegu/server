@@ -285,20 +285,20 @@ func NextcloudAuthCode(c *gin.Context) {
 	selectNextcloudModel := models.SelectNextcloudModel{
 		UserID: userID,
 	}
-	url, clientID, clientSecret, redirectURI := models.SelectNextcloud(db, selectNextcloudModel)
+	selectNextcloudResponse := models.SelectNextcloud(db, selectNextcloudModel)
 
 	accessTokenRequest := nextcloud.AccessTokenRequest{
-		URL:          url,
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
+		URL:          selectNextcloudResponse.URL,
+		ClientID:     selectNextcloudResponse.ClientID,
+		ClientSecret: selectNextcloudResponse.ClientSecret,
 		AuthCode:     code,
-		RedirectURI:  redirectURI,
+		RedirectURI:  selectNextcloudResponse.RedirectURI,
 	}
-	accessToken, refreshToken := nextcloud.GetAccessToken(accessTokenRequest)
+	accessTokenResponse := nextcloud.GetAccessToken(accessTokenRequest)
 
 	nextcloudTokenModel := models.NextcloudTokenModel{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		AccessToken:  accessTokenResponse.AccessToken,
+		RefreshToken: accessTokenResponse.RefreshToken,
 		UserID:       userID,
 	}
 	models.UpdateNextcloudToken(db, nextcloudTokenModel)

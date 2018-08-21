@@ -153,20 +153,27 @@ type SelectNextcloudModel struct {
 	UserID int
 }
 
+type SelectNextcloudResponse struct {
+	URL          string
+	ClientID     string
+	ClientSecret string
+	RedirectURI  string
+}
+
 // SelectNextcloud ...
-func SelectNextcloud(db *sql.DB, selectNextcloudModel SelectNextcloudModel) (string, string, string, string) {
+func SelectNextcloud(db *sql.DB, selectNextcloudModel SelectNextcloudModel) *SelectNextcloudResponse {
 	rows, err := db.Query("SELECT url, client_id, client_secret, redirect_uri FROM nextcloud WHERE user_id=$1", selectNextcloudModel.UserID)
 	cError.CheckError(err)
 
-	var url, clientID, clientSecret, redirectURI string
+	var selectNextcloudResponse SelectNextcloudResponse
 
 	if rows.Next() {
-		err := rows.Scan(&url, &clientID, &clientSecret, &redirectURI)
+		err := rows.Scan(&selectNextcloudResponse.URL, &selectNextcloudResponse.ClientID, &selectNextcloudResponse.ClientSecret, &selectNextcloudResponse.RedirectURI)
 		cError.CheckError(err)
 	}
 	rows.Close()
 
-	return url, clientID, clientSecret, redirectURI
+	return &selectNextcloudResponse
 }
 
 type NextcloudTokenModel struct {

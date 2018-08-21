@@ -39,7 +39,7 @@ type AccessTokenResponse struct {
 }
 
 // GetAccessToken ...
-func GetAccessToken(accessTokenRequest AccessTokenRequest) (string, string) {
+func GetAccessToken(accessTokenRequest AccessTokenRequest) *AccessTokenResponse {
 	body := strings.NewReader(fmt.Sprintf("client_id=%s&client_secret=%s&grant_type=%s&code=%s&redirect_uri=%s", accessTokenRequest.ClientID, accessTokenRequest.ClientSecret, "authorization_code", accessTokenRequest.AuthCode, accessTokenRequest.RedirectURI))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/apps/oauth2/api/v1/token", accessTokenRequest.URL), body)
 	cError.CheckError(err)
@@ -56,5 +56,5 @@ func GetAccessToken(accessTokenRequest AccessTokenRequest) (string, string) {
 	json.NewDecoder(resp.Body).Decode(&accessTokenResponse)
 	resp.Body.Close()
 
-	return accessTokenResponse.AccessToken, accessTokenResponse.RefreshToken
+	return &accessTokenResponse
 }
