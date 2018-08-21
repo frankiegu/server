@@ -9,7 +9,7 @@ import (
 
 // CreateUser ...
 func CreateUser(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, storage VARCHAR(255) NOT NULL DEFAULT 'local')")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, storage VARCHAR(255) NOT NULL DEFAULT 'none')")
 	cError.CheckError(err)
 }
 
@@ -190,20 +190,20 @@ func UpdateNextcloudToken(db *sql.DB, nextcloudTokenModel NextcloudTokenModel) {
 	cError.CheckError(err)
 }
 
-// CheckIsNextcloud ...
-func CheckIsNextcloud(db *sql.DB, userID int) bool {
-	rows, err := db.Query("SELECT is_nextcloud FROM account WHERE user_id=$1", userID)
+// CheckStorage ...
+func CheckStorage(db *sql.DB, userID int) string {
+	rows, err := db.Query("SELECT storage FROM account WHERE id=$1", userID)
 	cError.CheckError(err)
 
-	var isNextcloud = false
+	var storage string
 
 	if rows.Next() {
-		err := rows.Scan(&isNextcloud)
+		err := rows.Scan(&storage)
 		cError.CheckError(err)
 	}
 	rows.Close()
 
-	return isNextcloud
+	return storage
 }
 
 // CheckNextcloudToken ...

@@ -20,6 +20,8 @@ class OnboardContainer extends Container {
         this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
       }
 
+      if (data.user_id > 0) this.setState({ userID: data.user_id });
+
       document.getElementById('loader').style.display = 'none';
     });
     

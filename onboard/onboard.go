@@ -364,20 +364,21 @@ func CheckOnboard(c *gin.Context) {
 	if !ok {
 		fmt.Println("Middleware db error")
 	}
+	userID := models.SelectAdmin(db)
 
 	var currentProgress string
 
-	if userID := models.SelectAdmin(db); userID > 0 {
+	if userID > 0 {
 		currentProgress = "signup"
 
 		if models.CheckSMTP(db) {
 			currentProgress = "smtp"
 
-			if models.CheckIsNextcloud(db, userID) {
+			if storage := models.CheckStorage(db, userID); storage != "none" {
 				currentProgress = "nextcloud"
 			}
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"current_progress": currentProgress})
+	c.JSON(http.StatusOK, gin.H{"user_id": userID, "current_progress": currentProgress})
 }
