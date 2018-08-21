@@ -179,13 +179,34 @@ class OnboardContainer extends Container {
   sendTestEmail(event, url) {
     event.preventDefault();
 
-    document.getElementById('smtpLoader').classList.add('show');
-
     var smtpHostname = document.getElementById('smtpHost').value;
     var smtpPort = document.getElementById('smtpPort').value;
     var smtpUsername = document.getElementById('smtpUsername').value;
     var smtpPassword = document.getElementById('smtpPassword').value;
     var smtpTestEmail = document.getElementById('smtpTestEmail').value;
+
+    var isError = false;
+    this.removeOnboardErrors();
+
+    // Check if smtp hostname is none
+    isError = this.isFieldNone(smtpHostname, 'smtpHostError', 'This field is required');
+
+    // Check if smtp port is none
+    isError = this.isFieldNone(smtpPort, 'smtpPortError', 'This field is required');
+
+    // Check if smtp username is none
+    isError = this.isFieldNone(smtpUsername, 'smtpUsernameError', 'This field is required');
+
+    // Check if smtp password is none
+    isError = this.isFieldNone(smtpPassword, 'smtpPasswordError', 'This field is required');
+
+    // Check if smtp test email is none
+    isError = this.isFieldNone(smtpTestEmail, 'smtpTestEmailError', 'This field is required');
+
+    // Return false if any of the above errors exists
+    if (isError) return false;
+
+    document.getElementById('smtpLoader').classList.add('show');
 
     var data = {
       smtp_hostname: smtpHostname,
