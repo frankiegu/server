@@ -125,7 +125,7 @@ func CheckSMTP(db *sql.DB) bool {
 
 // CreateNextcloud ...
 func CreateNextcloud(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS nextcloud (id BIGSERIAL, user_id INTEGER REFERENCES account(id), url VARCHAR(255) NOT NULL, client_id VARCHAR(1200) NOT NULL, client_secret VARCHAR(1200) NOT NULL, directory VARCHAR(255) NOT NULL, access_token VARCHAR(255), refresh_token VARCHAR(255), PRIMARY KEY (id, user_id))")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS nextcloud (id BIGSERIAL, user_id INTEGER REFERENCES account(id), url VARCHAR(255) NOT NULL, client_id VARCHAR(1200) NOT NULL, client_secret VARCHAR(1200) NOT NULL, directory VARCHAR(255) NOT NULL, redirect_uri VARCHAR(255) NOT NULL, access_token VARCHAR(255), refresh_token VARCHAR(255), PRIMARY KEY (id, user_id))")
 	cError.CheckError(err)
 }
 
@@ -144,7 +144,7 @@ func InsertNextcloud(db *sql.DB, nextcloudModel NextcloudModel) {
 	_, err := db.Query("INSERT INTO nextcloud (user_id, url, client_id, client_secret, directory, redirect_uri) VALUES ($1, $2, $3, $4, $5, $6)", nextcloudModel.UserID, nextcloudModel.URL, nextcloudModel.ClientID, nextcloudModel.ClientSecret, nextcloudModel.Directory, nextcloudModel.RedirectURI)
 	cError.CheckError(err)
 
-	_, err = db.Query("UPDATE account SET is_nextcloud=$1, is_onboarded=$2 WHERE id=$3", true, true, nextcloudModel.UserID)
+	_, err = db.Query("UPDATE account SET storage=$1 WHERE id=$2", "nextcloud", nextcloudModel.UserID)
 	cError.CheckError(err)
 }
 

@@ -15,7 +15,7 @@ class OnboardContainer extends Container {
       if (data.current_progress === "signup") {
         this.setState({ isSignUpFilled: true });
       } else if (data.current_progress === "smtp") {
-        this.setState({ isSignUpFilled: true, isSMTPFilled: false});
+        this.setState({ isSignUpFilled: true, isSMTPFilled: true});
       } else if (data.current_progress === "nextcloud") {
         this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
       }

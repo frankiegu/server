@@ -296,6 +296,8 @@ func NextcloudAuthCode(c *gin.Context) {
 	}
 	accessTokenResponse := nextcloud.GetAccessToken(accessTokenRequest)
 
+	fmt.Println(accessTokenResponse)
+
 	nextcloudTokenModel := models.NextcloudTokenModel{
 		AccessToken:  accessTokenResponse.AccessToken,
 		RefreshToken: accessTokenResponse.RefreshToken,
