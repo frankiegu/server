@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import OnboardContainer from '../containers/OnboardContainer';
 
 class OnboardRoute extends Component {
- render() {
+  render() {
     return (
       <Subscribe to={[OnboardContainer]}>
         {onboard => (
