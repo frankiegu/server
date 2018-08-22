@@ -44,7 +44,7 @@ function OnboardStorage(props) {
                 </div>
                 <div id="nextcloudForm">
                   <div className="onboard__label onboard__label--small">Nextcloud OAuth2 configuration</div>
-                  <p className="onboard__sub-label">Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{props.userID}</p>
+                  <p className="onboard__sub-label">Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{onboard.state.userID}</p>
                   <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
                   <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (https://mynextcloud.com)*" />
                   <div className="onboard__error" id="nextcloudURLError">This field is required</div>

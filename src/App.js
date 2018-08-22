@@ -18,17 +18,7 @@ var apiRoutes = {
 }
 
 class App extends Component {
-  constructor () {
-    super();
-    
-    this.state = {
-      userID: 1
-    };
-  }
-
   render() {
-    const userID = this.state.userID;
-    
     return (
       <div className="app">
         <div id="loader"><i></i></div>
@@ -45,7 +35,7 @@ class App extends Component {
           />
           <Route
             path="/storage"
-            render={(props) => <OnboardStorage {...props} nextcloudAPI={apiRoutes.nextcloud} userID={userID} />}
+            render={(props) => <OnboardStorage {...props} nextcloudAPI={apiRoutes.nextcloud} />}
           />
           <Route
             path="/signin"
