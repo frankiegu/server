@@ -7,23 +7,27 @@ class OnboardContainer extends Container {
   constructor () {
     super();
 
-    fetch("http://localhost:8080/check-onboard")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      if (data.current_progress === "signup") {
-        this.setState({ isSignUpFilled: true });
-      } else if (data.current_progress === "smtp") {
-        this.setState({ isSignUpFilled: true, isSMTPFilled: true});
-      } else if (data.current_progress === "nextcloud") {
-        this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
-      }
+    if (GetCookie) {
+      this.setState({ isSignedIn: true });
+    } else {
+      fetch("http://localhost:8080/check-onboard")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.current_progress === "signup") {
+          this.setState({ isSignUpFilled: true });
+        } else if (data.current_progress === "smtp") {
+          this.setState({ isSignUpFilled: true, isSMTPFilled: true});
+        } else if (data.current_progress === "onboarded") {
+          this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
+        }
 
-      if (data.user_id > 0) this.setState({ userID: data.user_id });
+        if (data.user_id > 0) this.setState({ userID: data.user_id });
 
-      document.getElementById('loader').style.display = 'none';
-    });
+        document.getElementById('loader').style.display = 'none';
+      });
+    }
     
     this.state = {
       userID: 0,

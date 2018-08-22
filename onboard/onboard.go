@@ -370,16 +370,12 @@ func CheckOnboard(c *gin.Context) {
 
 	var currentProgress string
 
-	if userID > 0 {
+	if storage := models.CheckStorage(db, userID); storage != "none" {
+		currentProgress = "onboarded"
+	} else if models.CheckSMTP(db) {
+		currentProgress = "smtp"
+	} else if userID > 0 {
 		currentProgress = "signup"
-
-		if models.CheckSMTP(db) {
-			currentProgress = "smtp"
-
-			if storage := models.CheckStorage(db, userID); storage != "none" {
-				currentProgress = "nextcloud"
-			}
-		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"user_id": userID, "current_progress": currentProgress})
