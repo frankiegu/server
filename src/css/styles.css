@@ -64,11 +64,11 @@ table {
 
 .mt, .onboard__sub-label {
   margin-top: 10px !important; }
-  .mt0 {
+  .mt0, .onboard__button-group input[type="submit"] {
     margin-top: 0 !important; }
   .mt\+, .header__right, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard select, .onboard__sub-form .button, .onboard__sub-form i, .onboard__sub-form p, .onboard__secondary-form .button, .onboard__note, .onboard__radio-form div:nth-child(3) {
     margin-top: 20px !important; }
-  .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form, .onboard__secondary-form {
+  .mt\+\+, .currently-reading, .onboard__submit, .onboard__sub-form, .onboard__secondary-form, .onboard__button-group {
     margin-top: 30px !important; }
   .mt\+\+\+ {
     margin-top: 40px !important; }
@@ -165,7 +165,7 @@ table {
 .mh {
   margin-left: 10px !important;
   margin-right: 10px !important; }
-  .mh0 {
+  .mh0, .onboard__button-group input[type="submit"] {
     margin-left: 0 !important; }
   .mh\+ {
     margin-left: 20px !important; }
@@ -179,7 +179,7 @@ table {
     margin-left: 5px !important; }
   .mh\-\- {
     margin-left: 2px !important; }
-  .mh0 {
+  .mh0, .onboard__button-group input[type="submit"] {
     margin-right: 0 !important; }
   .mh\+ {
     margin-right: 20px !important; }
@@ -438,7 +438,7 @@ table {
   margin-left: auto;
   margin-right: auto; }
 
-.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__sub-submit, .onboard__radio-form div {
+.flex, .alert--error, .alert--success, .header__right, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .onboard__sub-submit, .onboard__radio-form div, .onboard__button-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
@@ -467,7 +467,7 @@ table {
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between; }
-  .flex__space-around {
+  .flex__space-around, .onboard__button-group {
     -ms-flex-pack: distribute;
     justify-content: space-around; }
   .flex__space-evenly {

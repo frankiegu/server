@@ -153,4 +153,15 @@
             @extend .none;
         }
     }
+
+    &__button-group {
+        @extend .flex;
+        @extend .flex__space-around;
+        @extend .mt\+\+;
+
+        & input[type="submit"] {
+            @extend .mt0;
+            @extend .mh0;
+        }
+    }
 }

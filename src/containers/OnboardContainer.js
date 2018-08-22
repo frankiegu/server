@@ -15,7 +15,7 @@ class OnboardContainer extends Container {
       if (data.current_progress === "signup") {
         this.setState({ isSignUpFilled: true });
       } else if (data.current_progress === "smtp") {
-        this.setState({ isSignUpFilled: true, isSMTPFilled: true});
+        this.setState({ isSignUpFilled: true, isSMTPFilled: false});
       } else if (data.current_progress === "nextcloud") {
         this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
       }
@@ -241,6 +241,12 @@ class OnboardContainer extends Container {
       }
       
     });
+  }
+
+  skipSMTP(event) {
+    event.preventDefault();
+
+    this.setState({ isSMTPFilled: true });
   }
 
   nextcloud(event, url) {
