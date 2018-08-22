@@ -7,8 +7,8 @@ class OnboardContainer extends Container {
   constructor () {
     super();
 
-    if (GetCookie) {
-      this.setState({ isSignedIn: true });
+    if (GetCookie("joyread")) {
+      this.setState({ isSignedIn: true, isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true });
     } else {
       fetch("http://localhost:8080/check-onboard")
       .then((response) => {
@@ -18,9 +18,9 @@ class OnboardContainer extends Container {
         if (data.current_progress === "signup") {
           this.setState({ isSignUpFilled: true });
         } else if (data.current_progress === "smtp") {
-          this.setState({ isSignUpFilled: true, isSMTPFilled: true});
+          this.setState({ isSignUpFilled: true, isSMTPFilled: true });
         } else if (data.current_progress === "onboarded") {
-          this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true});
+          this.setState({ isSignUpFilled: true, isSMTPFilled: true, isStorageFilled: true });
         }
 
         if (data.user_id > 0) this.setState({ userID: data.user_id });
