@@ -52,8 +52,6 @@ func init() {
 
 	err = yaml.Unmarshal(yamlFile, &conf)
 	cError.CheckError(err)
-
-	fmt.Println(&conf)
 }
 
 func GetConf() *BaseStruct {
