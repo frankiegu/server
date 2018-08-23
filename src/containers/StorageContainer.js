@@ -7,8 +7,42 @@ class StorageContainer extends Container {
     super();
  
     this.state = {
-      isStorageStored: true,
+      isStorageStored: false,
+      isNextcloud: true,
+      nextcloudURL: "",
+      nextcloudClientID: "",
+      nextcloudClientSecret: "",
+      nextcloudDirectory: "",
+      joyreadURL: "",
     }
+  }
+
+  handleNextcloudChange() {
+    this.setState({ isNextcloud: true });
+  }
+
+  handleLocalChange() {
+    this.setState({ isNextcloud: false });
+  }
+
+  handleNextcloudURLChange(event) {
+    this.setState({ nextcloudURL: event.target.value });
+  }
+
+  handleNextcloudClientIDChange(event) {
+    this.setState({ nextcloudClientID: event.target.value });
+  }
+
+  handleNextcloudClientSecretChange(event) {
+    this.setState({ nextcloudClientSecret: event.target.value });
+  }
+
+  handleNextcloudDirectoryChange(event) {
+    this.setState({ nextcloudDirectory: event.target.value });
+  }
+
+  handleJoyreadURLChange(event) {
+    this.setState({ joyreadURL: event.target.value });
   }
 
   storage(event, url) {
@@ -18,7 +52,7 @@ class StorageContainer extends Container {
 
     if (isNextcloud) {
       var nextcloudURL = document.getElementById('nextcloudURL').value;
-      var nextcloudClientId = document.getElementById('nextcloudClientId').value;
+      var nextcloudClientID = document.getElementById('nextcloudClientID').value;
       var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
       var nextcloudDirectory = document.getElementById('nextcloudDirectory').value;
       var joyreadURL = document.getElementById('joyreadURL').value;
@@ -30,7 +64,7 @@ class StorageContainer extends Container {
       isError = IsFieldNone(nextcloudURL, 'nextcloudURLError', 'This field is required');
 
       // Check if Nextcloud client id is none
-      isError = IsFieldNone(nextcloudClientId, 'nextcloudClientIdError', 'This field is required');
+      isError = IsFieldNone(nextcloudClientID, 'nextcloudClientIDError', 'This field is required');
 
       // Check if Nextcloud client secret is none
       isError = IsFieldNone(nextcloudClientSecret, 'nextcloudClientSecretError', 'This field is required');
@@ -47,7 +81,7 @@ class StorageContainer extends Container {
       var data = {
         user_id: this.state.userID,
         nextcloud_url: nextcloudURL,
-        nextcloud_client_id: nextcloudClientId,
+        nextcloud_client_id: nextcloudClientID,
         nextcloud_client_secret: nextcloudClientSecret,
         nextcloud_directory: nextcloudDirectory,
         joyread_url: joyreadURL

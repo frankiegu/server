@@ -22,17 +22,17 @@ function OnboardSMTP(props) {
             :
               <form className="onboard">
                 <label className="onboard__label">Mail server configuration</label>
-                <input type="text" className="onboard__smtp-host" id="smtpHost" placeholder="SMTP hostname (smtp.fastmail.com)*" />
+                <input type="text" id="smtpHost" placeholder="SMTP hostname (smtp.fastmail.com)*" onChange={(event) => smtpStore.handleHostnameChange(event)} />
                 <div className="onboard__error" id="smtpHostError">This field is required</div>
-                <input type="text" className="onboard__smtp-port" id="smtpPort" placeholder="SMTP port (25/587/465)*" />
+                <input type="text" id="smtpPort" placeholder="SMTP port (25/587/465)*" onChange={(event) => smtpStore.handlePortChange(event)} />
                 <div className="onboard__error" id="smtpPortError">This field is required</div>
-                <input type="email" className="onboard__smtp-username" id="smtpUsername" placeholder="SMTP username (hello@johnwell.com)*" />
+                <input type="email" id="smtpUsername" placeholder="SMTP username (hello@johnwell.com)*" onChange={(event) => smtpStore.handleUsernameChange(event)} />
                 <div className="onboard__error" id="smtpUsernameError">This field is required</div>
-                <input type="password" className="onboard__smtp-password" id="smtpPassword" placeholder="SMTP password*" />
+                <input type="password" id="smtpPassword" placeholder="SMTP password*" onChange={(event) => smtpStore.handlePasswordChange(event)} />
                 <div className="onboard__error" id="smtpPasswordError">This field is required</div>
                 <div className="onboard__sub-form">
                   <label className="onboard__label onboard__label--small">Send test email to</label>
-                  <input type="email" className="onboard__smtp-testemail" id="smtpTestEmail" placeholder="Email address" />
+                  <input type="email" id="smtpTestEmail" placeholder="Email address" />
                   <div className="onboard__error" id="smtpTestEmailError">This field is required</div>
                   <div className="onboard__sub-submit">
                     <button className="button button--secondary" onClick={(event) => smtpStore.sendTestEmail(event, props.testEmailAPI)}>Send</button>

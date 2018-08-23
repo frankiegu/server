@@ -9,16 +9,31 @@ class SignUpContainer extends Container {
  
     this.state = {
       userID: 1,
-      isSignUpStored: true
+      isSignUpStored: false,
+      username: "",
+      email: "",
+      password: ""
     }
+  }
+
+  handleUsernameChange(event) {
+    this.setState({ username: event.target.value });
+  }
+
+  handleEmailChange(event) {
+    this.setState({ email: event.target.value });
+  }
+
+  handlePasswordChange(event) {
+    this.setState({ password: event.target.value });
   }
 
   signUp(event, url) {
     event.preventDefault();
 
-    var username = document.getElementById('signUpUsername').value;
-    var email = document.getElementById('signUpEmail').value;
-    var password = document.getElementById('signUpPassword').value;
+    var username = this.state.username;
+    var email = this.state.email;
+    var password = this.state.password;
 
     var isError = false;
     RemoveOnboardErrors();

@@ -7,17 +7,38 @@ class SMTPContainer extends Container {
     super();
  
     this.state = {
-      isSMTPStored: true,
+      userID: 0,
+      isSMTPStored: false,
+      hostname: "",
+      port: "",
+      username: "",
+      password: ""
     }
+  }
+
+  handleHostnameChange(event) {
+    this.setState({ hostname: event.target.value });
+  }
+
+  handlePortChange(event) {
+    this.setState({ port: event.target.value });
+  }
+
+  handleUsernameChange(event) {
+    this.setState({ username: event.target.value });
+  }
+
+  handlePasswordChange(event) {
+    this.setState({ password: event.target.value });
   }
 
   smtp(event, url) {
     event.preventDefault();
 
-    var smtpHostname = document.getElementById('smtpHost').value;
-    var smtpPort = document.getElementById('smtpPort').value;
-    var smtpUsername = document.getElementById('smtpUsername').value;
-    var smtpPassword = document.getElementById('smtpPassword').value;
+    var smtpHostname = this.state.hostname;
+    var smtpPort = this.state.port;
+    var smtpUsername = this.state.username;
+    var smtpPassword = this.state.password;
 
     var isError = false;
     RemoveOnboardErrors();
