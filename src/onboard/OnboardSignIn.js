@@ -1,24 +1,25 @@
 import React from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
-import OnboardContainer from '../containers/OnboardContainer';
+import SignInContainer from '../containers/SignInContainer';
+import StorageContainer from '../containers/StorageContainer';
 import OnboardRoute from './OnboardRoute';
 
 function OnboardSignIn(props) {
   return (
-    <Subscribe to={[OnboardContainer]}>
-      {onboard => (
-        onboard.state.isSignedIn
+    <Subscribe to={[SignInContainer, StorageContainer]}>
+      {(signInStore, storageStore) => (
+        signInStore.state.isSignedIn
         ?
           <Redirect to="/" />
         :
-          onboard.state.isStorageFilled
+          storageStore.state.isStorageStored
           ?
-            <form className="onboard">
+            <form className="onboard" onSubmit={(event) => signInStore.signIn(event, props.signInAPI)}>
               <label className="onboard__label">Sign In</label>
-              <input type="text" className="onboard__usernameoremail" id="signInUsernameOrEmail" placeholder="Username / Email address" />
-              <input type="password" className="onboard__password" id="signInPassword" placeholder="Password" />
-              <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.signIn(event, props.signInAPI)} />
+              <input type="text" name="usernameoremail" id="signInUsernameOrEmail" placeholder="Username / Email address" onChange={(event) => signInStore.handleUsernameOrEmailChange(event)} />
+              <input type="password" name="password" id="signInPassword" placeholder="Password" onChange={(event) => signInStore.handlePasswordChange(event)} />
+              <input type="submit" className="button button--primary onboard__submit" value="Submit" />
             </form>
           :
             <OnboardRoute />

@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
-import OnboardContainer from '../containers/OnboardContainer';
+import SignUpContainer from '../containers/SignUpContainer';
+import SMTPContainer from '../containers/SMTPContainer';
+import StorageContainer from '../containers/StorageContainer';
 
 class OnboardRoute extends Component {
   render() {
     return (
-      <Subscribe to={[OnboardContainer]}>
-        {onboard => (
-          onboard.state.isSignUpFilled
+      <Subscribe to={[SignUpContainer, SMTPContainer, StorageContainer]}>
+        {(signUpStore, smtpStore, storageStore) => (
+          signUpStore.state.isSignUpStored
           ?
-            onboard.state.isSMTPFilled
+            smtpStore.state.isSMTPStored
             ?
-              onboard.state.isStorageFilled
+              storageStore.state.isStorageStored
               ?
                 <Redirect to="/signin" />
               :

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
 import OnboardRoute from './onboard/OnboardRoute';
 import CurrentlyReading from './CurrentlyReading';
-import OnboardContainer from './containers/OnboardContainer';
+import SignInContainer from './containers/SignInContainer';
 
 class Home extends Component {
   render() {
     return (
-      <Subscribe to={[OnboardContainer]}>
-        {onboard => (
-          onboard.state.isSignedIn
+      <Subscribe to={[SignInContainer]}>
+        {signInStore => (
+          signInStore.state.isSignedIn
           ? 
             <CurrentlyReading />
           :

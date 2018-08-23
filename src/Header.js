@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Subscribe } from 'unstated';
-import OnboardContainer from './containers/OnboardContainer';
+import SignInContainer from './containers/SignInContainer';
 import logoImg from './assets/vector/logo.svg';
 import dp from './assets/png/dp.png';
 import UploadBooks from './UploadBooks';
@@ -30,13 +30,13 @@ function HeaderRight(props) {
 
 function MenuDropdown() {
   return (
-    <Subscribe to={[OnboardContainer]}>
-      {onboard => (
+    <Subscribe to={[SignInContainer]}>
+      {signInStore => (
         <div className="header__m-dropdown">
           <a className="header__link header__link--menu"><i className="icon icon--small"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path fill="#676767" d="M8.5 3c1.2 0 2.2.4 3.2 1H9v2h6V0h-2v2.5C11.7 1.5 10.2 1 8.5 1 4.6 1 1.3 4 1 7.9l2 .2C3.2 5.2 5.6 3 8.5 3z"/><path data-color="color-2" fill="#444" d="M7.5 13c-1.2 0-2.2-.4-3.2-1H7v-2H1v6h2v-2.5c1.3 1 2.8 1.5 4.5 1.5 3.9 0 7.2-3 7.5-6.9l-2-.2c-.2 2.9-2.6 5.1-5.5 5.1z"/></svg></i>Sync Nextcloud</a>
           <a className="header__link header__link--menu"><i className="icon icon--small"><svg width="16" height="17" xmlns="http://www.w3.org/2000/svg"><path d="M15.903 7.677V.274c0-.164-.11-.274-.274-.274H.274C.11 0 0 .11 0 .274v7.403h15.903zM12.34 1.645h1.096v4.387H12.34V1.645zm-1.92 0h1.097v4.387H10.42V1.645zm-1.919 0h1.097v4.387H8.5V1.645zm-5.484 3.29h4.387v1.097H3.016V4.935zM0 8.226v7.403c0 .165.11.274.274.274h1.371v.823c0 .164.11.274.274.274.165 0 .275-.11.275-.274v-.823H13.71v.823c0 .164.11.274.274.274.164 0 .274-.11.274-.274v-.823h1.371c.165 0 .274-.11.274-.274V8.226H0zm3.565 6.032H2.468V9.871h1.097v4.387zm1.919 0H4.387V9.871h1.097v4.387zm1.92 0H6.305V9.871h1.097v4.387zm5.483 0H8.5v-1.097h4.387v1.097z" fill="#676767"/></svg></i>Collections</a>
           <a className="header__link header__link--menu"><i className="icon icon--small"><svg width="17" height="17" xmlns="http://www.w3.org/2000/svg"><path d="M16.762 7.131l-2.178-.29a6.265 6.265 0 0 0-.61-1.47l1.336-1.745a.274.274 0 0 0-.024-.36l-1.551-1.552a.273.273 0 0 0-.36-.024l-1.746 1.335a6.265 6.265 0 0 0-1.47-.61L9.87.239A.275.275 0 0 0 9.597 0H7.403a.274.274 0 0 0-.271.238l-.29 2.178a6.265 6.265 0 0 0-1.47.61L3.625 1.69a.273.273 0 0 0-.36.024L1.713 3.265a.274.274 0 0 0-.024.36l1.335 1.746c-.261.457-.468.95-.61 1.47l-2.177.29A.275.275 0 0 0 0 7.403v2.194c0 .137.102.253.238.271l2.178.29c.141.52.347 1.013.61 1.47L1.69 13.375a.274.274 0 0 0 .024.36l1.551 1.552a.274.274 0 0 0 .36.024l1.746-1.335c.458.261.95.468 1.47.61l.29 2.177a.274.274 0 0 0 .272.238h2.194a.274.274 0 0 0 .271-.238l.29-2.178a6.265 6.265 0 0 0 1.47-.61l1.746 1.336a.274.274 0 0 0 .36-.024l1.552-1.551a.274.274 0 0 0 .024-.36l-1.335-1.746a6.28 6.28 0 0 0 .61-1.47l2.177-.29A.275.275 0 0 0 17 9.597V7.403a.274.274 0 0 0-.238-.271zM8.5 10.969a2.468 2.468 0 1 1 0-4.935 2.468 2.468 0 0 1 0 4.935z" fill="#676767"/></svg></i>Settings</a>
-          <a className="header__link header__link--menu" onClick={() => onboard.signOut()}><i className="icon icon--small"><svg width="15" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#676767"><path d="M6.375 0H8.5v6.375H6.375z"/><path d="M12.431 4.037c-.425-.425-1.062-.318-1.487.107-.425.425-.319 1.062.106 1.487 1.063.957 1.7 2.444 1.7 3.931 0 2.976-2.338 5.313-5.313 5.313-2.974 0-5.312-2.338-5.312-5.313 0-1.487.638-2.974 1.806-3.93a1.138 1.138 0 0 0 .106-1.488 1.138 1.138 0 0 0-1.487-.107C.956 5.42 0 7.438 0 9.563A7.392 7.392 0 0 0 7.438 17a7.392 7.392 0 0 0 7.437-7.438c0-2.124-.85-4.143-2.444-5.524z"/></g></svg></i>Sign out</a>
+          <a className="header__link header__link--menu" onClick={() => signInStore.signOut()}><i className="icon icon--small"><svg width="15" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#676767"><path d="M6.375 0H8.5v6.375H6.375z"/><path d="M12.431 4.037c-.425-.425-1.062-.318-1.487.107-.425.425-.319 1.062.106 1.487 1.063.957 1.7 2.444 1.7 3.931 0 2.976-2.338 5.313-5.313 5.313-2.974 0-5.312-2.338-5.312-5.313 0-1.487.638-2.974 1.806-3.93a1.138 1.138 0 0 0 .106-1.488 1.138 1.138 0 0 0-1.487-.107C.956 5.42 0 7.438 0 9.563A7.392 7.392 0 0 0 7.438 17a7.392 7.392 0 0 0 7.437-7.438c0-2.124-.85-4.143-2.444-5.524z"/></g></svg></i>Sign out</a>
         </div>
       )}
     </Subscribe>
@@ -67,11 +67,11 @@ function NotificationDropdown() {
 class Header extends Component {
   render() {
     return (
-      <Subscribe to={[OnboardContainer]}>
-        {onboard => (
+      <Subscribe to={[SignInContainer]}>
+        {signInStore => (
           <header className="header">
             {
-              onboard.state.isSignedIn
+              signInStore.state.isSignedIn
               ? 
                 <div>
                   <HeaderLeft />

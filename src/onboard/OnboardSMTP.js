@@ -1,20 +1,22 @@
 import React from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
-import OnboardContainer from '../containers/OnboardContainer';
+import SignInContainer from '../containers/SignInContainer';
+import SignUpContainer from '../containers/SignUpContainer';
+import SMTPContainer from '../containers/SMTPContainer';
 import OnboardRoute from './OnboardRoute';
 
 function OnboardSMTP(props) {
   return (
-    <Subscribe to={[OnboardContainer]}>
-      {onboard => (
-        onboard.state.isSignedIn
+    <Subscribe to={[SignInContainer, SignUpContainer, SMTPContainer]}>
+      {(signInStore, signUpStore, smtpStore) => (
+        signInStore.state.isSignedIn
         ?
           <Redirect to="/" />
         :
-          onboard.state.isSignUpFilled
+          signUpStore.state.isSignUpStored
           ?
-            onboard.state.isSMTPFilled
+            smtpStore.state.isSMTPStored
             ?
               <OnboardRoute />
             :
@@ -33,14 +35,14 @@ function OnboardSMTP(props) {
                   <input type="email" className="onboard__smtp-testemail" id="smtpTestEmail" placeholder="Email address" />
                   <div className="onboard__error" id="smtpTestEmailError">This field is required</div>
                   <div className="onboard__sub-submit">
-                    <button className="button button--secondary" onClick={(event) => onboard.sendTestEmail(event, props.testEmailAPI)}>Send</button>
+                    <button className="button button--secondary" onClick={(event) => smtpStore.sendTestEmail(event, props.testEmailAPI)}>Send</button>
                     <i id="smtpLoader"></i>
                     <p id="smtpText">Test email sent successfully!</p>
                   </div>
                 </div>
                 <div className="onboard__button-group">
-                  <button className="button button--secondary" onClick={(event) => onboard.skipSMTP(event)}>Skip</button>
-                  <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.smtp(event, props.smtpAPI)} />
+                  <button className="button button--secondary" onClick={(event) =>smtpStore.skipSMTP(event)}>Skip</button>
+                  <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => smtpStore.smtp(event, props.smtpAPI)} />
                 </div>
               </form>
           :

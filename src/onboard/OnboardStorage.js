@@ -1,7 +1,10 @@
 import React from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
-import OnboardContainer from '../containers/OnboardContainer';
+import SignInContainer from '../containers/SignInContainer';
+import SignUpContainer from '../containers/SignUpContainer';
+import SMTPContainer from '../containers/SMTPContainer';
+import StorageContainer from '../containers/StorageContainer';
 import OnboardRoute from './OnboardRoute';
 
 function HandleRadioClick(event) {
@@ -15,15 +18,15 @@ function HandleRadioClick(event) {
 
 function OnboardStorage(props) {
   return (
-    <Subscribe to={[OnboardContainer]}>
-      {onboard => (
-        onboard.state.isSignedIn
+    <Subscribe to={[SignInContainer, SignUpContainer, SMTPContainer, StorageContainer]}>
+      {(signInStore, signUpStore, smtpStore, storageStore) => (
+        signInStore.state.isSignedIn
         ?
           <Redirect to="/" />
         :
-          onboard.state.isSignUpFilled && onboard.state.isSMTPFilled
+          signUpStore.state.isSignUpStored && signUpStore.state.isSMTPStored
           ?
-            onboard.state.isStorageFilled
+            storageStore.state.isStorageStored
             ?
               <OnboardRoute />
             :
@@ -44,7 +47,7 @@ function OnboardStorage(props) {
                 </div>
                 <div id="nextcloudForm">
                   <div className="onboard__label onboard__label--small">Nextcloud OAuth2 configuration</div>
-                  <p className="onboard__sub-label">Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{onboard.state.userID}</p>
+                  <p className="onboard__sub-label">Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{storageStore.state.userID}</p>
                   <p className="onboard__sub-label">Check <a href="">FAQ</a> on how to integrate Nextcloud.</p>
                   <input type="text" className="onboard__nextcloud-url" id="nextcloudURL" placeholder="Nextcloud URL (https://mynextcloud.com)*" />
                   <div className="onboard__error" id="nextcloudURLError">This field is required</div>
@@ -57,7 +60,7 @@ function OnboardStorage(props) {
                   <input type="text" className="onboard__nextcloud-joyread-url" id="joyreadURL" placeholder="Joyread URL (https://myjoyread.com)*" />
                   <div className="onboard__error" id="joyreadURLError">This field is required</div>
                 </div>
-                <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.nextcloud(event, props.nextcloudAPI)} />
+                <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => storageStore.storage(event, props.nextcloudAPI)} />
               </form>
           :
             <OnboardRoute />

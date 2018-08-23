@@ -1,18 +1,19 @@
 import React from 'react';
 import { Subscribe } from 'unstated';
 import { Redirect } from "react-router-dom";
-import OnboardContainer from '../containers/OnboardContainer';
+import SignInContainer from '../containers/SignInContainer';
+import SignUpContainer from '../containers/SignUpContainer';
 import OnboardRoute from './OnboardRoute';
 
 function OnboardSignUp(props) {
   return (
-    <Subscribe to={[OnboardContainer]}>
-      {onboard => (
-        onboard.state.isSignedIn
+    <Subscribe to={[SignInContainer, SignUpContainer]}>
+      {(signInStore, signUpStore) => (
+        signInStore.state.isSignedIn
         ?
           <Redirect to="/" />
         :
-          onboard.state.isSignUpFilled
+          signUpStore.state.isSignUpStored
           ?
             <OnboardRoute />
           :
@@ -24,7 +25,7 @@ function OnboardSignUp(props) {
               <div className="onboard__error" id="signUpEmailError">This field is required</div>
               <input type="password" className="onboard__password" id="signUpPassword" placeholder="Password*" />
               <div className="onboard__error" id="signUpPasswordError">This field is required</div>
-              <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => onboard.signUp(event, props.signUpAPI)} />
+              <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => signUpStore.signUp(event, props.signUpAPI)} />
             </form>
       )}
     </Subscribe>
