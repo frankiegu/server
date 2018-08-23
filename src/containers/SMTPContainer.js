@@ -5,6 +5,20 @@ import IsFieldNone from '../error/IsFieldNone';
 class SMTPContainer extends Container {
   constructor() {
     super();
+
+    fetch("http://localhost:8080/is-smtp-present")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.is_smtp_present) {
+          this.setState({ isSMTPStored: true });
+        }
+
+        if (data.user_id > 0) this.setState({ userID: data.user_id });
+
+        document.getElementById('loader').style.display = 'none';
+      });
  
     this.state = {
       userID: 0,

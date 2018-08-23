@@ -360,6 +360,50 @@ func PostSignIn(c *gin.Context) {
 	}
 }
 
+// IsAdminPresent ...
+func IsAdminPresent(c *gin.Context) {
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	userID := models.SelectAdmin(db)
+	isAdminPresent := false
+
+	if userID > 0 {
+		isAdminPresent = true
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user_id": userID, "is_admin_present": isAdminPresent})
+}
+
+// IsSMTPPresent ...
+func IsSMTPPresent(c *gin.Context) {
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	c.JSON(http.StatusOK, gin.H{"is_smtp_present": models.CheckSMTP(db)})
+}
+
+// IsStoragePresent ...
+func IsStoragePresent(c *gin.Context) {
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	userID := models.SelectAdmin(db)
+	isStoragePresent := false
+
+	if storage := models.CheckStorage(db, userID); storage != "none" {
+		isStoragePresent = true
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user_id": userID, "is_storage_present": isStoragePresent})
+}
+
 // CheckOnboard ...
 func CheckOnboard(c *gin.Context) {
 	db, ok := c.MustGet("db").(*sql.DB)

@@ -6,9 +6,23 @@ import IsFieldNone from '../error/IsFieldNone';
 class SignUpContainer extends Container {
   constructor() {
     super();
+
+    fetch("http://localhost:8080/is-admin-present")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.is_admin_present) {
+          this.setState({ isSignUpStored: true });
+        }
+
+        if (data.user_id > 0) this.setState({ userID: data.user_id });
+
+        document.getElementById('loader').style.display = 'none';
+      });
  
     this.state = {
-      userID: 1,
+      userID: 0,
       isSignUpStored: false,
       username: "",
       email: "",

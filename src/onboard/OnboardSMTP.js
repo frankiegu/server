@@ -41,7 +41,7 @@ function OnboardSMTP(props) {
                   </div>
                 </div>
                 <div className="onboard__button-group">
-                  <button className="button button--secondary" onClick={(event) =>smtpStore.skipSMTP(event)}>Skip</button>
+                  <button className="button button--secondary" onClick={(event) => smtpStore.skipSMTP(event)}>Skip</button>
                   <input type="submit" className="button button--primary onboard__submit" value="Submit" onClick={(event) => smtpStore.smtp(event, props.smtpAPI)} />
                 </div>
               </form>

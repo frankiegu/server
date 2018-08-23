@@ -6,6 +6,18 @@ class StorageContainer extends Container {
   constructor() {
     super();
  
+    fetch("http://localhost:8080/is-storage-present")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.is_storage_present) {
+          this.setState({ isStorageStored: true });
+        }
+
+        document.getElementById('loader').style.display = 'none';
+      });
+
     this.state = {
       isStorageStored: false,
       isNextcloud: true,
