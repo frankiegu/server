@@ -7,7 +7,7 @@ class SignUpContainer extends Container {
   constructor() {
     super();
 
-    fetch("http://localhost:8080/is-admin-present")
+    fetch("/is-admin-present")
       .then((response) => {
         return response.json();
       })

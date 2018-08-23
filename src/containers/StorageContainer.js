@@ -6,7 +6,7 @@ class StorageContainer extends Container {
   constructor() {
     super();
  
-    fetch("http://localhost:8080/is-storage-present")
+    fetch("/is-storage-present")
       .then((response) => {
         return response.json();
       })

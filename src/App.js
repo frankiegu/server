@@ -9,12 +9,12 @@ import Home from './Home';
 import Header from './Header';
 
 var apiRoutes = {
-  signIn: 'http://localhost:8080/signin',
-  signUp: 'http://localhost:8080/signup',
-  smtp: 'http://localhost:8080/smtp',
-  testEmail: 'http://localhost:8080/test-email',
-  nextcloud: 'http://localhost:8080/nextcloud',
-  uploadBooks: 'http://localhost:8080/upload-books'
+  signIn: '/signin',
+  signUp: '/signup',
+  smtp: '/smtp',
+  testEmail: '/test-email',
+  nextcloud: '/nextcloud',
+  uploadBooks: '/upload-books'
 }
 
 class App extends Component {

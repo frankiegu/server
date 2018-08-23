@@ -6,7 +6,7 @@ class SMTPContainer extends Container {
   constructor() {
     super();
 
-    fetch("http://localhost:8080/is-smtp-present")
+    fetch("/is-smtp-present")
       .then((response) => {
         return response.json();
       })
