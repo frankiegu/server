@@ -14,7 +14,7 @@ function OnboardStorage(props) {
         ?
           <Redirect to="/" />
         :
-          signUpStore.state.isSignUpStored && signUpStore.state.isSMTPStored
+          signUpStore.state.isSignUpStored
           ?
             storageStore.state.isStorageStored
             ?
