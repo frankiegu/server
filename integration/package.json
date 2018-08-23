@@ -1,0 +1,14 @@
+{
+  "name": "integration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^23.5.0"
+  },
+  "dependencies": {
+    "knex": "^0.15.2",
+    "pg": "^7.4.3",
+    "superagent": "^3.8.3"
+  }
+}
