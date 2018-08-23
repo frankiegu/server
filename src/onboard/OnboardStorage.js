@@ -6,15 +6,6 @@ import SignUpContainer from '../containers/SignUpContainer';
 import StorageContainer from '../containers/StorageContainer';
 import OnboardRoute from './OnboardRoute';
 
-function HandleRadioClick(event) {
-  var storageType = event.target.value;
-  if (storageType === "local") {
-    document.getElementById('nextcloudForm').className = "none";
-  } else {
-    document.getElementById('nextcloudForm').className = "";
-  }
-}
-
 function OnboardStorage(props) {
   return (
     <Subscribe to={[SignInContainer, SignUpContainer, StorageContainer]}>

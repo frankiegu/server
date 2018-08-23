@@ -48,9 +48,7 @@ class StorageContainer extends Container {
   storage(event, url) {
     event.preventDefault();
 
-    var isNextcloud = document.getElementById('nextcloudRadio').checked ? true : false;
-
-    if (isNextcloud) {
+    if (this.state.isNextcloud) {
       var nextcloudURL = document.getElementById('nextcloudURL').value;
       var nextcloudClientID = document.getElementById('nextcloudClientID').value;
       var nextcloudClientSecret = document.getElementById('nextcloudClientSecret').value;
