@@ -425,7 +425,7 @@ table {
 .cursor-pointer, .button, .header__logo, .header__menu, .header__notification, .header__books, .header__link, .header__signup, .currently-reading__left, .currently-reading__right {
   cursor: pointer; }
 
-.none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__error, .onboard__sub-form i, .onboard__sub-form p, .onboard #nextcloudForm.none {
+.none, #uploadBooks, .alert, .header__m-dropdown, .header__n-dropdown, .onboard__sub-form i, .onboard__sub-form p, .onboard #nextcloudForm.none {
   display: none; }
 
 .block, .button, .header__m-dropdown.open, .open.header__n-dropdown, .onboard__label, .onboard__sub-label, .onboard__error--active, .onboard__submit, .onboard__sub-form i.show, .onboard__sub-form p.show {

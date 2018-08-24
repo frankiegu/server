@@ -1,10 +1,31 @@
 import React, { Component } from 'react'
+import { 
+  validateAdminAccount, 
+  validateSMTPConfig, 
+  validateStorageConfig } from './validation.js'
+import { hasNoErrors } from '../utils/validation.js'
 
 const Step = Object.freeze({ 
   createAdmin: 0,
   setupSMTP: 1,
   setupStorage: 2
 })
+
+const defaultNextcloudStorageConfig = Object.freeze({
+  type: "nextcloud",
+  url: "",
+  clientID: "",
+  secret: "",
+  directory: "",
+  joyreadURL: "",
+  errors: {
+    url: "",
+    clientID: "",
+    secret: "",
+    directory: "",
+    joyreadURL: ""
+  }
+});
 
 const defaultState = Object.freeze({ 
   step: Step.createAdmin, 
@@ -23,33 +44,20 @@ const defaultState = Object.freeze({
     port: "",
     username: "",
     password: "",
-    testAddress: "",
     errors: {
       hostname: "",
       port: "",
       username: "",
       password: "",
-    testAddress: ""
     }
   },
-  storage: {
-    userID: null,
-    nextcloud: {
-      url: "",
-      clientID: "",
-      secret: "",
-      directory: "",
-      joyreadURL: "",
-      errors: {
-        url: "",
-        clientID: "",
-        secret: "",
-        directory: "",
-        joyreadURL: ""
-      }
+  testEmail: {
+    address: "",
+    errors: {
+      address: ""
     }
-  }
-  
+  },
+  storage: defaultNextcloudStorageConfig
 });
 
 const AdminForm = props => 
@@ -78,6 +86,23 @@ const AdminForm = props =>
       value="Submit" />
   </form>
 
+const TestEmailSubForm = props => 
+  <div className="onboard__sub-form">
+    <label className="onboard__label onboard__label--small">Send test email to</label>
+    <input type="email" 
+      name="testAddress"
+      placeholder="Email address" 
+      value={props.address}
+      onChange={props.onInputChange} />
+    <div className="onboard__error">{props.errors.address}</div>
+    <div className="onboard__sub-submit">
+      <button className="button button--secondary" 
+        onClick={props.onSendTestEmailButtonClick}>Send</button>
+      <i id="smtpLoader"></i>
+      { props.testSuccess && <p>Test email sent successfully!</p> }
+    </div>
+  </div>
+
 const SMTPForm = props => 
   <form className="onboard" onSubmit={props.onSubmitButtonClick} >
     <label className="onboard__label">Mail server configuration</label>
@@ -105,21 +130,7 @@ const SMTPForm = props =>
       value={props.password}
       onChange={props.onInputChange} />
     <div className="onboard__error">{props.errors.password}</div>
-    <div className="onboard__sub-form">
-      <label className="onboard__label onboard__label--small">Send test email to</label>
-      <input type="email" 
-        name="testAddress"
-        placeholder="Email address" 
-        value={props.testAddress}
-        onChange={props.onInputChange} />
-      <div className="onboard__error">{props.errors.testAddress}</div>
-      <div className="onboard__sub-submit">
-        <button className="button button--secondary" 
-          onClick={props.onSendTestEmailButtonClick}>Send</button>
-        <i id="smtpLoader"></i>
-        { props.testSuccess && <p>Test email sent successfully!</p>}
-      </div>
-    </div>
+    <TestEmailSubForm {...props.testEmail} />
     <div className="onboard__button-group">
       <button className="button button--secondary" 
         onClick={props.onSkipButtonClick}>Skip</button>
@@ -135,7 +146,7 @@ const NextcloudSubForm = props =>
       Nextcloud OAuth2 configuration
     </div>
     <p className="onboard__sub-label">
-      Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/{props.userID}
+      Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/&lt;USER ID&gt;
     </p>
     <p className="onboard__sub-label">
       Check <a href="">FAQ</a> on how to integrate Nextcloud.
@@ -181,7 +192,7 @@ const StorageForm = props =>
         <input type="radio" 
           name="storage" 
           id="nextcloudRadio" 
-          checked={!!props.nextcloud}
+          checked={props.type === "nextcloud"}
           onChange={props.onStorageOptionChange}
           value={"nextcloud"} />
         <label htmlFor="nextcloudRadio">Nextcloud</label>
@@ -193,7 +204,7 @@ const StorageForm = props =>
         <input type="radio" 
           name="storage" 
           id="localRadio" 
-          checked={!props.nextcloud}
+          checked={props.type === "local"}
           onChange={props.onStorageOptionChange}
           value="local" />
         <label htmlFor="localRadio">Local storage</label>
@@ -202,11 +213,10 @@ const StorageForm = props =>
         Local storage as a storage option will provide you a way to sync ebooks...
       </p>
     </div>
-    { props.nextcloud && 
+    { props.type === "nextcloud" && 
         <NextcloudSubForm 
-          userID={props.userID} 
           onInputChange={props.onNextcloudInputChange}
-          {...props.nextcloud} />
+          {...props} />
     }
     <input type="submit" className="button button--primary onboard__submit" value="Submit" />
   </form>
@@ -229,7 +239,6 @@ export default class OnboardContainer extends Component {
   }
 
   handleSMTPInputChange = ({ target }) => {
-    console.log('input')
     const { name, value } = target;
     this.setState(prevState => {
       const prevSmtp = prevState.smtp || defaultState.smtp;
@@ -245,62 +254,72 @@ export default class OnboardContainer extends Component {
   handleNextcloudInputChange = ({ target }) => {
     const { name, value } = target;
     this.setState(prevState => {
-      const prevNextcloud = prevState.storage.nextcloud 
-        || defaultState.storage.nextcloud;
+      const prevStorage = prevState.storage 
+        || defaultNextcloudStorageConfig;
       return {
         storage: { 
-          ...prevState.storage,
-          nextcloud: {
-            ...prevNextcloud,
+          ...prevStorage,
             [name]: value
           }
         }
-      }
     });
   }
 
   handleStorageOptionChange = e => {
-    if (e.target.value === "local")
-      this.setState(prevState => ({
-        storage: {
-          ...prevState.storage,
-          nextcloud: null
-        }
-      }));
+    if (e.target.value === "nextcloud")
+      this.setState({ storage: defaultNextcloudStorageConfig });
     else
-      this.setState(prevState => ({
-        storage: {
-          ...prevState.storage,
-          nextcloud: defaultState.storage.nextcloud
-        }
-      }));
+      this.setState({ storage: { type: "local" }});
   }
-
 
   skipSMTPConfigStep = () => 
     this.setState({ smtp: null, step: Step.setupStorage });
 
+  attemptToCommitAdmin = () => {
+    const admin = this.state.admin;
+    const validatedAdmin = validateAdminAccount(admin)
+    if (hasNoErrors(validatedAdmin.errors)) {
+      this.setState({ step: Step.setupSMTP });
+    } else {
+      this.setState({ admin: validatedAdmin })
+    }
+  }
+
+  attemptToCommitSMTPConfig = () => {
+    const smtp = this.state.smtp;
+    const validatedSMTP = validateSMTPConfig(smtp)
+    if (hasNoErrors(validatedSMTP.errors)) {
+      this.setState({ step: Step.setupStorage, smtp: validatedSMTP });
+    } else {
+      this.setState({ smtp: validatedSMTP })
+    }
+  }
+
+  attemptToCommitStorageConfig = () => {
+    const storage = this.state.storage;
+    const validatedStorage = validateStorageConfig(storage);
+    if (hasNoErrors(validatedStorage.errors)) {
+      // upload all data!
+      console.log('all done! time to upload', this.state);
+    } else {
+      this.setState({ storage: validatedStorage })
+    }
+  }
   commitStep = e => {
     e.preventDefault();
     switch (this.state.step) {
       case Step.createAdmin: {
-        // here we should perform validation and send request 
-        // to server. 
-        this.setState({ step: Step.setupSMTP });
+        this.attemptToCommitAdmin();      
         break;
       }
 
       case Step.setupSMTP: {
-        // here we should perform validation and send request 
-        // to server. 
-        this.setState({ step: Step.setupStorage });
+        this.attemptToCommitSMTPConfig();
         break;
       }
 
       default: { //storage
-        // here we should perform validation and send request 
-        // to server and after that finish gracefully. 
-        console.log('all done!', this.state)
+        this.attemptToCommitStorageConfig();
         break;
       }
         
@@ -319,7 +338,8 @@ export default class OnboardContainer extends Component {
           onInputChange={this.handleSMTPInputChange} 
           onSubmitButtonClick={this.commitStep}
           onSkipButtonClick={this.skipSMTPConfigStep}
-          {...this.state.smtp} />;
+          testEmail={this.state.testEmail }
+          {...this.state.smtp } />;
       default: // storage
         return <StorageForm 
           onStorageOptionChange={this.handleStorageOptionChange}
