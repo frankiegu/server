@@ -19,7 +19,8 @@
     "concurrently": "^3.5.1",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
-    "gulp-sass": "^4.0.1"
+    "gulp-sass": "^4.0.1",
+    "react-test-renderer": "^16.4.2"
   },
   "proxy": "http://localhost:8080"
 }

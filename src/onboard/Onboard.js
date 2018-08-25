@@ -4,6 +4,9 @@ import {
   validateSMTPConfig, 
   validateStorageConfig } from './validation.js'
 import { hasNoErrors } from '../utils/validation.js'
+import AdminForm from './AdminForm.js'
+import SMTPForm from './SMTPForm.js'
+import StorageForm from './StorageForm.js'
 import * as api from './api.js'
 
 const Step = Object.freeze({ 
@@ -62,167 +65,6 @@ const defaultState = Object.freeze({
   storage: defaultNextcloudStorageConfig
 });
 
-const AdminForm = props => 
-  <form className="onboard" onSubmit={props.onSubmitButtonClick}>
-    <label className="onboard__label">Create an admin account</label>
-    <input type="text" 
-      name="username" 
-      placeholder="Username (johnwell)*" 
-      value={props.username}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.username}</div>
-    <input type="email" 
-      name="email"
-      placeholder="Email address (info@example.com)*" 
-      value={props.email}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.email}</div>
-    <input type="password" 
-      name="password"
-      placeholder="Password*" 
-      value={props.password}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.password}</div>
-    <input type="submit" 
-      className="button button--primary onboard__submit" 
-      value="Submit" />
-  </form>
-
-const TestEmailSubForm = props => 
-  <div className="onboard__sub-form">
-    <label className="onboard__label onboard__label--small">Send test email to</label>
-    <input type="email" 
-      name="testAddress"
-      placeholder="Email address" 
-      value={props.address}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.address}</div>
-    <div className="onboard__sub-submit">
-      <button className="button button--secondary" 
-        onClick={props.onSendTestEmailButtonClick}>Send</button>
-      <i id="smtpLoader"></i>
-      { props.testSuccess && <p>Test email sent successfully!</p> }
-    </div>
-  </div>
-
-const SMTPForm = props => 
-  <form className="onboard" onSubmit={props.onSubmitButtonClick} >
-    <label className="onboard__label">Mail server configuration</label>
-    <input type="text" 
-      name="hostname"
-      value={props.hostname}
-      placeholder="SMTP hostname (smtp.fastmail.com)*" 
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.hostname}</div>
-    <input type="text" 
-      name="port"
-      placeholder="SMTP port (25/587/465)*" 
-      value={props.port}
-      onChange={props.onInputChange} />
-    <div className="onboard__error" >{props.errors.port}</div>
-    <input type="email" 
-      name="username"
-      placeholder="SMTP username (hello@johnwell.com)*" 
-      value={props.username}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.username}</div>
-    <input type="password" 
-      name="password"
-      placeholder="SMTP password*" 
-      value={props.password}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.password}</div>
-    <TestEmailSubForm {...props.testEmail} />
-    <div className="onboard__button-group">
-      <button className="button button--secondary" 
-        onClick={props.onSkipButtonClick}>Skip</button>
-      <input type="submit" 
-        className="button button--primary onboard__submit" 
-        value="Submit"/>
-    </div>
-  </form>
-
-const NextcloudSubForm = props => 
-  <div id="nextcloudForm">
-    <div className="onboard__label onboard__label--small">
-      Nextcloud OAuth2 configuration
-    </div>
-    <p className="onboard__sub-label">
-      Redirect URI: &lt;JOYREAD URL&gt;/nextcloud-auth/&lt;USER ID&gt;
-    </p>
-    <p className="onboard__sub-label">
-      Check <a href="">FAQ</a> on how to integrate Nextcloud.
-    </p>
-    <input type="text" 
-      name="url"
-      placeholder="Nextcloud URL (https://mynextcloud.com)*" 
-      value={props.url}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.url}</div>
-    <input type="text" 
-      name="clientID"
-      placeholder="Client id*" 
-      value={props.clientID}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.clientID}</div>
-    <input type="text" 
-      name="secret"
-      placeholder="Client secret*" 
-      value={props.secret}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.secret}</div>
-    <input type="text" 
-      name="directory"
-      placeholder="Nextcloud directory (/books or /)*" 
-      value={props.directory}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.directory}</div>
-    <input type="text" 
-      name="joyreadURL"
-      placeholder="Joyread URL (https://myjoyread.com)*" 
-      value={props.joyreadURL}
-      onChange={props.onInputChange} />
-    <div className="onboard__error">{props.errors.joyreadURL}</div>
-  </div>
-
-const StorageForm = props => 
-  <form className="onboard" onSubmit={props.onSubmitButtonClick} >
-    <label className="onboard__label">Ebooks storage option</label>
-    <div className="onboard__note">NOTE: Please make sure you choose the correct option, the storage option cannot be changed again.</div>
-    <div className="onboard__radio-form">
-      <div>
-        <input type="radio" 
-          name="storage" 
-          id="nextcloudRadio" 
-          checked={props.type === "nextcloud"}
-          onChange={props.onStorageOptionChange}
-          value={"nextcloud"} />
-        <label htmlFor="nextcloudRadio">Nextcloud</label>
-      </div>
-      <p className="onboard__info">
-        Nextcloud as a storage option will provide you a way to sync ebooks...
-      </p>
-      <div>
-        <input type="radio" 
-          name="storage" 
-          id="localRadio" 
-          checked={props.type === "local"}
-          onChange={props.onStorageOptionChange}
-          value="local" />
-        <label htmlFor="localRadio">Local storage</label>
-      </div>
-      <p className="onboard__info">
-        Local storage as a storage option will provide you a way to sync ebooks...
-      </p>
-    </div>
-    { props.type === "nextcloud" && 
-        <NextcloudSubForm 
-          onInputChange={props.onNextcloudInputChange}
-          {...props} />
-    }
-    <input type="submit" className="button button--primary onboard__submit" value="Submit" />
-  </form>
-
 export default class OnboardContainer extends Component {
 
   constructor() {
@@ -243,10 +85,9 @@ export default class OnboardContainer extends Component {
   handleSMTPInputChange = ({ target }) => {
     const { name, value } = target;
     this.setState(prevState => {
-      const prevSmtp = prevState.smtp || defaultState.smtp;
       return {
         smtp: { 
-          ...prevSmtp,
+          ...prevState.smtp,
           [name]: value
         }
       }
@@ -256,11 +97,9 @@ export default class OnboardContainer extends Component {
   handleNextcloudInputChange = ({ target }) => {
     const { name, value } = target;
     this.setState(prevState => {
-      const prevStorage = prevState.storage 
-        || defaultNextcloudStorageConfig;
       return {
         storage: { 
-          ...prevStorage,
+          ...prevState.storage,
             [name]: value
           }
         }
@@ -333,7 +172,7 @@ export default class OnboardContainer extends Component {
       .then(res => {
         switch(res.status) {
           case 200: {
-            console.log('success!!')
+            this.props.onComplete(res.body)
             break;
           }
           case 400: {
