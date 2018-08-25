@@ -4,6 +4,7 @@ import {
   validateSMTPConfig, 
   validateStorageConfig } from './validation.js'
 import { hasNoErrors } from '../utils/validation.js'
+import * as api from './api.js'
 
 const Step = Object.freeze({ 
   createAdmin: 0,
@@ -40,6 +41,7 @@ const defaultState = Object.freeze({
     }
   },
   smtp: {
+    required: false,
     hostname: "",
     port: "",
     username: "",
@@ -273,13 +275,13 @@ export default class OnboardContainer extends Component {
   }
 
   skipSMTPConfigStep = () => 
-    this.setState({ smtp: null, step: Step.setupStorage });
+    this.setState({ smtp: defaultState.smtp, step: Step.setupStorage });
 
   attemptToCommitAdmin = () => {
     const admin = this.state.admin;
     const validatedAdmin = validateAdminAccount(admin)
     if (hasNoErrors(validatedAdmin.errors)) {
-      this.setState({ step: Step.setupSMTP });
+      this.setState({ step: Step.setupSMTP, admin: validatedAdmin });
     } else {
       this.setState({ admin: validatedAdmin })
     }
@@ -295,16 +297,72 @@ export default class OnboardContainer extends Component {
     }
   }
 
+  collectOnboardData = () => {
+    const { errors: _1, ...admin } = this.state.admin;
+    const { errors: _2, required: smtpRequired, ...smtp } = this.state.smtp;
+    const { errors: _3, ...storage } = this.state.storage;
+    if (smtpRequired)
+      return { admin, smtp, storage };
+    return { admin, storage }
+  }
+
+  handleBadRequest = res => {
+    const errors = res.body;
+    this.setState(prevState => {
+      const change = {};
+      if (errors.storage) {
+        change.storage = { ...prevState.storage, errors: errors.storage }
+        change.step = Step.storage;
+      }
+      if (errors.smtp) {
+        change.smtp = { ...prevState.smtp, errors: errors.smtp }
+        change.step = Step.smtp;
+      }
+      if (errors.admin) {
+        change.admin = { ...prevState.admin, errors: errors.admin }
+        change.step = Step.createAdmin;
+      }
+
+      return change;
+    })
+  }
+
+  postOnboardData = () => {
+    // should show some progress bar here
+    api.postOnboardData(this.collectOnboardData())
+      .then(res => {
+        switch(res.status) {
+          case 200: {
+            console.log('success!!')
+            break;
+          }
+          case 400: {
+            this.handleBadRequest(res);        
+            break;
+          }
+          default: {
+            throw new Error('Unknown status code '+ res.status + ' ' +  res.body)
+            break;
+          }
+        }
+      })
+      .catch(err => {
+        // show pop up error, clear
+        console.log('oops!', err)
+      })
+
+  }
+
   attemptToCommitStorageConfig = () => {
     const storage = this.state.storage;
     const validatedStorage = validateStorageConfig(storage);
     if (hasNoErrors(validatedStorage.errors)) {
-      // upload all data!
-      console.log('all done! time to upload', this.state);
+      this.setState({ storage: validatedStorage }, this.postOnboardData)
     } else {
       this.setState({ storage: validatedStorage })
     }
   }
+
   commitStep = e => {
     e.preventDefault();
     switch (this.state.step) {

@@ -31,7 +31,6 @@ const validateSMTPUsername = username => {
 }
 
 const validatePort = port => {
-  console.log('validate port', port, port.length)
   if (port.length === 0)
     return {  value: port, error: "Port is required" };
 
@@ -82,12 +81,12 @@ export const validateSMTPConfig = smtp => {
   const password = validatePassword(smtp.password)
 
   const errors = { hostname, username, port: portError, password }
-  return { ...smtp, port: newPort, errors }
+  return { ...smtp, required: true, port: newPort, errors }
 } 
 
 export const validateStorageConfig = storage => {
   if (storage.type === "local")
-    return storage;
+    return { type: "local", errors: {} };
 
   // assume nextcloud config
   const url = validateURL(storage.url, { name: "Nextcloud" });
