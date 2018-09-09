@@ -1,0 +1,47 @@
+input[type="text"], input[type="email"], input[type="password"] {
+    @extend .p;
+    @extend .border;
+    @extend .outline-none;
+    @extend .border-box;
+    @extend .fs\-;
+    @extend .text-color;
+
+    height: 36px;
+
+    &:focus {
+        @extend .border-focus;
+    }
+}
+
+#mainFilter {
+    @extend .fs;
+    @extend .text-color;
+    @extend .pv\-;
+}
+
+.filter-box {
+    @extend .brand-secondary-background;
+
+    width: 210px;
+    height: 200px;
+
+    &__title {
+        @extend .fw\+;
+        @extend .pb\-;
+
+        background: white;
+    }
+
+    &__list {
+        @extend .pb;
+
+        height: 170px;
+        overflow-y: auto;
+        
+        & li {
+            @extend .flex;
+            @extend .ph\-;
+            @extend .mt;
+        }
+    }
+}

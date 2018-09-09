@@ -30,12 +30,11 @@ func StartServer() {
 	conf := settings.GetConf()
 
 	// Serve static files
-	r.Static("/service-worker.js", path.Join(conf.BaseValues.AssetPath, "build/service-worker.js"))
-	r.Static("/static", path.Join(conf.BaseValues.AssetPath, "build/static"))
+	r.Static("/assets", path.Join(conf.BaseValues.AssetPath, "assets"))
 	r.Static("/cover", path.Join(conf.BaseValues.AssetPath, "uploads/img"))
 
 	// HTML rendering
-	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "build/index.html"))
+	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "templates/index.html"))
 
 	// Open postgres database
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", conf.BaseValues.DBValues.DBUsername, conf.BaseValues.DBValues.DBPassword, conf.BaseValues.DBValues.DBHostname, conf.BaseValues.DBValues.DBPort, conf.BaseValues.DBValues.DBName, conf.BaseValues.DBValues.DBSSLMode)

@@ -1,0 +1,20 @@
+.footer {
+    @extend .flex;
+    @extend .flex__space-between;
+    @extend .fs\-;
+    @extend .mb\+;
+
+    &__right {
+        & a {
+            @extend .text-color;
+
+            &:hover {
+                @extend .text-hover;
+            }
+
+            &:first-child {
+                @extend .mr\+;
+            }
+        }
+    }
+}
