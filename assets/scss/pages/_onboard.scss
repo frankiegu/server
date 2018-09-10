@@ -3,6 +3,7 @@
     @extend .margin-center;
 
     width: 420px;
+    min-height: calc(100vh - 130px);
 
     &__title {
         @extend .fs\+;

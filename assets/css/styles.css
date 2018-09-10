@@ -635,15 +635,18 @@ input[type="text"], input[type="email"], input[type="password"] {
         border: 2px solid #F56363; }
 
 .onboard {
-  width: 420px; }
+  width: 420px;
+  min-height: calc(100vh - 130px); }
   .onboard__title {
     text-align: center; }
 
-.main .books a {
-  width: 170px;
-  margin-right: 36px; }
-  .main .books a img {
+.main {
+  min-height: calc(100vh - 130px); }
+  .main .books a {
     width: 170px;
-    border: 2px solid transparent; }
-    .main .books a img:hover {
-      border: 2px solid #F56363; }
+    margin-right: 36px; }
+    .main .books a img {
+      width: 170px;
+      border: 2px solid transparent; }
+      .main .books a img:hover {
+        border: 2px solid #F56363; }

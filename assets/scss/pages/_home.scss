@@ -1,6 +1,8 @@
 .main {
     @extend .mt\+\+;
 
+    min-height: calc(100vh - 130px);
+
     &__content {
         @extend .flex;
         @extend .flex__space-between;
