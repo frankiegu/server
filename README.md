@@ -30,7 +30,8 @@ Joyread is under development. It is not ready for production use.
    CREATE DATABASE joyreaddb WITH ENCODING='UTF8' OWNER=joyreaduser CONNECTION LIMIT=-1;
    ```
  ### Development
-  - Clone the repo and put it in an appropriate `GOPATH`
+  - Clone the repo and put it in an appropriate `GOPATH`. For eg: `$GOPATH/src/github.com/joyread/server`
+  - Configure the values in `config/app.yaml`
   - Run `go get -d ./...` or `dep ensure` inside the project folder
-  - Then `go run ./cmd/joyread/main.go`. This will run the joyread server
+  - Then `go run ./cmd/joyread/main.go`. This will run the joyread server on the port mentioned in the `app.yaml` configuration. Default port is `8080`
   - In order to compile SCSS, you can do `gulp` inside the project folder
