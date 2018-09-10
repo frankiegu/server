@@ -17,4 +17,4 @@ Full-text search across all your ebooks: Search by metadata, content and tags.
 You might already have your ebook collection on your Nextcloud: Why not just use Nextcloud sync feature in Joyread to grab all the ebooks and read it?
 
 ### Source folder sync
-Do you find it cumbersome to upload your massive collection of ebooks via HTTP file upload? In Joyread, Each user has a separate source folder where the respective user ebooks will be stored. You can SSH or FTP (or whatever way) upload all your ebooks to your source folder in the Joyread server and sync it via the web interface.
+Do you find it cumbersome to upload your massive collection of ebooks via HTTP file upload? In Joyread, each user has a separate source folder where the respective user ebooks will be stored. You can SSH or FTP (or whatever way) upload all your ebooks to your source folder in the Joyread server and sync it via the web interface.
