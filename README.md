@@ -1,5 +1,5 @@
 # Joyread
-Joyread is a lightweight self-hosted ebook reader written in Go. Licensed under GPLv3. UNDER ACTIVE DEVELOPMENT.
+Joyread is a lightweight self-hosted ebook reader written in Go. Licensed under AGPLv3. UNDER ACTIVE DEVELOPMENT.
 
 ### Cross-platform
 Joyread runs anywhere Go can compile for: Windows, macOS, Linux, ARM, etc. Choose the one you love!
