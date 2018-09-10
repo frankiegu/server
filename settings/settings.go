@@ -36,7 +36,6 @@ type BaseValuesStruct struct {
 
 // DBValuesStruct struct
 type DBValuesStruct struct {
-	DBType     string `yaml:"type" binding:"required"`
 	DBHostname string `yaml:"hostname" binding:"required"`
 	DBPort     string `yaml:"port" binding:"required"`
 	DBName     string `yaml:"name" binding:"required"`
