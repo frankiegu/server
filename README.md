@@ -8,7 +8,7 @@ Joyread runs anywhere Go can compile for: Windows, macOS, Linux, ARM, etc. Choos
 Simply run the binary for your platform. Or ship Joyread with Docker.
 
 ### Share your ebooks
-Share ebooks with your family and friends: Being a multi-user product, this software can be utilized for sharing ebooks public to all users in the platform or share only with selected users. You can also keep ebooks private.
+Share ebooks with your family and friends: Being a multi-user product, this software can be utilized for sharing ebooks public to all users in the platform or share only with selected users. You can also keep your ebooks private.
  
 ### Full-text search
 Full-text search across all your ebooks: Search by metadata, content and tags.
