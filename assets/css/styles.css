@@ -115,9 +115,9 @@ table {
 
 .mr {
   margin-right: 10px !important; }
-  .mr0, .header__nav:last-child, .currently-reading__books a:last-child, .main .books a:nth-child(5n) {
+  .mr0, .header__nav:last-child, .footer__right a:last-child, .currently-reading__books a:last-child, .main .books a:nth-child(5n) {
     margin-right: 0 !important; }
-  .mr\+, .footer__right a:first-child {
+  .mr\+, .footer__right a {
     margin-right: 20px !important; }
   .mr\+\+, .header__nav, .currently-reading__left {
     margin-right: 30px !important; }

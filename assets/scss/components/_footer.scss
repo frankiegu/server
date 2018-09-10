@@ -7,13 +7,14 @@
     &__right {
         & a {
             @extend .text-color;
+            @extend .mr\+;
 
             &:hover {
                 @extend .text-hover;
             }
 
-            &:first-child {
-                @extend .mr\+;
+            &:last-child {
+                @extend .mr0;
             }
         }
     }
