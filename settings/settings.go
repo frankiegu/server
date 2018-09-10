@@ -20,6 +20,7 @@ type BaseStruct struct {
 type BaseValuesStruct struct {
 	ServerPort string         `yaml:"port" binding:"required"`
 	AssetPath  string         `yaml:"asset_path" binding:"required"`
+	DataPath   string         `yaml:"data_path" binding:"required"`
 	DBValues   DBValuesStruct `yaml:"database" binding:"required"`
 }
 

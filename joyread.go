@@ -31,10 +31,10 @@ func StartServer() {
 
 	// Serve static files
 	r.Static("/assets", path.Join(conf.BaseValues.AssetPath, "assets"))
-	r.Static("/cover", path.Join(conf.BaseValues.AssetPath, "uploads/img"))
+	r.Static("/cover", path.Join(conf.BaseValues.DataPath, "uploads/img"))
 
 	// HTML rendering
-	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "templates/*"))
+	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "assets/templates/*"))
 
 	// Open postgres database
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", conf.BaseValues.DBValues.DBUsername, conf.BaseValues.DBValues.DBPassword, conf.BaseValues.DBValues.DBHostname, conf.BaseValues.DBValues.DBPort, conf.BaseValues.DBValues.DBName, conf.BaseValues.DBValues.DBSSLMode)

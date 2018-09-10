@@ -2,11 +2,12 @@
 
 server:
     port: 8080 # port that app runs
-    asset_path: . # templates, scss etc
+    asset_path: . # templates, css, img, js etc
+    data_path: . # uploaded books and cover images
     database:
-        hostname: localhost # localhost/23.253.231.169
-        port: 5432 # 5432/3306
+        hostname: localhost # localhost or external IP of your database server
+        port: 5432 # 5432
         name: joyreaddb # joyreaddb
         username: postgres # joyreaduser
-        password: 
-        sslmode: disable # only applicable for postgresql
+        password:
+        sslmode: disable
