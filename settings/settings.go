@@ -9,18 +9,6 @@ import (
 	cError "github.com/joyread/server/error"
 )
 
-const (
-	portDefault      = "8080"
-	portEnv          = "JOYREAD_PORT"
-	assetPathEnv     = "JOYREAD_ASSET_PATH"
-	assetPathDefault = "."
-)
-
-var (
-	serverPort = portDefault
-	assetPath  = assetPathDefault
-)
-
 var conf BaseStruct
 
 // BaseStruct struct
@@ -28,6 +16,7 @@ type BaseStruct struct {
 	BaseValues BaseValuesStruct `yaml:"server" binding:"required"`
 }
 
+// BaseValuesStruct struct
 type BaseValuesStruct struct {
 	ServerPort string         `yaml:"port" binding:"required"`
 	AssetPath  string         `yaml:"asset_path" binding:"required"`
@@ -53,6 +42,7 @@ func init() {
 	cError.CheckError(err)
 }
 
+// GetConf ...
 func GetConf() *BaseStruct {
 	return &conf
 }
