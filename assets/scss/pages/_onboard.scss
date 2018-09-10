@@ -14,12 +14,12 @@
 
     & input[type="text"], & input[type="email"], & input[type="password"] {
         @extend .w1\/1;
-        @extend .mt\+\+;
+        @extend .mt\+;
     }
 
     & .button {
         @extend .block;
-        @extend .mt\+\+;
+        @extend .mt\+;
         @extend .margin-center;
     }
 }

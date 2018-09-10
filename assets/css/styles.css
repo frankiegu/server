@@ -66,9 +66,9 @@ table {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .main__content {
+  .mt\+, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard .button, .main__content {
     margin-top: 20px !important; }
-  .mt\+\+, .currently-reading, .currently-reading__books, .onboard, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard .button, .main {
+  .mt\+\+, .currently-reading, .currently-reading__books, .onboard, .main {
     margin-top: 30px !important; }
   .mt\+\+\+ {
     margin-top: 40px !important; }

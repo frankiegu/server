@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	// vendor packages
 	"github.com/dgrijalva/jwt-go"
@@ -51,15 +52,16 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+// GetSignUp ...
 func GetSignUp(c *gin.Context) {
 	c.HTML(http.StatusOK, "signup.html", "")
 }
 
 // SignUpRequest struct
 type SignUpRequest struct {
-	Username string `json:"username" binding:"required"`
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Username string `form:"username" binding:"required"`
+	Email    string `form:"email" binding:"required"`
+	Password string `form:"password" binding:"required"`
 }
 
 // SignUpResponse struct
@@ -73,7 +75,7 @@ type SignUpResponse struct {
 func PostSignUp(c *gin.Context) {
 	var form SignUpRequest
 
-	if err := c.BindJSON(&form); err == nil {
+	if err := c.Bind(&form); err == nil {
 		// Generate password hash using bcrypt
 		passwordHash, err := hashPassword(form.Password)
 		cError.CheckError(err)
@@ -97,19 +99,22 @@ func PostSignUp(c *gin.Context) {
 
 		lastInsertID := models.InsertUser(db, signUpModel)
 
-		signUpResponse := &SignUpResponse{
-			Status: "registered",
-			Token:  token,
-			UserID: lastInsertID,
-		}
+		expiration := time.Now().Add(365 * 24 * time.Hour)
+		cookie := http.Cookie{Name: fmt.Sprintf("joyread-u%d", lastInsertID), Value: token, Expires: expiration}
+		http.SetCookie(c.Writer, &cookie)
 
-		c.JSON(http.StatusMovedPermanently, signUpResponse)
+		c.Redirect(http.StatusMovedPermanently, "/smtp")
 	} else {
 		errorResponse := &ErrorResponse{
 			Error: err.Error(),
 		}
 		c.JSON(http.StatusBadRequest, errorResponse)
 	}
+}
+
+// GetSMTP ...
+func GetSMTP(c *gin.Context) {
+	c.HTML(http.StatusOK, "smtp.html", "")
 }
 
 // SMTPRequest struct

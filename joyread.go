@@ -2,7 +2,6 @@ package joyread
 
 import (
 	// built-in packages
-
 	"database/sql"
 	"fmt"
 	"os"
@@ -57,7 +56,7 @@ func StartServer() {
 	r.POST("/signin", onboard.PostSignIn)
 	r.GET("/signup", onboard.GetSignUp)
 	r.POST("/signup", onboard.PostSignUp)
-	r.GET("/smtp", home.Home)
+	r.GET("/smtp", onboard.GetSMTP)
 	r.POST("/smtp", onboard.PostSMTP)
 	r.POST("/test-email", onboard.TestEmail)
 	r.GET("/storage", home.Home)
