@@ -51,6 +51,10 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+func GetSignUp(c *gin.Context) {
+	c.HTML(http.StatusOK, "signup.html", "")
+}
+
 // SignUpRequest struct
 type SignUpRequest struct {
 	Username string `json:"username" binding:"required"`

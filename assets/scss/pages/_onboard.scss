@@ -1,0 +1,24 @@
+.onboard {
+    @extend .mt\+\+;
+    @extend .margin-center;
+
+    width: 420px;
+
+    &__title {
+        @extend .fs\+;
+        @extend .fw\+;
+        
+        text-align: center;
+    }
+
+    & input[type="text"], & input[type="email"], & input[type="password"] {
+        @extend .w1\/1;
+        @extend .mt\+\+;
+    }
+
+    & .button {
+        @extend .block;
+        @extend .mt\+\+;
+        @extend .margin-center;
+    }
+}

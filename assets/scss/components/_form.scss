@@ -3,14 +3,29 @@ input[type="text"], input[type="email"], input[type="password"] {
     @extend .border;
     @extend .outline-none;
     @extend .border-box;
-    @extend .fs\-;
+    @extend .fs;
     @extend .text-color;
 
+    font-family: $font-primary;
     height: 36px;
 
     &:focus {
         @extend .border-focus;
     }
+}
+
+.input-error {
+    @extend .block;
+    @extend .fs\-;
+    @extend .fw\+;
+    @extend .mt\-\-;
+    @extend .mb\-;
+}
+
+.input-info {
+    @extend .block;
+    @extend .fs\-;
+    @extend .mt\-\-;
 }
 
 #mainFilter {
@@ -44,4 +59,18 @@ input[type="text"], input[type="email"], input[type="password"] {
             @extend .mt;
         }
     }
+}
+
+.button {
+    @extend .brand-background;
+    @extend .cursor-pointer;
+    @extend .fs;
+    @extend .fw\+;
+    @extend .ph\+;
+    @extend .pv;
+
+    font-family: $font-primary;
+    color: white;
+    border: none;
+    outline: none;
 }

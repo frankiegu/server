@@ -34,7 +34,7 @@ func StartServer() {
 	r.Static("/cover", path.Join(conf.BaseValues.AssetPath, "uploads/img"))
 
 	// HTML rendering
-	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "templates/index.html"))
+	r.LoadHTMLGlob(path.Join(conf.BaseValues.AssetPath, "templates/*"))
 
 	// Open postgres database
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", conf.BaseValues.DBValues.DBUsername, conf.BaseValues.DBValues.DBPassword, conf.BaseValues.DBValues.DBHostname, conf.BaseValues.DBValues.DBPort, conf.BaseValues.DBValues.DBName, conf.BaseValues.DBValues.DBSSLMode)
@@ -55,7 +55,7 @@ func StartServer() {
 	r.GET("/", home.Home)
 	r.GET("/signin", home.Home)
 	r.POST("/signin", onboard.PostSignIn)
-	r.GET("/signup", home.Home)
+	r.GET("/signup", onboard.GetSignUp)
 	r.POST("/signup", onboard.PostSignUp)
 	r.GET("/smtp", home.Home)
 	r.POST("/smtp", onboard.PostSMTP)

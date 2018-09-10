@@ -68,7 +68,7 @@ table {
     margin-top: 0 !important; }
   .mt\+, .main__content {
     margin-top: 20px !important; }
-  .mt\+\+, .currently-reading, .currently-reading__books, .main {
+  .mt\+\+, .currently-reading, .currently-reading__books, .onboard, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard .button, .main {
     margin-top: 30px !important; }
   .mt\+\+\+ {
     margin-top: 40px !important; }
@@ -76,7 +76,7 @@ table {
     margin-top: 50px !important; }
   .mt\- {
     margin-top: 5px !important; }
-  .mt\-\- {
+  .mt\-\-, .input-error, .input-info {
     margin-top: 2px !important; }
 
 .mb {
@@ -91,7 +91,7 @@ table {
     margin-bottom: 40px !important; }
   .mb\+\+\+\+ {
     margin-bottom: 50px !important; }
-  .mb\- {
+  .mb\-, .input-error {
     margin-bottom: 5px !important; }
   .mb\-\- {
     margin-bottom: 2px !important; }
@@ -279,7 +279,7 @@ table {
   .pr\-\- {
     padding-right: 2px !important; }
 
-.pv, .header__n-dropdown {
+.pv, .button, .header__n-dropdown {
   padding-top: 10px !important;
   padding-bottom: 10px !important; }
   .pv0 {
@@ -316,7 +316,7 @@ table {
   padding-right: 10px !important; }
   .ph0 {
     padding-left: 0 !important; }
-  .ph\+ {
+  .ph\+, .button {
     padding-left: 20px !important; }
   .ph\+\+, body {
     padding-left: 30px !important; }
@@ -330,7 +330,7 @@ table {
     padding-left: 2px !important; }
   .ph0 {
     padding-right: 0 !important; }
-  .ph\+ {
+  .ph\+, .button {
     padding-right: 20px !important; }
   .ph\+\+, body {
     padding-right: 30px !important; }
@@ -343,7 +343,7 @@ table {
   .ph\-\- {
     padding-right: 2px !important; }
 
-.w1\/1, .currently-reading__header {
+.w1\/1, .currently-reading__header, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
   width: 100% !important; }
 
 .w1\/2 {
@@ -358,18 +358,18 @@ table {
 .w1\/5 {
   width: 20% !important; }
 
-.fs, body, #mainFilter, .header__nav {
+.fs, body, input[type="text"], input[type="email"], input[type="password"], #mainFilter, .button, .header__nav {
   font-size: 16px; }
-  .fs\+, .currently-reading__title {
+  .fs\+, .currently-reading__title, .onboard__title {
     font-size: 20px; }
-  .fs\-, input[type="text"], input[type="email"], input[type="password"], .footer {
+  .fs\-, .input-error, .input-info, .footer {
     font-size: 14px; }
   .fs\-\-, .header__notifications {
     font-size: 12px; }
 
 .fw {
   font-weight: 400; }
-  .fw\+, .filter-box__title, .header__nav, .currently-reading__title {
+  .fw\+, .input-error, .filter-box__title, .button, .header__nav, .currently-reading__title, .onboard__title {
     font-weight: 600; }
 
 .w1300, body {
@@ -381,10 +381,10 @@ table {
 .brand-secondary-color {
   color: #F5EFEF; }
 
-.brand-background, ::-moz-selection, .header__notifications {
+.brand-background, ::-moz-selection, .button, .header__notifications {
   background-color: #F56363; }
 
-.brand-background, ::selection, .header__notifications {
+.brand-background, ::selection, .button, .header__notifications {
   background-color: #F56363; }
 
 .brand-secondary-background, .filter-box {
@@ -424,19 +424,19 @@ table {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
-.cursor-pointer, .currently-reading__left, .currently-reading__right {
+.cursor-pointer, .button, .currently-reading__left, .currently-reading__right {
   cursor: pointer; }
 
 .none, #uploadBooks, .header__n-dropdown {
   display: none; }
 
-.block, .header__i-dropdown {
+.block, .input-error, .input-info, .header__i-dropdown, .onboard .button {
   display: block; }
 
 .inline-block {
   display: inline-block; }
 
-.margin-center, body {
+.margin-center, body, .onboard, .onboard .button {
   margin-left: auto;
   margin-right: auto; }
 
@@ -544,6 +544,7 @@ table {
     margin-left: -25px; }
 
 input[type="text"], input[type="email"], input[type="password"] {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif;
   height: 36px; }
 
 .filter-box {
@@ -554,6 +555,12 @@ input[type="text"], input[type="email"], input[type="password"] {
   .filter-box__list {
     height: 170px;
     overflow-y: auto; }
+
+.button {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif;
+  color: white;
+  border: none;
+  outline: none; }
 
 .header {
   height: 60px; }
@@ -626,6 +633,11 @@ input[type="text"], input[type="email"], input[type="password"] {
       border: 2px solid transparent; }
       .currently-reading__books a img:hover {
         border: 2px solid #F56363; }
+
+.onboard {
+  width: 420px; }
+  .onboard__title {
+    text-align: center; }
 
 .main .books a {
   width: 170px;
