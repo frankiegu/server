@@ -14,7 +14,7 @@
     </header>
     <main class="onboard">
         <div class="onboard__title">Create an admin account</div>
-        <form method="post" action="/signup" class="onboard__form" id="signUpForm">
+        <form method="post" action="/signup" class="onboard__form">
             <input type="text" name="username" placeholder="Username" />
             <p class="input-error"></p>
             <p class="input-info"></p>
@@ -36,20 +36,5 @@
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#signUpForm').submit(function(e) {
-                e.preventDefault();
-
-                var data = $(this).serialize();
-                $.post('/signup', data, function(response) {
-                    console.log(response);
-                    window.location.href = "/smtp";
-                }).fail(function(error) {
-                    console.log(error);
-                })
-            });
-        });
-    </script>
 </body>
 </html>

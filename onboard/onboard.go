@@ -54,7 +54,21 @@ type ErrorResponse struct {
 
 // GetSignUp ...
 func GetSignUp(c *gin.Context) {
-	c.HTML(http.StatusOK, "signup.html", "")
+	token, _ := c.Cookie("joyread-token")
+
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	var userID int
+	userID = models.GetUserIDFromToken(db, token)
+
+	if userID != 0 {
+		c.Redirect(http.StatusMovedPermanently, "/smtp")
+	} else {
+		c.HTML(http.StatusOK, "signup.html", "")
+	}
 }
 
 // SignUpRequest struct
@@ -94,13 +108,13 @@ func PostSignUp(c *gin.Context) {
 			Email:        form.Email,
 			PasswordHash: passwordHash,
 			Token:        token,
-			IsAdmin:      true,
+			IsAdmin:      1,
 		}
 
-		lastInsertID := models.InsertUser(db, signUpModel)
-
+		lastInsertID := models.InsertAccount(db, signUpModel)
+		fmt.Println(lastInsertID)
 		expiration := time.Now().Add(365 * 24 * time.Hour)
-		cookie := http.Cookie{Name: fmt.Sprintf("joyread-u%d", lastInsertID), Value: token, Expires: expiration}
+		cookie := http.Cookie{Name: "joyread-token", Value: token, Expires: expiration}
 		http.SetCookie(c.Writer, &cookie)
 
 		c.Redirect(http.StatusMovedPermanently, "/smtp")
@@ -114,6 +128,8 @@ func PostSignUp(c *gin.Context) {
 
 // GetSMTP ...
 func GetSMTP(c *gin.Context) {
+	token, _ := c.Cookie("joyread-token")
+	fmt.Println(token)
 	c.HTML(http.StatusOK, "smtp.html", "")
 }
 

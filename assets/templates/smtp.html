@@ -24,13 +24,16 @@
     <main class="onboard">
         <div class="onboard__title">Mail server configuration</div>
         <form method="post" action="/smtp" class="onboard__form">
-            <input type="text" name="username" placeholder="Username" />
+            <input type="text" name="hostname" placeholder="SMTP hostname (smtp.fastmail.com)*" />
             <p class="input-error"></p>
             <p class="input-info"></p>
-            <input type="email" name="email" placeholder="Email address" />
+            <input type="text" name="port" placeholder="SMTP port (25/587/465)*" />
             <p class="input-error"></p>
             <p class="input-info"></p>
-            <input type="password" name="password" placeholder="Password" />
+            <input type="text" name="username" placeholder="SMTP username (hello@johnwell.com)*" />
+            <p class="input-error"></p>
+            <p class="input-info"></p>
+            <input type="password" name="password" placeholder="SMTP password" />
             <p class="input-error"></p>
             <p class="input-info"></p>
             <input type="submit" class="button button--primary" value="Submit" />

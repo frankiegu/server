@@ -46,7 +46,7 @@ func StartServer() {
 		middleware.APIMiddleware(db),
 	)
 
-	models.CreateUser(db)
+	models.CreateAccount(db)
 	models.CreateSMTP(db)
 	models.CreateNextcloud(db)
 
