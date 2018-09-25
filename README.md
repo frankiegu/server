@@ -1,6 +1,6 @@
 # Joyread
-<a href="https://chat.joyread.org" alt="Joyread chat">
-  <img src="https://img.shields.io/badge/chat-chat.joyread.org-red.svg?style=flat-square" />
+<a href="https://discord.gg/ykUww2P" alt="Joyread chat">
+  <img src="https://img.shields.io/badge/chat-Discord-blue.svg?style=flat-square" />
 </a>
 
 Joyread is a lightweight self-hosted ebook reader written in Go. Licensed under AGPLv3. UNDER ACTIVE DEVELOPMENT.
