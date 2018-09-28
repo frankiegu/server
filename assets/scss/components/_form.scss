@@ -26,6 +26,17 @@ input[type="text"], input[type="email"], input[type="password"] {
     @extend .block;
     @extend .fs\-;
     @extend .mt\-\-;
+
+    line-height: 18px;
+}
+
+.radio-info {
+    @extend .block;
+    @extend .fs\-;
+    @extend .mt\-;
+
+    line-height: 18px;
+    margin-left: 25px;
 }
 
 #mainFilter {

@@ -59,7 +59,7 @@ func StartServer() {
 	r.GET("/smtp", onboard.GetSMTP)
 	r.POST("/smtp", onboard.PostSMTP)
 	r.POST("/test-email", onboard.TestEmail)
-	r.GET("/storage", home.Home)
+	r.GET("/storage", onboard.GetStorage)
 	r.POST("/nextcloud", onboard.PostNextcloud)
 	r.GET("/nextcloud-auth/:user_id", onboard.NextcloudAuthCode)
 	r.GET("/is-admin-present", onboard.IsAdminPresent)

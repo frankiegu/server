@@ -121,7 +121,16 @@ func PostSignUp(c *gin.Context) {
 
 // GetSMTP ...
 func GetSMTP(c *gin.Context) {
-	c.HTML(http.StatusOK, "smtp.html", "")
+	db, ok := c.MustGet("db").(*sql.DB)
+	if !ok {
+		fmt.Println("Middleware db error")
+	}
+
+	if models.CheckSMTP(db) {
+		c.Redirect(http.StatusMovedPermanently, "/storage")
+	} else {
+		c.HTML(http.StatusOK, "smtp.html", "")
+	}
 }
 
 // SMTPRequest struct
@@ -209,6 +218,11 @@ func TestEmail(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, errorResponse)
 	}
+}
+
+// GetStorage
+func GetStorage(c *gin.Context) {
+	c.HTML(http.StatusOK, "storage.html", "")
 }
 
 // NextcloudRequest struct

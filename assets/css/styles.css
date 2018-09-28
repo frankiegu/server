@@ -62,11 +62,11 @@ table {
   .m\-\- {
     margin: 2px !important; }
 
-.mt, .filter-box__list li {
+.mt, .filter-box__list li, .onboard__description {
   margin-top: 10px !important; }
   .mt0 {
     margin-top: 0 !important; }
-  .mt\+, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard .button, .main__content {
+  .mt\+, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard .button, .onboard__radio, .main__content {
     margin-top: 20px !important; }
   .mt\+\+, .currently-reading, .currently-reading__books, .onboard, .main {
     margin-top: 30px !important; }
@@ -74,7 +74,7 @@ table {
     margin-top: 40px !important; }
   .mt\+\+\+\+ {
     margin-top: 50px !important; }
-  .mt\- {
+  .mt\-, .radio-info {
     margin-top: 5px !important; }
   .mt\-\-, .input-error, .input-info {
     margin-top: 2px !important; }
@@ -362,7 +362,7 @@ table {
   font-size: 16px; }
   .fs\+, .currently-reading__title, .onboard__title {
     font-size: 20px; }
-  .fs\-, .input-error, .input-info, .footer {
+  .fs\-, .input-error, .input-info, .radio-info, .footer {
     font-size: 14px; }
   .fs\-\-, .header__notifications {
     font-size: 12px; }
@@ -430,7 +430,7 @@ table {
 .none, #uploadBooks, .header__n-dropdown {
   display: none; }
 
-.block, .input-error, .input-info, .header__i-dropdown, .onboard .button, .onboard__sub-message p i {
+.block, .input-error, .input-info, .radio-info, .header__i-dropdown, .onboard .button, .onboard__sub-message p i {
   display: block; }
 
 .inline-block {
@@ -440,7 +440,7 @@ table {
   margin-left: auto;
   margin-right: auto; }
 
-.flex, .filter-box__list li, .header, .header__right, .header__nav, .footer, .onboard__sub-message, .main__content {
+.flex, .filter-box__list li, .header, .header__right, .header__nav, .footer, .onboard__radio, .onboard__sub-message, .main__content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
@@ -461,7 +461,7 @@ table {
     -webkit-box-align: baseline;
     -ms-flex-align: baseline;
     align-items: baseline; }
-  .flex__center, .header {
+  .flex__center, .header, .onboard__radio {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center; }
@@ -546,6 +546,13 @@ table {
 input[type="text"], input[type="email"], input[type="password"] {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif;
   height: 36px; }
+
+.input-info {
+  line-height: 18px; }
+
+.radio-info {
+  line-height: 18px;
+  margin-left: 25px; }
 
 .filter-box {
   width: 210px;
@@ -641,6 +648,9 @@ input[type="text"], input[type="email"], input[type="password"] {
   min-height: calc(100vh - 130px); }
   .onboard__title {
     text-align: center; }
+  .onboard__description {
+    text-align: center;
+    line-height: 20px; }
   .onboard__sub-message p i {
     width: 30px;
     height: 30px;

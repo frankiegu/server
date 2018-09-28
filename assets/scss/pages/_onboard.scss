@@ -12,6 +12,13 @@
         text-align: center;
     }
 
+    &__description {
+        @extend .mt;
+
+        text-align: center;
+        line-height: 20px;
+    }
+
     & input[type="text"], & input[type="email"], & input[type="password"] {
         @extend .w1\/1;
         @extend .mt\+;
@@ -21,6 +28,12 @@
         @extend .block;
         @extend .mt\+;
         @extend .margin-center;
+    }
+
+    &__radio {
+        @extend .flex;
+        @extend .flex__center;
+        @extend .mt\+;
     }
 
     &__sub {
@@ -39,7 +52,7 @@
             & p {
                 & i {
                     @extend .block;
-                    
+
                     width: 30px;
                     height: 30px;
                     background-image: url('/assets/img/gif/loading.gif');
