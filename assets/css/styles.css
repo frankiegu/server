@@ -98,7 +98,7 @@ table {
 
 .ml {
   margin-left: 10px !important; }
-  .ml0 {
+  .ml0, .onboard__sub .button {
     margin-left: 0 !important; }
   .ml\+ {
     margin-left: 20px !important; }
@@ -113,7 +113,7 @@ table {
   .ml\-\-, .header__i-dropdown {
     margin-left: 2px !important; }
 
-.mr {
+.mr, .onboard__sub .button {
   margin-right: 10px !important; }
   .mr0, .header__nav:last-child, .footer__right a:last-child, .currently-reading__books a:last-child, .main .books a:nth-child(5n) {
     margin-right: 0 !important; }
@@ -141,7 +141,7 @@ table {
     margin-top: 30px !important; }
   .mv\+\+\+ {
     margin-top: 40px !important; }
-  .mv\+\+\+\+ {
+  .mv\+\+\+\+, .onboard__sub {
     margin-top: 50px !important; }
   .mv\- {
     margin-top: 5px !important; }
@@ -155,7 +155,7 @@ table {
     margin-bottom: 30px !important; }
   .mv\+\+\+ {
     margin-bottom: 40px !important; }
-  .mv\+\+\+\+ {
+  .mv\+\+\+\+, .onboard__sub {
     margin-bottom: 50px !important; }
   .mv\- {
     margin-bottom: 5px !important; }
@@ -343,7 +343,7 @@ table {
   .ph\-\- {
     padding-right: 2px !important; }
 
-.w1\/1, .currently-reading__header, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"] {
+.w1\/1, .currently-reading__header, .onboard input[type="text"], .onboard input[type="email"], .onboard input[type="password"], .onboard__sub-message {
   width: 100% !important; }
 
 .w1\/2 {
@@ -358,7 +358,7 @@ table {
 .w1\/5 {
   width: 20% !important; }
 
-.fs, body, input[type="text"], input[type="email"], input[type="password"], #mainFilter, .button, .header__nav {
+.fs, body, input[type="text"], input[type="email"], input[type="password"], #mainFilter, .button, .header__nav, .onboard__sub-title {
   font-size: 16px; }
   .fs\+, .currently-reading__title, .onboard__title {
     font-size: 20px; }
@@ -369,7 +369,7 @@ table {
 
 .fw {
   font-weight: 400; }
-  .fw\+, .input-error, .filter-box__title, .button, .header__nav, .currently-reading__title, .onboard__title {
+  .fw\+, .input-error, .filter-box__title, .button, .header__nav, .currently-reading__title, .onboard__title, .onboard__sub-title {
     font-weight: 600; }
 
 .w1300, body {
@@ -381,10 +381,10 @@ table {
 .brand-secondary-color {
   color: #F5EFEF; }
 
-.brand-background, ::-moz-selection, .button, .header__notifications {
+.brand-background, ::-moz-selection, .button--primary, .header__notifications {
   background-color: #F56363; }
 
-.brand-background, ::selection, .button, .header__notifications {
+.brand-background, ::selection, .button--primary, .header__notifications {
   background-color: #F56363; }
 
 .brand-secondary-background, .filter-box {
@@ -430,7 +430,7 @@ table {
 .none, #uploadBooks, .header__n-dropdown {
   display: none; }
 
-.block, .input-error, .input-info, .header__i-dropdown, .onboard .button {
+.block, .input-error, .input-info, .header__i-dropdown, .onboard .button, .onboard__sub-message p i {
   display: block; }
 
 .inline-block {
@@ -440,7 +440,7 @@ table {
   margin-left: auto;
   margin-right: auto; }
 
-.flex, .filter-box__list li, .header, .header__right, .header__nav, .footer, .main__content {
+.flex, .filter-box__list li, .header, .header__right, .header__nav, .footer, .onboard__sub-message, .main__content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex; }
@@ -457,7 +457,7 @@ table {
     -webkit-box-align: end;
     -ms-flex-align: end;
     align-items: flex-end; }
-  .flex__baseline {
+  .flex__baseline, .onboard__sub-message {
     -webkit-box-align: baseline;
     -ms-flex-align: baseline;
     align-items: baseline; }
@@ -561,6 +561,8 @@ input[type="text"], input[type="email"], input[type="password"] {
   color: white;
   border: none;
   outline: none; }
+  .button--secondary {
+    background: #676767; }
 
 .header {
   height: 60px; }
@@ -639,6 +641,13 @@ input[type="text"], input[type="email"], input[type="password"] {
   min-height: calc(100vh - 130px); }
   .onboard__title {
     text-align: center; }
+  .onboard__sub-message p i {
+    width: 30px;
+    height: 30px;
+    background-image: url("/assets/img/gif/loading.gif");
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-bottom: -8px; }
 
 .main {
   min-height: calc(100vh - 130px); }

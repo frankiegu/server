@@ -78,13 +78,6 @@ type SignUpRequest struct {
 	Password string `form:"password" binding:"required"`
 }
 
-// SignUpResponse struct
-type SignUpResponse struct {
-	Status string `json:"status"`
-	Token  string `json:"token"`
-	UserID int    `json:"user_id"`
-}
-
 // PostSignUp ...
 func PostSignUp(c *gin.Context) {
 	var form SignUpRequest
@@ -111,8 +104,8 @@ func PostSignUp(c *gin.Context) {
 			IsAdmin:      1,
 		}
 
-		lastInsertID := models.InsertAccount(db, signUpModel)
-		fmt.Println(lastInsertID)
+		models.InsertAccount(db, signUpModel)
+
 		expiration := time.Now().Add(365 * 24 * time.Hour)
 		cookie := http.Cookie{Name: "joyread-token", Value: token, Expires: expiration}
 		http.SetCookie(c.Writer, &cookie)
@@ -128,31 +121,22 @@ func PostSignUp(c *gin.Context) {
 
 // GetSMTP ...
 func GetSMTP(c *gin.Context) {
-	token, _ := c.Cookie("joyread-token")
-	fmt.Println(token)
 	c.HTML(http.StatusOK, "smtp.html", "")
 }
 
 // SMTPRequest struct
 type SMTPRequest struct {
-	SMTPHostname string `json:"smtp_hostname" binding:"required"`
-	SMTPPort     string `json:"smtp_port" binding:"required"`
-	SMTPUsername string `json:"smtp_username" binding:"required"`
-	SMTPPassword string `json:"smtp_password" binding:"required"`
-	UserID       int    `json:"user_id" binding:"required"`
-}
-
-// SMTPResponse struct
-type SMTPResponse struct {
-	Status string `json:"status"`
-	UserID int    `json:"user_id"`
+	SMTPHostname string `form:"hostname" binding:"required"`
+	SMTPPort     string `form:"port" binding:"required"`
+	SMTPUsername string `form:"username" binding:"required"`
+	SMTPPassword string `form:"password" binding:"required"`
 }
 
 // PostSMTP ...
 func PostSMTP(c *gin.Context) {
 	var form SMTPRequest
 
-	if err := c.BindJSON(&form); err == nil {
+	if err := c.Bind(&form); err == nil {
 		db, ok := c.MustGet("db").(*sql.DB)
 		if !ok {
 			fmt.Println("Middleware db error")
@@ -169,11 +153,7 @@ func PostSMTP(c *gin.Context) {
 
 		models.InsertSMTP(db, smtpModel)
 
-		smtpResponse := &SMTPResponse{
-			Status: "registered",
-		}
-
-		c.JSON(http.StatusMovedPermanently, smtpResponse)
+		c.Redirect(http.StatusMovedPermanently, "/storage")
 	} else {
 		errorResponse := &ErrorResponse{
 			Error: err.Error(),
@@ -222,7 +202,7 @@ func TestEmail(c *gin.Context) {
 			IsEmailSent: isEmailSent,
 		}
 
-		c.JSON(http.StatusMovedPermanently, testEmailResponse)
+		c.JSON(http.StatusOK, testEmailResponse)
 	} else {
 		errorResponse := &ErrorResponse{
 			Error: err.Error(),

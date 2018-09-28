@@ -23,21 +23,14 @@ type SignUpModel struct {
 }
 
 // InsertAccount ...
-func InsertAccount(db *sql.DB, signUpModel SignUpModel) int64 {
-	stmt, err := db.Prepare("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES (?, ?, ?, ?, ?)")
+func InsertAccount(db *sql.DB, signUpModel SignUpModel) {
+	_, err := db.Query("INSERT INTO account (username, email, password_hash, jwt_token, is_admin) VALUES ($1, $2, $3, $4, $5)", signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin)
 	cError.CheckError(err)
-
-	res, err := stmt.Exec(signUpModel.Username, signUpModel.Email, signUpModel.PasswordHash, signUpModel.Token, signUpModel.IsAdmin)
-	cError.CheckError(err)
-
-	lastInsertID, err := res.LastInsertId()
-
-	return lastInsertID
 }
 
 // GetUserIDFromToken ...
 func GetUserIDFromToken(db *sql.DB, token string) int {
-	rows, err := db.Query("SELECT id FROM account WHERE jwt_token = ?", token)
+	rows, err := db.Query("SELECT id FROM account WHERE jwt_token = $1", token)
 	cError.CheckError(err)
 
 	var userID int
