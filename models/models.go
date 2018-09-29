@@ -7,9 +7,15 @@ import (
 	cError "github.com/joyread/server/error"
 )
 
+// CreateLegend ...
+func CreateLegend(db *sql.DB) {
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS legend (server_url VARCHAR(255) NOT NULL, storage VARCHAR(255) NOT NULL DEFAULT 'local')")
+	cError.CheckError(err)
+}
+
 // CreateAccount ...
 func CreateAccount(db *sql.DB) {
-	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE, storage VARCHAR(255) NOT NULL DEFAULT 'none')")
+	_, err := db.Query("CREATE TABLE IF NOT EXISTS account (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, jwt_token VARCHAR(255) NOT NULL, is_admin BOOLEAN NOT NULL DEFAULT FALSE)")
 	cError.CheckError(err)
 }
 

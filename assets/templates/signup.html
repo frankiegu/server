@@ -14,16 +14,17 @@
     </header>
     <main class="onboard">
         <div class="onboard__title">Create an admin account</div>
+        <div class="onboard__description">Admin controls the overall management in this platform - which includes adding or revoking users, removing books of others which is not appropriate.</div>
         <form method="post" action="/signup" class="onboard__form">
             <input type="text" name="username" placeholder="Username" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">This username will be publicly visible to other users in the platform when they see an activity of yours.</p>
             <input type="email" name="email" placeholder="Email address" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">This will be used only for communication regarding any notifications and will not be shown publicly.</p>
             <input type="password" name="password" placeholder="Password" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">You know what this is ;) Choose it wisely!</p>
             <input type="submit" class="button button--primary" value="Submit" />
         </form>
     </main>

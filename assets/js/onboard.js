@@ -1,4 +1,6 @@
 $(function() {
+    $('#joyreadURL').val(window.location.origin)
+    
     $('#sendTestEmail').click(function(e) {
         e.preventDefault()
 

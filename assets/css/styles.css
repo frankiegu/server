@@ -504,7 +504,7 @@ table {
 .overflow-hidden, .currently-reading__books, .main .books {
   overflow: hidden; }
 
-.outline-none, input[type="text"], input[type="email"], input[type="password"] {
+.outline-none, input[type="text"], input[type="email"], input[type="password"], input[type="radio"] {
   outline: none; }
 
 .no-link, .header__nav {
@@ -546,6 +546,9 @@ table {
 input[type="text"], input[type="email"], input[type="password"] {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, sans-serif;
   height: 36px; }
+
+a {
+  color: #F56363; }
 
 .input-info {
   line-height: 18px; }

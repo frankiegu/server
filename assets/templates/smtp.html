@@ -14,19 +14,20 @@
     </header>
     <main class="onboard">
         <div class="onboard__title">Mail server configuration</div>
+        <div class="onboard__description">Joyread will send emails to users on-behalf of your email account regarding any new activity of other users in the platform.</div>
         <form method="post" action="/smtp" class="onboard__form">
             <input type="text" name="hostname" placeholder="SMTP hostname (smtp.fastmail.com)*" id="smtpHostname" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">You can find this in your email service provider's SMTP information.</p>
             <input type="text" name="port" placeholder="SMTP port (25/587/465)*" id="smtpPort" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">Port 587 is supported by almost every outgoing SMTP server and it's useful for TLS connections; while port 465 is the right choice if you need to connect via SSL. Be sure to check the information provided from your email service provider and enter the appropriate value.</p>
             <input type="text" name="username" placeholder="SMTP username (hello@johnwell.com)*" id="smtpUsername" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">This will be your email address.</p>
             <input type="password" name="password" placeholder="SMTP password" id="smtpPassword" />
             <p class="input-error"></p>
-            <p class="input-info"></p>
+            <p class="input-info">Some providers might support the actual email password for SMTP settings. But it is recommended to create a separate application password for Joyread.</p>
             <div class="onboard__sub">
                 <div class="onboard__sub-title">Try sending a test email before submit</div>
                 <input type="text" name="test-email" placeholder="Email address" id="testEmailAddr" />

@@ -220,19 +220,19 @@ func TestEmail(c *gin.Context) {
 	}
 }
 
-// GetStorage
+// GetStorage ...
 func GetStorage(c *gin.Context) {
 	c.HTML(http.StatusOK, "storage.html", "")
 }
 
 // NextcloudRequest struct
 type NextcloudRequest struct {
-	UserID                int    `json:"user_id" binding:"required"`
-	NextcloudURL          string `json:"nextcloud_url" binding:"required"`
-	NextcloudClientID     string `json:"nextcloud_client_id" binding:"required"`
-	NextcloudClientSecret string `json:"nextcloud_client_secret" binding:"required"`
-	NextcloudDirectory    string `json:"nextcloud_directory" binding:"required"`
-	JoyreadURL            string `json:"joyread_url" binding:"required"`
+	UserID                int    `form:"user_id" binding:"required"`
+	NextcloudURL          string `form:"nextcloud_url" binding:"required"`
+	NextcloudClientID     string `form:"nextcloud_client_id" binding:"required"`
+	NextcloudClientSecret string `form:"nextcloud_client_secret" binding:"required"`
+	NextcloudDirectory    string `form:"nextcloud_directory" binding:"required"`
+	JoyreadURL            string `form:"joyread_url" binding:"required"`
 }
 
 // NextcloudResponse struct
@@ -245,7 +245,7 @@ type NextcloudResponse struct {
 func PostNextcloud(c *gin.Context) {
 	var form NextcloudRequest
 
-	if err := c.BindJSON(&form); err == nil {
+	if err := c.Bind(&form); err == nil {
 		db, ok := c.MustGet("db").(*sql.DB)
 		if !ok {
 			fmt.Println("Middleware db error")
